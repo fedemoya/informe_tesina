@@ -7493,8 +7493,11 @@ key "SJLA01"
 \end_inset
 
 .
- En nuestro caso los grafos, que surgen de la matriz de coeficientes de
- un modelo modelica aplanado, suelen ser esparcidos 
+\end_layout
+
+\begin_layout Standard
+En nuestro caso los grafos, que surgen de la matriz de coeficientes de un
+ modelo modelica aplanado, suelen ser esparcidos 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "elmqvist2005"
@@ -7506,6 +7509,11 @@ key "elmqvist2005"
 \end_inset
 
  constante en nuestros cálculos.
+ A dicho valor constante haremos referencia mediante la letra 
+\begin_inset Formula $K$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -8253,9 +8261,12 @@ En esta sección se describe la implementación de un algoritmo simple el
  de aplicar el algoritmo simple.
 \end_layout
 
+\begin_layout Subsection
+Un algoritmo simple para obtener la transformación BLT
+\end_layout
+
 \begin_layout Standard
-El algoritmo al que nos referimos es una versión modificada de el que se
- presenta en el capítulo 
+En el capítulo 
 \shape italic
 Differential Algebraic Equations
 \shape default
@@ -8270,10 +8281,8 @@ key "CK06"
 
 \end_inset
 
-.
- Se presenta como un algoritmo para obtener la transformación BLT de la
- matriz de coeficientes asociada a un sistema de ecuaciones diferenciales
- algebraicas.
+ se presenta un algoritmo para obtener la transformación BLT de la matriz
+ de coeficientes asociada a un sistema de ecuaciones diferenciales algebraicas.
  El algoritmo aplica sobre el grafo bipartito que se obtiene a partir del
  sistema de ecuaciones diferenciales algebraicas de la misma manera que
  lo hace la función 
@@ -8290,7 +8299,10 @@ verb+apply_tarjan+
 \end_inset
 
  de la sección anterior.
- Supondiendo un grafo que admite aristas de colores y que inicialmente las
+\end_layout
+
+\begin_layout Standard
+Supondiendo un grafo que admite aristas de colores y que inicialmente las
  aristas del grafo son de color negro el algoritmo se puede definir a partir
  de las siguientes reglas:
 \end_layout
@@ -8339,7 +8351,7 @@ Si el modelo no posee lazos algebraicos este algoritmo va a ser capaz de
 \end_layout
 
 \begin_layout Standard
-Tal como esta planteado el algoritmo en 
+Tal como esta planteado el algoritmo en el libro 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "CK06"
@@ -8449,9 +8461,13 @@ Revisar esta fórmula
 
 \end_layout
 
+\begin_layout Subsection
+Optimización del algoritmo simple
+\end_layout
+
 \begin_layout Standard
 Si modificamos el algoritmo de manera tal que no sea necesario recorrer
- todos los vértices correposndientes a ecuaciones ni todos los vértices
+ todos los vértices correspondientes a ecuaciones ni todos los vértices
  correspondientes a incógnitas para obtener los que poseen una sola arista
  adjacente de color rojo podemos mejorar la complejidad temporal.
 \end_layout
@@ -8492,7 +8508,7 @@ verb+CausalizationStrategy+
 
 \begin_layout Standard
 La versión implementada del algoritmo no utiliza aristas coloreadas, en
- cambio la condición para causalizar un par ecuación-incógnita es que el
+ cambio, la condición para causalizar un par ecuación-incógnita es que el
  vértice posea una sola arista adjacente.
  Además una vez que se causalizo un par ecuación-incógnita se borran ambos
  vértices del grafo junto con las aristas adjacentes a ambos.
@@ -8562,8 +8578,6 @@ verb+simpleCausalizationStrategy+
 \end_inset
 
 .
- Luego hacemos el análisis de complejidad para probar que se ejecuta en
- tiempo lineal.
 \end_layout
 
 \begin_layout Standard
@@ -8609,12 +8623,22 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-	    if (out_degree(v, _graph) == 1) {
+	    if (out_degree(v, _graph) == 1 && !_graph[v].visited) {
 \end_layout
 
 \begin_layout Plain Layout
 
-            _graph[v].visited = true; 
+			Edge e = getUniqueEdge(v);
+\end_layout
+
+\begin_layout Plain Layout
+
+			Vertex adjacent = target(e, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+			_graph[adjacent].visited = true;
 \end_layout
 
 \begin_layout Plain Layout
@@ -8669,12 +8693,12 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-			Vertex eq = *eqIter;
+            Vertex eq = *eqIter;
 \end_layout
 
 \begin_layout Plain Layout
 
-			Edge e = getUniqueEdge(eq);
+            Edge e = getUniqueEdge(eq);
 \end_layout
 
 \begin_layout Plain Layout
@@ -8699,90 +8723,7 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-            unknownDegree1Verts.remove(unknown); 
-\end_layout
-
-\begin_layout Plain Layout
-
-            CausalizationGraph::out_edge_iterator outEdgeIter, outEdgeIterEnd,
- next;
-\end_layout
-
-\begin_layout Plain Layout
-
-            boost::tie(outEdgeIter, outEdgeIterEnd) = out_edges(unknown,
- _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-            for(next = outEdgeIter; outEdgeIter != outEdgeIterEnd; outEdgeIter
- = next) {
-\end_layout
-
-\begin_layout Plain Layout
-
-                next++;
-\end_layout
-
-\begin_layout Plain Layout
-
-                Edge unkownAdjEdge = *outEdgeIter;
-\end_layout
-
-\begin_layout Plain Layout
-
-                Vertex unknownAdjEq = target(unkownAdjEdge, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-                remove_edge(unkownAdjEdge, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-                if (out_degree(unknownAdjEq, _graph) == 1) {
-\end_layout
-
-\begin_layout Plain Layout
-
-                    Edge e = getUniqueEdge(unknownAdjEq);
-\end_layout
-
-\begin_layout Plain Layout
-
-                    Vertex eqAdjUnknown = target(e, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-                    if(!_graph[eqAdjUnknown].visited) {
-\end_layout
-
-\begin_layout Plain Layout
-
-                        _graph[unknownAdjEq].visited = true;
-\end_layout
-
-\begin_layout Plain Layout
-
-                        eqDegree1Verts.push_back(unknownAdjEq);
-\end_layout
-
-\begin_layout Plain Layout
-
-                    }
-\end_layout
-
-\begin_layout Plain Layout
-
-                }
-\end_layout
-
-\begin_layout Plain Layout
-
-            }
+			collectDegree1Verts(unknown, eqDegree1Verts);
 \end_layout
 
 \begin_layout Plain Layout
@@ -8812,119 +8753,47 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-        Vertex unknown = *unknownIter;
+        	Vertex unknown = *unknownIter;
 \end_layout
 
 \begin_layout Plain Layout
 
-        Edge e = getUniqueEdge(unknown); 
+            Edge e = getUniqueEdge(unknown); 
 \end_layout
 
 \begin_layout Plain Layout
 
-        Vertex eq = target(e, _graph);
+            Vertex eq = target(e, _graph);
 \end_layout
 
 \begin_layout Plain Layout
 
-      makeCausalEnd(_graph[eq].eq, _graph[unknown].unknown);       remove_edge(e,
- _graph);
+            makeCausalEnd(_graph[eq].eq, _graph[unknown].unknown);
 \end_layout
 
 \begin_layout Plain Layout
 
+            remove_edge(e, _graph);
 \end_layout
 
 \begin_layout Plain Layout
 
-        CausalizationGraph::out_edge_iterator outEdgeIter, outEdgeIterEnd,
- next;
+            remove_vertex(unknown, _graph);
 \end_layout
 
 \begin_layout Plain Layout
 
-        boost::tie(outEdgeIter, outEdgeIterEnd) = out_edges(eq, _graph);
+            collectDegree1Verts(eq, unknownDegree1Verts);
 \end_layout
 
 \begin_layout Plain Layout
 
-        for(next = outEdgeIter; outEdgeIter != outEdgeIterEnd; outEdgeIter
- = next) {
+       	 remove_vertex(eq, _graph);
 \end_layout
 
 \begin_layout Plain Layout
 
-          next++;
-\end_layout
-
-\begin_layout Plain Layout
-
-          Edge outEdge = *outEdgeIter;
-\end_layout
-
-\begin_layout Plain Layout
-
-          if(outEdge != e) {
-\end_layout
-
-\begin_layout Plain Layout
-
-            Vertex eqAdjUnknown = target(outEdge, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-            remove_edge(outEdge, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-            if (out_degree(eqAdjUnknown, _graph) == 1) {
-\end_layout
-
-\begin_layout Plain Layout
-
-              unknownDegree1Verts.push_back(eqAdjUnknown);
-\end_layout
-
-\begin_layout Plain Layout
-
-            }
-\end_layout
-
-\begin_layout Plain Layout
-
-          }
-\end_layout
-
-\begin_layout Plain Layout
-
-        }
-\end_layout
-
-\begin_layout Plain Layout
-
-        makeCausalEnd(_graph[eq].eqs, _graph[unknown].unknowns);
-\end_layout
-
-\begin_layout Plain Layout
-
-        remove_edge(e, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-        remove_vertex(unknown, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-        remove_vertex(eq, _graph);
-\end_layout
-
-\begin_layout Plain Layout
-
-        unknownDegree1Verts.erase(unknownIter);
+        	unknownDegree1Verts.erase(unknownIter);
 \end_layout
 
 \begin_layout Plain Layout
@@ -8955,7 +8824,7 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-La función 
+Al inicio de la función 
 \begin_inset ERT
 status open
 
@@ -8968,7 +8837,7 @@ verb+simpleCausalizationStrategy+
 
 \end_inset
 
- declara dos listas, 
+ se declaran dos listas, 
 \begin_inset ERT
 status open
 
@@ -9040,16 +8909,380 @@ verb+_graph+
 
 \end_inset
 
- y buscando los vértices de grado uno.
- Como ya explicamos en la sección 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:ComplejidadTarjan1"
+ y buscando los vértices de grado uno que aún no hayan sido visitados.
+ Cuando encontramos uno lo primero que hacemos es marcar el vértice adjacente
+ como visitado ya que ambos serán causalizados en el mismo momento, luego
+ agregamos el vértice a la lista correspondiente.
+\end_layout
+
+\begin_layout Standard
+Luego de la inicialización de las listas que contienen los vértices de grado
+ uno, lo que hacemos es extraer uno a uno los vértices de cada una de las
+ listas y causalizarlos.
+ Esto lo hacemos con un bucle while que itera hasta que ambas listas queden
+ vacias.
+ Para cada vértfice de grado uno extraido de la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
 
 \end_inset
 
- la complejidad temporal de las operaciones que recorren la lista de adyacencia
- de un vértice se puede considerar constante; este es el caso de la operación
+ lo primero que hacemos es causalizarlo mediante la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalBegining+
+\end_layout
+
+\end_inset
+
+.
+ Luego eliminamos del grafo la única arista incidente en el vértice y el
+ vértice mismo.
+ El vértice adyacente al vértice eliminado también debe ser removido, pero
+ antes, es necesario colectar, entre los vértices adyacentes a este, los
+ que sean de grado uno.
+ La función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+collectDegree1Verts+
+\end_layout
+
+\end_inset
+
+ es la encargada de realizar esta tarea.
+ Los vértices extraidos de la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+ son causalizados mediante la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalEnd+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A continuación vemos el código de las funciones 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalBegining+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalEnd+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  void CausalizationStrategy::makeCausalBegining(Equation e, Expression
+ unknown) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    EquationList causalEqs = EquationSolver::solve(EquationList(1, e), ExpList(1
+, unknown), _mmo_class.syms_ref(), c_code, _cl);
+\end_layout
+
+\begin_layout Plain Layout
+
+    foreach_(Equation e, causalEqs) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      _causalEqsBegining.push_back(e);
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  void CausalizationStrategy::makeCausalEnd(Equation e, Expression unknown)
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+    EquationList causalEqs = EquationSolver::solve(EquationList(1, e), ExpList(1
+, unknown), _mmo_class.syms_ref(), c_code, _cl);
+\end_layout
+
+\begin_layout Plain Layout
+
+    foreach_(Equation e, causalEqs) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      _causalEqsEnd[_causalEqsEndIndex--] = e;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ambas funciones reciben como párametro una ecuación y una incógnita.
+ Lo primero que se hace es despejar la incógnita en la ecuación.
+ El despeje lo realiza la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+EquationSolver::solve+
+\end_layout
+
+\end_inset
+
+ la cual fue implementada utilizando la biblioteca de manipulación simbólica
+ GiNaC.
+ La ecuación, reordenada de manera que del lado derecho quede solo la incógnita,
+ se agrega a la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsBegining+
+\end_layout
+
+\end_inset
+
+ en el caso de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalBegining+
+\end_layout
+
+\end_inset
+
+ y al vector 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsEnd+
+\end_layout
+
+\end_inset
+
+ en el caso de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalEnd+
+\end_layout
+
+\end_inset
+
+.
+ La lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsBegining+
+\end_layout
+
+\end_inset
+
+ y el vector 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsEnd+
+\end_layout
+
+\end_inset
+
+ se utilizaron como alternativa a la numeración de las ecuaciones planteada
+ en la versión original del algoritmo simple.
+\end_layout
+
+\begin_layout Standard
+Por último, tenemos el código de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+collectDegree1Verts+
+\end_layout
+
+\end_inset
+
+ la cual, dado un vértice, itera sobre las aristas incidentes.
+ Por cada arista se obtiene el vértice adjacente, se elimina la arista del
+ grafo y si el vértice adyacente es de grado uno se lo agrega a la lista
+ correspondiente (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+ o 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+).
+ De la misma manera que se hizo durante la inicialización de las listas
  
 \begin_inset ERT
 status open
@@ -9058,13 +9291,12 @@ status open
 
 
 \backslash
-verb+out_degree+
+verb+eqDegree1Verts+
 \end_layout
 
 \end_inset
 
-.
- Como en C++ la operación de agregar un elemento en una lista de tipo 
+ y 
 \begin_inset ERT
 status open
 
@@ -9072,34 +9304,777 @@ status open
 
 
 \backslash
-verb+std::list+
+verb+unknownDegree1Verts+
 \end_layout
 
 \end_inset
 
- también es constante se puede concluir que la inicialización de las listas
- es un proceso que se ejecuta en tiempo lineal.
+, por cada vértice de grado uno que encontramos marcamos el vértice adyacente
+ como visitado ya que ambos se causalizan en el mismo momento.
+ La eliminación de las aristas es una alternativa a colorearlas de color
+ azul que es lo que se plantea en la versión original del algoritmo.
+ Al eliminar las aristas reducimos el tamaño del grafo lo cual resulta convenien
+te en caso de que el algoritmo simple no logre causalizar todas las ecuaciones
+ y sea necesario aplicar el algoritmo de Tarjan.
 \end_layout
 
 \begin_layout Standard
-K = E/V
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  void CausalizationStrategy::collectDegree1Verts(Vertex v, std::list<Vertex>
+ &degree1Verts) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    CausalizationGraph::out_edge_iterator outEdgeIter, outEdgeIterEnd, next;
+\end_layout
+
+\begin_layout Plain Layout
+
+    boost::tie(outEdgeIter, outEdgeIterEnd) = out_edges(v, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+    for(next = outEdgeIter; outEdgeIter != outEdgeIterEnd; outEdgeIter =
+ next) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      next++;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Edge adjEdge = *outEdgeIter;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Vertex adjacent = target(adjEdge, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+      remove_edge(adjEdge, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (out_degree(adjacent, _graph) == 1 && !_graph[adjacent].visited)
+ {
+\end_layout
+
+\begin_layout Plain Layout
+
+        Edge e = getUniqueEdge(adjacent);
+\end_layout
+
+\begin_layout Plain Layout
+
+        Vertex adjAdjacent = target(e, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+        _graph[adjAdjacent].visited = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+        degree1Verts.push_back(adjacent);
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Complejidad
 \end_layout
 
 \begin_layout Standard
-V + V * K es porque la operación se realiza una vez por cada vértice de
- grado uno y además por cada vértice de grado uno se realiza para cada vértice
- adyacente (K).
+Para calcular la complejidad de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ lo que vamos a hacer es calcular primero la complejidad de las subrutinas
+ que esta función invoca.
+ Luego a partir de esos valores calculados, y junto con los valores de complejid
+ad temporal del resto de las funciones que se invocan, calcularemos la complejid
+ad total de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+En la tabla que se ve a continuación se puede ver el cálculo de complejidad
+ de las funciones 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalBegining+
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+makeCausalEnd+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+collectDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Tabular
-<lyxtabular version="3" rows="8" columns="4">
+<lyxtabular version="3" rows="9" columns="6">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Función
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Complejidad
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cantidad de invocaciones
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Complejidad total
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+makeCausalBegining
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+push_back (std::list)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+makeCausalEnd
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+operator[] (std::vector)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+collectDegree1Verts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+target (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+remove_edge (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K (E/V)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+out_degree (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K (E/V)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getUniqueEdge
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+push_back (std::list)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+operator[] (CausalizationGraph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+log V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+log V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Habiendo calculado la complejidad de las subrutinas ahora si podemos calcular
+ la complejidad de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+.
+ En la siguiente tabla se detalla el cálculo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="15" columns="6">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9127,7 +10102,7 @@ Cantidad invocaciones
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9136,8 +10111,365 @@ Complejidad total
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Inicialización de las listas eqDegree1Verts y unknownDegree1Verts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vertices (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V+V\times\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+out_degree (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K (E/V)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K * V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+graph[] (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+log V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3 * V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3 * V * log V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getUniqueEdge
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+target (Boost Graph)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+push_back (std::list)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bucle while
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9171,7 +10503,7 @@ out_degree
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9183,8 +10515,29 @@ out_degree
 
 \end_inset
 </cell>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V+V\times\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9215,7 +10568,7 @@ push_back
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9227,8 +10580,26 @@ push_back
 
 \end_inset
 </cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9262,7 +10633,7 @@ graph[]
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9274,8 +10645,26 @@ graph[]
 
 \end_inset
 </cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9298,12 +10687,27 @@ remove_vertex
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset Formula $2V$
+\end_inset
+
 
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9314,6 +10718,15 @@ remove_vertex
 </cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9341,7 +10754,7 @@ V+K*V
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9350,8 +10763,26 @@ O(V)
 
 \end_inset
 </cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -9379,7 +10810,16 @@ V
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+O(V)
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9390,18 +10830,34 @@ V
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\emph on
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 makeCausalEnd
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -9410,23 +10866,85 @@ V
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $O(V^{2}$
+\begin_inset Formula $O(V$
 \end_inset
 
 )
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+collectDegree1Verts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+V
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -9437,6 +10955,28 @@ V
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+A partir de los valores calculados en la tabla se puede concluir que la
+ complejidad temporal de la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ es 
+\begin_inset Formula $O(V+V\times\log V)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Chapter
