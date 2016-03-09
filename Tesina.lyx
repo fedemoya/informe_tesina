@@ -82,6 +82,14 @@
 
 \begin_body
 
+\begin_layout Author
+Federico Moya
+\end_layout
+
+\begin_layout Title
+Casalización de modelos Modelica
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
@@ -180,30 +188,6 @@ Introducción
 \end_layout
 
 \begin_layout Standard
-En el contexto del proyecto 
-\begin_inset Quotes eld
-\end_inset
-
-Modelado, Simulación y Control en Tiempo Real con Aplicaciones en Electrónica
- de Potencia
-\begin_inset Quotes erd
-\end_inset
-
- de la Universidad Nacional de Rosario se está desarrollando un compilador
- para el lenguaje de modelado Modelica 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Fritzson98"
-
-\end_inset
-
-.
- En este trabajo se describe la implementación de un componente de dicho
- compilador cuya tarea es la causalización de ecuaciones diferenciales algebraic
-as.
-\end_layout
-
-\begin_layout Standard
 Modelica es un lenguaje orientado a objetos, para el modelado de sistemas
  complejos, con componentes, mecánicos, eléctricos, electrónicos, hidráulicos,
  térmicos, etc.
@@ -295,19 +279,6 @@ key "Tarjan72"
  Para aplicar dicho algoritmo es necesario construir un grafo a partir de
  las ecuaciones suponiendo que las ecuaciones y las variables son nodos
  y las aristas representan el uso de una variable en una ecuación.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Un párrafo para cada capítulo
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Section
@@ -450,7 +421,7 @@ Las desventajas del método experimental nos llevan al concepto de modelo.
  el modelo es lo suficientemente realistico.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Modelo
 \end_layout
 
@@ -540,7 +511,7 @@ Este trabajo trata con modelos matemáticos representados de varias maneras,
  
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Simulación
 \end_layout
 
@@ -667,7 +638,7 @@ Revisar este párrafo
 
 \end_inset
 
- Como se menciono en la sección 
+ Como se mencionó en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "sec:Modelica"
@@ -719,12 +690,571 @@ reference "sub:Aplicación-Tarjan-Boost"
  Modelica.
 \end_layout
 
+\begin_layout Section
+Motivación, Objetivos, y Trabajo Relacionado
+\end_layout
+
+\begin_layout Standard
+El presente trabajo se enmarca dentro del proyecto de investigación 
+\begin_inset Quotes eld
+\end_inset
+
+Modelado, Simulación y Control en Tiempo Real con Aplicaciones en Electrónica
+ de Potencia
+\begin_inset Quotes erd
+\end_inset
+
+ de la Universidad Nacional de Rosario.
+\end_layout
+
+\begin_layout Standard
+Uno de los objetivos del proyecto es el desarrollo de un compilador para
+ el lenguaje de modelado Modelica 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fritzson98"
+
+\end_inset
+
+ con los fines de investigar distintos algoritmos en relación a modelos
+ de gran escala.
+ Existen diversas herramientas de modelado y simulación Modelica libres
+ como OpenModelica, JModelica.
+ Aunque estas herramientas son software libre la experimentación con nuevos
+ algoritmos no resulta sencilla, ya sea porque están programadas en un lenguaje
+ propio como es el caso de OpenModelica o porque la inclusión de código
+ experimental las volvería más inestables.
+\end_layout
+
+\begin_layout Standard
+Por este fin se planteó el desarrollo de un compilador de Modelica propio
+ sobre el cual desarrollar y probar los nuevos algoritmos.
+\end_layout
+
+\begin_layout Standard
+En este trabajo se describe la implementación de un componente de dicho
+ compilador cuya tarea es la causalización de ecuaciones diferenciales algebraic
+as.
+\end_layout
+
+\begin_layout Section
+Organización del trabajo
+\end_layout
+
+\begin_layout Standard
+El resto del trabajo se conforma de la siguiente manera:
+\end_layout
+
+\begin_layout Standard
+....
+\end_layout
+
 \begin_layout Part
 Preliminares
 \end_layout
 
 \begin_layout Chapter
 Marco teórico
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Modelado-Físico-Acausal"
+
+\end_inset
+
+Modelado Físico Acausal
+\end_layout
+
+\begin_layout Standard
+El modelado acausal es un estilo declarativo de modelado, que significa
+ modelado basado en ecuaciones más que en asignaciones.
+ Las ecuaciones no especifican qué variables son de entrada y cuáles son
+ de salida, mientras que en las asignaciones las variables del lado izquierda
+ siempre son de salida y las variables del lado derecho siempre son entradas.
+ Por la tanto la causalidad de los modelos basados en ecuaciones es indeterminda
+ y solo se determina cuando los correspondientes sistemas de ecuaciones
+ se resuelven.
+ A esto es a lo que se denomina modelado acausal.
+ El término modelado físico refleja el hecho de que el modelado acausal
+ es muy apropiado para representar la estructura física de los sistemas
+ modelados.
+\end_layout
+
+\begin_layout Standard
+La principal ventaja del modelado acausal es que la dirección de la solución
+ de las ecuaciones es adaptable al flujo de datos del contexto en el que
+ se computa la solución.
+ El flujo de datos se define estableciendo qué variables son necesarias
+ como 
+\shape italic
+salidas
+\shape default
+, y cuáles son 
+\shape italic
+entradas
+\shape default
+ externas al sistema simulado.
+ 
+\end_layout
+
+\begin_layout Section
+Modelos Matemáticos para Sistemas Continuos
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+FB: No se definió esto antes creo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Previamente hemos definido una variable de estado como una variable que
+ debe ser almacenada y actualizada durante la simulación para poder calcular
+ las salidas del modelo.
+ Para los sistemas de tiempo continuo estas variables son aquellas para
+ las cuales sus derivadas respecto del tiempo aparecen en el modelo.
+ Existe una formulación estandar de las ecuaciones de ciertos modelos matemático
+s de sistemas dinámicos denominada modelos de espacio de estados explicitos,
+ en donde las derivadas de las variables de estado aparecen explícitamente
+ del lado izquierdo de las ecuaciones.
+\end_layout
+
+\begin_layout Standard
+Estos modelos son atractivos como una representación matemática básica dado
+ que usualmente resultan más eficientes de resolver y analizar que otros
+ modelos más complicados, sirviendo a la vez para representar un espectro
+ amplio de aplicaciones.
+ Sin embargo hay que tener en cuenta que muchos modelos no pueden ser transforma
+dos a la forma de espacio de estados explicito.
+\end_layout
+
+\begin_layout Subsection
+Forma Explícita de Espacio de Estados
+\end_layout
+
+\begin_layout Standard
+La forma básica de ecuaciones continuas ODE en forma de espacio de estados
+ explícita se presenta debajo, donde 
+\begin_inset Formula $x($
+\end_inset
+
+t) es el conjunto de variables de estados, 
+\begin_inset Formula $u(t)$
+\end_inset
+
+representa las variables de entrada, y 
+\begin_inset Formula $y(t)$
+\end_inset
+
+representa las variables de salida y/o las algebraicas.
+ Se dice que el modelo se encuentra en forma de espacio de estados explícita
+ si y solo si las derivadas se encuentran del lado izquierdo de la primer
+ ecuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\dot{x}(t) & = & f(x(t),u(t))\\
+y(t) & = & g(x(t),u(t))
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Aqui 
+\begin_inset Formula $\dot{x}(t)$
+\end_inset
+
+, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang english
+
+\begin_inset Formula $u(t)$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang spanish
+ y 
+\begin_inset Formula $y(t)$
+\end_inset
+
+ son vectores y 
+\begin_inset Formula $f(t)$
+\end_inset
+
+ y 
+\begin_inset Formula $g(t)$
+\end_inset
+
+ son funciones vectoriales.
+ Los modelos de espacio de estados que no han sido manipulados y llevados
+ a esta forma se encuentra en una forma implícita.
+ La forma semi-explícita de una DAE es de la siguiente manera:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\dot{x}(t) & = & f(x(t),y(t),u(t))\\
+y(t) & = & g(x(t),u(t))
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Ecuaciones diferenciales ordinarias
+\end_layout
+
+\begin_layout Standard
+Las ecuaciones diferenciales ordinarias (o ODEs por sus siglas en inglés)
+ aparecen en la mayoría de los modelos matemáticos de sistemas continuos
+ dado que la dependencia respecto del tiempo en esos modelos generalmente
+ se refleja por medio de derivadas respecto del tiempo de variables de estado
+ correspondientes a dichos modelos.
+ La ley de fuerza de Newton, la cual establece que la fuerza 
+\begin_inset Formula $F$
+\end_inset
+
+ es igual a la masa 
+\begin_inset Formula $m$
+\end_inset
+
+ por la segunda derivada 
+\begin_inset Formula $\ddot{s}$
+\end_inset
+
+ de la posición 
+\begin_inset Formula $s$
+\end_inset
+
+ con respecto al tiempo, es un ejemplo de ODE de segundo orden:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\begin{aligned}m\ddot{s}(t)\end{aligned}
+ & = & F(t)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Introduciendo una variable 
+\begin_inset Formula $v(t)$
+\end_inset
+
+ nos podemos deshacer de la segunda derivada.
+ Después de reacomodar la primer ecuación tenemos a todas las derivadas
+ del lado izquierdo y todas son derivadas de primer orden.
+ Esto significa que hemos transformado el sistema en uno ODE explícito de
+ primer orden:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\dot{x}(t) & = & \frac{F(t)}{m}\\
+\dot{s}(t) & = & v(t)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Un sistema ODE de esta forma es especialmente eficiente para resolver númericame
+nte.
+ La estructura general de un sistema ODE en forma espacio temporal explícita
+ es la siguiente, con variables de entrada 
+\begin_inset Formula $u(t)$
+\end_inset
+
+, salidas 
+\begin_inset Formula $y(t)$
+\end_inset
+
+, y variables de estado 
+\begin_inset Formula $x(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\dot{x}(t) & = & f(x(t),u(t))\\
+y(y) & = & g(x(t),u(t))
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Aqui también introdujimos variables de salida 
+\begin_inset Formula $y(t)$
+\end_inset
+
+ que son directamente computables a partir de las variables de estado y
+ las variables de entrada pero que no influencian la solución para las variables
+ de estado 
+\begin_inset Formula $x(t)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Ecuaciones algebraicas
+\end_layout
+
+\begin_layout Standard
+Las ecuaciones algebraicas son relaciones entre variables que no involucran
+ derivadas de ninguna variable.
+ Estas ecuaciones aparecen naturalmente en modelos de sistemas naturales
+ o artificiales, especialmente cuando hay involucrada alguna restricción.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Incluir diagrama del péndulo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Por ejemplo, las coordenadas cartesianas 
+\begin_inset Formula $\{x_{1},x_{2}\}$
+\end_inset
+
+ de la masa en el péndulo de la figura 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+incluir ref
+\end_layout
+
+\end_inset
+
+ satisfacen la siguiente ecuación algebraica donde se establece que la longitud
+ del pendulo es 
+\begin_inset Formula $L$
+\end_inset
+
+ según la ley de Pitagoras:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+x_{1}^{2}+x_{2}^{2} & = & L^{2}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Las variables definidas por ecuaciones algebraicas y cuyas derivadas no
+ aparecen en el modelo se denominan variables algebraicas.
+ Alguna de estas variables también pueden ser variables de salida.
+\end_layout
+
+\begin_layout Standard
+La forma general de un sistema de ecuaciones algebraicas (sin incluir ecuaciones
+ diferenciales) es se puede ver a continuación:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+g(x(t),u(t),y(t)) & = & 0
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Ecuaciones diferenciales algebraicas
+\end_layout
+
+\begin_layout Standard
+Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
+ tanto ecuaciones difrenciales como ecuaciones algebraicas.
+ Por ejemplo, el modelo que vemos a continuación, el cual corresponde a
+ un péndulo, está compuesto por ecuaciones diferenciales algebraicas, cinco
+ de las ecuaciones del modelo son diferenciales y dos son algebraicas.
+ Las variables del modelo son 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $v_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $v_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $\varphi$
+\end_inset
+
+, 
+\begin_inset Formula $\omega$
+\end_inset
+
+, 
+\begin_inset Formula $F$
+\end_inset
+
+ y las constantes 
+\begin_inset Formula $L$
+\end_inset
+
+, 
+\begin_inset Formula $m$
+\end_inset
+
+, 
+\begin_inset Formula $g$
+\end_inset
+
+.
+ Hemos reemplazado la ecuación correspondiente a la ley de Pitagóras por
+ dos ecuaciones algebraicas sobre las variables 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ y 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ respectivamente, las cuales aún preservan la restricción sobre la longitud
+ del péndulo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+m\dot{v} & = & -F\sin(\varphi)\\
+m\dot{v} & = & -F\cos(\varphi)-mg\\
+\dot{x_{1}} & = & v_{1}\\
+\dot{x}_{2} & = & v_{2}\\
+\dot{\varphi} & = & \omega\\
+x_{1} & = & L\sin(\varphi)\\
+x_{2} & = & -L\cos\left(\varphi\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La forma general de un sistema DAE, de la cual el ejemplo anterior es un
+ caso particular donde 
+\begin_inset Formula $x=\{x_{1},x_{2},v_{1},v_{2},\varphi\}$
+\end_inset
+
+, 
+\begin_inset Formula $u=\{\}$
+\end_inset
+
+, 
+\begin_inset Formula $y=\{$
+\end_inset
+
+
+\begin_inset Formula $\omega,F\}$
+\end_inset
+
+, se puede ver a continuación:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+f(x(t),\dot{x}(t),u(t),y(t) & = & 0\\
+g(x(t),u(t),y(t) & = & 0
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Que pasa con las ecuaciones en diferencia, ecuaciones condicionales y DAEs
+ híbridas? Las tendria que incluir en el marco teórico.
+ Como se manejan en el compilador.
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -773,6 +1303,101 @@ Modelica es un lenguaje orientado a objetos con un concepto general de clase
 \begin_layout Standard
 Estas son las propiedades que hacen a Modelica un lenguaje potente y fácil
  de utilizar, especialmente para modelado y simulación.
+\end_layout
+
+\begin_layout Subsection
+Modelado matemático orientado a objetos
+\end_layout
+
+\begin_layout Standard
+Los lenguajes orientados a objetos tradicionales como Smalltalk, Java o
+ C++, así como también los lenguajes procedurales como Fortran o C, soportan
+ la programación sobre datos almacenados en memoria.
+ Los datos almacenados en memoria corresponde a valores de variables y datos
+ de objetos.
+ El número de objetos usualmente cambia de manera dinámica.
+ El enfoque de orientación a objetos de Smalltalk enfatiza el envío de mensajes
+ entre objetos.
+\end_layout
+
+\begin_layout Standard
+El enfoque de Modelica del concepto de orientación a objetos es diferente
+ ya que Modelica enfatiza el modelado matemático estructurado.
+ La orientación a objetos es vista como una forma de estructuración para
+ poder manejar la complejidad de las descripciones de grandes sistemas.
+ Un Modelo Modelica es principalmente una descripción matemática declarativa.
+ Las propiedades de los sistemas dinámicos se expresan de manera declarativa
+ mediante ecuaciones.
+ 
+\end_layout
+
+\begin_layout Standard
+El enfoque declarativo de Modelica sobre la orientación a objetos se puede
+ resumir en estos puntos:
+\end_layout
+
+\begin_layout Itemize
+La orientación a objetos es utilizada como un concepto de estructuración,
+ enfatizando la estructura declarativa y la reutilización de los modelos
+ matemáticos.
+ Las tres maneras de estructurar son jerarquías, conexiones entre componentes
+ y herencia.
+\end_layout
+
+\begin_layout Itemize
+Las propiedades de los modelos dinámicos se expresan de manera declarativa
+ utilizando ecuaciones.
+\end_layout
+
+\begin_layout Itemize
+Un objeto es una colección de variables de instancia y ecuaciones que comparten
+ un conjunto de datos.
+\end_layout
+
+\begin_layout Standard
+No obstante
+\end_layout
+
+\begin_layout Itemize
+La orientación a objetos en el modelado matemático no es considerado como
+ un intercambio de mensajes entre objetos.
+\end_layout
+
+\begin_layout Standard
+La forma declarativa y orientada a objetos de describir sistemas y su comportami
+ento que ofrece Modelica es de un nivel más alto de abstracción del que
+ poseen los lenguajes orientados a objetos tradicionales ya que ciertos
+ detalles de implementación se omiten.
+ Por ejemplo, no es necesario escribir código para transportar datos de
+ un objeto a otro mediante asignaciones.
+ Ese código lo genera automáticamente el compilador de Modelica a partir
+ de las ecuaciones dadas.
+\end_layout
+
+\begin_layout Standard
+De la misma manera que ocurre en los lenguajes orientados a objetos ordinarios
+ las clases son plantillas para la creación de objetos.
+ Tanto variables como ecuaciones pueden ser heredadas entre clases.
+ También las definiciones de funciones pueden ser heredadas.
+ No obstante, la especificación de comportamiento se realiza principalmente
+ mediante ecuaciones en lugar de métodos.
+ También el lenguaje permite escribir código en forma de algoritmos incluyendo
+ funciones pero esto es una excepción más que una regla.
+\end_layout
+
+\begin_layout Standard
+Dado que este trabajo se centra en la etapa de causalización y que en ese
+ momento del proceso de compilación el modelo ya se encuentra aplanado,
+ es decir solo se compone de variables de tipos básicos y ecuaciones, no
+ ahondaremos más en las particularidades del sistema de clases de Modelica.
+ El lector interesado puede consultar en 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fritzson98"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
@@ -1555,101 +2180,6 @@ key "Fritzson:2003:POM:966262"
 \end_layout
 
 \begin_layout Subsection
-Modelado matemático orientado a objetos
-\end_layout
-
-\begin_layout Standard
-Los lenguajes orientados a objetos tradicionales como Smalltalk, Java o
- C++, así como también los lenguajes procedurales como Fortran o C, soportan
- la programación sobre datos almacenados en memoria.
- Los datos almacenados en memoria corresponde a valores de variables y datos
- de objetos.
- El número de objetos usualmente cambia de manera dinámica.
- El enfoque de orientación a objetos de Smalltalk enfatiza el envío de mensajes
- entre objetos.
-\end_layout
-
-\begin_layout Standard
-El enfoque de Modelica del concepto de orientación a objetos es diferente
- ya que Modelica enfatiza el modelado matemático estructurado.
- La orientación a objetos es vista como una forma de estructuración para
- poder manejar la complejidad de las descripciones de grandes sistemas.
- Un Modelo Modelica es principalmente una descripción matemática declarativa.
- Las propiedades de los sistemas dinámicos se expresan de manera declarativa
- mediante ecuaciones.
- 
-\end_layout
-
-\begin_layout Standard
-El enfoque declarativo de Modelica sobre la orientación a objetos se puede
- resumir en estos puntos:
-\end_layout
-
-\begin_layout Itemize
-La orientación a objetos es utilizada como un concepto de estructuración,
- enfatizando la estructura declarativa y la reutilización de los modelos
- matemáticos.
- Las tres maneras de estructurar son jerarquías, conexiones entre componentes
- y herencia.
-\end_layout
-
-\begin_layout Itemize
-Las propiedades de los modelos dinámicos se expresan de manera declarativa
- utilizando ecuaciones.
-\end_layout
-
-\begin_layout Itemize
-Un objeto es una colección de variables de instancia y ecuaciones que comparten
- un conjunto de datos.
-\end_layout
-
-\begin_layout Standard
-No obstante
-\end_layout
-
-\begin_layout Itemize
-La orientación a objetos en el modelado matemático no es considerado como
- un intercambio de mensajes entre objetos.
-\end_layout
-
-\begin_layout Standard
-La forma declarativa y orientada a objetos de describir sistemas y su comportami
-ento que ofrece Modelica es de un nivel más alto de abstracción del que
- poseen los lenguajes orientados a objetos tradicionales ya que ciertos
- detalles de implementación se omiten.
- Por ejemplo, no es necesario escribir código para transportar datos de
- un objeto a otro mediante asignaciones.
- Ese código lo genera automáticamente el compilador de Modelica a partir
- de las ecuaciones dadas.
-\end_layout
-
-\begin_layout Standard
-De la misma manera que ocurre en los lenguajes orientados a objetos ordinarios
- las clases son plantillas para la creación de objetos.
- Tanto variables como ecuaciones pueden ser heredadas entre clases.
- También las definiciones de funciones pueden ser heredadas.
- No obstante, la especificación de comportamiento se realiza principalmente
- mediante ecuaciones en lugar de métodos.
- También el lenguaje permite escribir código en forma de algoritmos incluyendo
- funciones pero esto es una excepción más que una regla.
-\end_layout
-
-\begin_layout Standard
-Dado que este trabajo se centra en la etapa de causalización y que en ese
- momento del proceso de compilación el modelo ya se encuentra aplanado,
- es decir solo se compone de variables de tipos básicos y ecuaciones, no
- ahondaremos más en las particularidades del sistema de clases de Modelica.
- El lector interesado puede consultar en 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Fritzson98"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsection
 Ecuaciones
 \end_layout
 
@@ -2177,205 +2707,6 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Subsection
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Modelado-Físico-Acausal"
-
-\end_inset
-
-Modelado Físico Acausal
-\end_layout
-
-\begin_layout Standard
-El modelado acausal es un estilo declarativo de modelado, que significa
- modelado basado en ecuaciones más que en asignaciones.
- Las ecuaciones no especifican qué variables son de entrada y cuáles son
- de salida, mientras que en las asignaciones las variables del lado izquierda
- siempre son de salida y las variables del lado derecho siempre son entradas.
- Por la tanto la causalidad de los modelos basados en ecuaciones es indeterminda
- y solo se determina cuando los correspondientes sistemas de ecuaciones
- se resuelven.
- A esto es a lo que se denomina modelado acausal.
- El término modelado físico refleja el hecho de que el modelado acausal
- es muy apropiado para representar la estructura física de los sistemas
- modelados.
-\end_layout
-
-\begin_layout Standard
-La principal ventaja del modelado acausal es que la dirección de la solución
- de las ecuaciones es adaptable al flujo de datos del contexto en el que
- se computa la solución.
- El flujo de datos se define estableciendo qué variables son necesarias
- como 
-\shape italic
-salidas
-\shape default
-, y cuáles son 
-\shape italic
-entradas
-\shape default
- externas al sistema simulado.
- 
-\end_layout
-
-\begin_layout Standard
-La acausalidad de las clases de la biblioteca de Modelica las hacen más
- reutilizables que las clases que contienen asignaciones donde la causalidad
- entrada-salida es fija.
-\end_layout
-
-\begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Implementación-y-ejecución"
-
-\end_inset
-
-Simulación de modelos Modelica
-\end_layout
-
-\begin_layout Standard
-En esta sección vamos a detallar brevemente los pasos necesarios para traducir
- y simular un modelo Modelica.
-\end_layout
-
-\begin_layout Standard
-En primer lugar se realiza un análisis sintáctico del código fuente Modelica
- del cual se obtiene un árbol sintáctico abstracto.
- Luego esta representación se analiza gramaticalmente, se realiza la verificació
-n de tipos, las clases se heredan y expanden, se realizan las modificaciones
- e instanciaciones correspondientes, las ecuaciones 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+connect+
-\end_layout
-
-\end_inset
-
- se convierten en ecuaciones comunes, etc.
- El resultado de este proceso de análisis y traducción es un conjunto plano
- de ecuaciones, constantes, variables y funciones.
- No queda ningún rastro de la estructura de objetos.
-\end_layout
-
-\begin_layout Standard
-Después del proceso de aplanado todas las ecuaciones se ordenan topológicamente
- de acuerdo a las dependencias del flujo de datos entre ellas.
- En el caso de ecuaciones diferenciales algebraicas, no solo se realiza
- un ordenamiento, sino que también es necesario manipular las ecuaciones
- para convertir la matriz de coeficientes a forma triangular inferior de
- a bloques, lo que usualmente se denomina transformación BLT por sus siglas
- en ingles 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Fritzson98"
-
-\end_inset
-
-.
- Luego un módulo de optimización compuesto por algoritmos de simplificación
- algebraica, métodos de reducción de índices, etc., elimina la mayoría de
- las ecuaciones dejando solo un conjunto mínimo que eventualmente va a ser
- resuelto numéricamente.
- Por ejemplo, si dos ecuaciones sintácticamente equivalentes aparecen solo
- se conserva una.
-\end_layout
-
-\begin_layout Standard
-La etapa siguiente consiste en convertir las ecuaciones independientes resultant
-es en asignaciones.
- Esto es posible dado que las ecuaciones fueron ordenadas y se determinó
- una secuencia de ejecución para la evaluación de las ecuaciones.
- Si aparece un conjunto de ecuaciones fuertemente conectadas (un bucle algebraic
-o) se realizan transformaciones simbólicas que ejecutan una serie de transformac
-iones algebraicas para simplificar las dependencias entre las variables.
- En ciertos casos se puede resolver el sistema de ecuaciones diferenciales
- si este posee solución simbólica.
-\end_layout
-
-\begin_layout Standard
-Finalmente se genera código en algún lenguaje de programación convencional,
- usualmente C, y se lo enlaza con algún método de integración numérica el
- cual es el encargado de resolver el sistema de ecuaciones resultante el
- cual ya a sido drásticamente reducido.
-\end_layout
-
-\begin_layout Standard
-En la figura 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-ref{fig:compilacion_Modelica}
-\end_layout
-
-\end_inset
-
- se pueden ver las distintas etapas del proceso de traducción y ejecución.
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{figure}[H]
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-centering
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-includegraphics[width=0.3
-\backslash
-textwidth]{graphics/EtapasCompilacion.jpg}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-caption{Etapas del proceso de compilación y ejecución de Modelica.}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-label{fig:compilacion_Modelica}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{figure}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Tipos de ecuaciones presente en modelos matemáticos
 \end_layout
 
@@ -2384,7 +2715,7 @@ En esta sección vamos a ver un repaso de diferentes tipos de ecuaciones
  y variables, y cómo se relacionan con el lenguaje Modelica.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Categorías de variables y constantes
 \end_layout
 
@@ -2599,457 +2930,150 @@ Variables algebraicas:
 \end_layout
 
 \begin_layout Subsection
-Ecuaciones diferenciales ordinarias
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Implementación-y-ejecución"
+
+\end_inset
+
+Simulación de modelos Modelica
 \end_layout
 
 \begin_layout Standard
-Las ecuaciones diferenciales ordinarias (o ODEs por sus siglas en ingles)
- aparecen en la mayoria de los modelos matemáticos de sistemas continuos
- dado que la dependencia respecto del tiempo en esos modelos generalmente
- se refleja por medio de derivadas respecto del tiempo de variables de estado
- correspondientes a dichos modelos.
- La ley de fuerza de Newton, la cual establece que la fuerza 
-\begin_inset Formula $F$
-\end_inset
-
- es igual a la masa 
-\begin_inset Formula $m$
-\end_inset
-
- por la segunda derivada 
-\begin_inset Formula $\ddot{s}$
-\end_inset
-
- de la posición 
-\begin_inset Formula $s$
-\end_inset
-
- con respecto al tiempo, es un ejemplo de ODE de segundo orden:
+En esta sección vamos a detallar brevemente los pasos necesarios para traducir
+ y simular un modelo Modelica.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\begin{aligned}m\ddot{s}(t)\end{aligned}
- & = & F(t)
-\end{align*}
+En primer lugar se realiza un análisis sintáctico del código fuente Modelica
+ del cual se obtiene un árbol sintáctico abstracto.
+ Luego esta representación se analiza gramaticalmente, se realiza la verificació
+n de tipos, las clases se heredan y expanden, se realizan las modificaciones
+ e instanciaciones correspondientes, las ecuaciones 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+connect+
+\end_layout
 
 \end_inset
 
-
+ se convierten en ecuaciones comunes, etc.
+ El resultado de este proceso de análisis y traducción es un conjunto plano
+ de ecuaciones, constantes, variables y funciones.
+ No queda ningún rastro de la estructura de objetos.
 \end_layout
 
 \begin_layout Standard
-Introduciendo una variable 
-\begin_inset Formula $v(t)$
-\end_inset
+Después del proceso de aplanado todas las ecuaciones se ordenan topológicamente
+ de acuerdo a las dependencias del flujo de datos entre ellas.
+ En el caso de ecuaciones diferenciales algebraicas, no solo se realiza
+ un ordenamiento, sino que también es necesario manipular las ecuaciones
+ para convertir la matriz de coeficientes a forma triangular inferior de
+ a bloques, lo que usualmente se denomina transformación BLT por sus siglas
+ en ingles 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fritzson98"
 
- nos podemos deshacer de la segunda derivada.
- Después de reacomodar la primer ecuación tenemos a todas las derivadas
- del lado izquierdo y todas son derivadas de primer orden.
- Esto significa que hemos transformado el sistema en uno ODE explícito de
- primer orden:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & \frac{F(t)}{m}\\
-\dot{s}(t) & = & v(t)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Un sistema ODE de esta forma es especialmente eficiente para resolver númericame
-nte.
- La estructura general de un sistema ODE en forma espacio temporal explícita
- es la siguiente, con variables de entrada 
-\begin_inset Formula $u(t)$
-\end_inset
-
-, salidas 
-\begin_inset Formula $y(t)$
-\end_inset
-
-, y variables de estado 
-\begin_inset Formula $x(t)$
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),u(t))\\
-y(y) & = & g(x(t),u(t))
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Aqui también introdujimos variables de salida 
-\begin_inset Formula $y(t)$
-\end_inset
-
- que son directamente computables a partir de las variables de estado y
- las variables de entrada pero que no influencian la solución para las variables
- de estado 
-\begin_inset Formula $x(t)$
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Subsection
-Ecuaciones algebraicas
-\end_layout
-
-\begin_layout Standard
-Las ecuaciones algebraicas son relaciones entre variables que no involucran
- derivadas de ninguna variable.
- Estas ecuaciones aparecen naturalmente en modelos de sistemas naturales
- o artificiales, especialmente cuando hay involucrada alguna restricción.
+ Luego un módulo de optimización compuesto por algoritmos de simplificación
+ algebraica, métodos de reducción de índices, etc., elimina la mayoría de
+ las ecuaciones dejando solo un conjunto mínimo que eventualmente va a ser
+ resuelto numéricamente.
+ Por ejemplo, si dos ecuaciones sintácticamente equivalentes aparecen solo
+ se conserva una.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+La etapa siguiente consiste en convertir las ecuaciones independientes resultant
+es en asignaciones.
+ Esto es posible dado que las ecuaciones fueron ordenadas y se determinó
+ una secuencia de ejecución para la evaluación de las ecuaciones.
+ Si aparece un conjunto de ecuaciones fuertemente conectadas (un bucle algebraic
+o) se realizan transformaciones simbólicas que ejecutan una serie de transformac
+iones algebraicas para simplificar las dependencias entre las variables.
+ En ciertos casos se puede resolver el sistema de ecuaciones diferenciales
+ si este posee solución simbólica.
+\end_layout
+
+\begin_layout Standard
+Finalmente se genera código en algún lenguaje de programación convencional,
+ usualmente C, y se lo enlaza con algún método de integración numérica el
+ cual es el encargado de resolver el sistema de ecuaciones resultante el
+ cual ya a sido drásticamente reducido.
+\end_layout
+
+\begin_layout Standard
+En la figura 
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-Incluir diagrama del péndulo
+
+
+\backslash
+ref{fig:compilacion_Modelica}
 \end_layout
 
 \end_inset
 
-
+ se pueden ver las distintas etapas del proceso de traducción y ejecución.
 \end_layout
 
 \begin_layout Standard
-Por ejemplo, las coordenadas cartesianas 
-\begin_inset Formula $\{x_{1},x_{2}\}$
-\end_inset
-
- de la masa en el péndulo de la figura 
-\begin_inset Note Note
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-incluir ref
+
+
+\backslash
+begin{figure}[H]
 \end_layout
-
-\end_inset
-
- satisfacen la siguiente ecuación algebraica donde se establece que la longitud
- del pendulo es 
-\begin_inset Formula $L$
-\end_inset
-
- según la ley de Pitagoras:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-x_{1}^{2}+x_{2}^{2} & = & L^{2}
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Las variables definidas por ecuaciones algebraicas y cuyas derivadas no
- aparecen en el modelo se denominan variables algebraicas.
- Alguna de estas variables también pueden ser variables de salida.
-\end_layout
-
-\begin_layout Standard
-La forma general de un sistema de ecuaciones algebraicas (sin incluir ecuaciones
- diferenciales) es se puede ver a continuación:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-g(x(t),u(t),y(t)) & = & 0
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Ecuaciones diferenciales algebraicas
-\end_layout
-
-\begin_layout Standard
-Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
- tanto ecuaciones difrenciales como ecuaciones algebraicas.
- Por ejemplo, el modelo que vemos a continuación, el cual corresponde a
- un péndulo, está compuesto por ecuaciones diferenciales algebraicas, cinco
- de las ecuaciones del modelo son diferenciales y dos son algebraicas.
- Las variables del modelo son 
-\begin_inset Formula $x_{1}$
-\end_inset
-
-, 
-\begin_inset Formula $x_{2}$
-\end_inset
-
-, 
-\begin_inset Formula $v_{1}$
-\end_inset
-
-, 
-\begin_inset Formula $v_{2}$
-\end_inset
-
-, 
-\begin_inset Formula $\varphi$
-\end_inset
-
-, 
-\begin_inset Formula $\omega$
-\end_inset
-
-, 
-\begin_inset Formula $F$
-\end_inset
-
- y las constantes 
-\begin_inset Formula $L$
-\end_inset
-
-, 
-\begin_inset Formula $m$
-\end_inset
-
-, 
-\begin_inset Formula $g$
-\end_inset
-
-.
- Hemos reemplazado la ecuación correspondiente a la ley de Pitagóras por
- dos ecuaciones algebraicas sobre las variables 
-\begin_inset Formula $x_{1}$
-\end_inset
-
- y 
-\begin_inset Formula $x_{2}$
-\end_inset
-
- respectivamente, las cuales aún preservan la restricción sobre la longitud
- del péndulo.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-m\dot{v} & = & -F\sin(\varphi)\\
-m\dot{v} & = & -F\cos(\varphi)-mg\\
-\dot{x_{1}} & = & v_{1}\\
-\dot{x}_{2} & = & v_{2}\\
-\dot{\varphi} & = & \omega\\
-x_{1} & = & L\sin(\varphi)\\
-x_{2} & = & -L\cos\left(\varphi\right)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-La forma general de un sistema DAE, de la cual el ejemplo anterior es un
- caso particular donde 
-\begin_inset Formula $x=\{x_{1},x_{2},v_{1},v_{2},\varphi\}$
-\end_inset
-
-, 
-\begin_inset Formula $u=\{\}$
-\end_inset
-
-, 
-\begin_inset Formula $y=\{$
-\end_inset
-
-
-\begin_inset Formula $\omega,F\}$
-\end_inset
-
-, se puede ver a continuación:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-f(x(t),\dot{x}(t),u(t),y(t) & = & 0\\
-g(x(t),u(t),y(t) & = & 0
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
 
 \begin_layout Plain Layout
-Que pasa con las ecuaciones en diferencia, ecuaciones condicionales y DAEs
- híbridas? Las tendria que incluir en el marco teórico.
- Como se manejan en el compilador.
+
+  
+\backslash
+centering
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Ecuaciones de Espacio de estados para Sistemas Continuos
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
 
 \begin_layout Plain Layout
-FB: No se definió esto antes creo
+
+  
+\backslash
+includegraphics[width=0.3
+\backslash
+textwidth]{graphics/EtapasCompilacion.jpg}
 \end_layout
 
-\end_inset
+\begin_layout Plain Layout
 
-
+  
+\backslash
+caption{Etapas del proceso de compilación y ejecución de Modelica.}
 \end_layout
 
-\begin_layout Standard
-Previamente hemos definido una variable de estado como una variable que
- debe ser almacenada y actualizada durante la simulación para poder calcular
- las salidas del modelo.
- Para los sistemas de tiempo continuo estas variables son aquellas para
- las cuales sus derivadas respecto del tiempo aparecen en el modelo.
- Existe una formulación estandar de las ecuaciones de ciertos modelos matemático
-s de sistemas dinámicos denominada modelos de espacio de estados explicitos,
- en donde las derivadas de las variables de estado aparecen explícitamente
- del lado izquierdo de las ecuaciones.
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:compilacion_Modelica}
 \end_layout
 
-\begin_layout Standard
-Estos modelos son atractivos como una representación matemática básica dado
- que usualmente resultan más eficientes de resolver y analizar que otros
- modelos más complicados, sirviendo a la vez para representar un espectro
- amplio de aplicaciones.
- Sin embargo hay que tener en cuenta que muchos modelos no pueden ser transforma
-dos a la forma de espacio de estados explicito.
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
 \end_layout
-
-\begin_layout Subsection
-Forma Explícita de Espacio de Estados
-\end_layout
-
-\begin_layout Standard
-La forma básica de ecuaciones continuas ODE en forma de espacio de estados
- explícita se presenta debajo, donde 
-\begin_inset Formula $x($
-\end_inset
-
-t) es el conjunto de variables de estados, 
-\begin_inset Formula $u(t)$
-\end_inset
-
-representa las variables de entrada, y 
-\begin_inset Formula $y(t)$
-\end_inset
-
-representa las variables de salida y/o las algebraicas.
- Se dice que el modelo se encuentra en forma de espacio de estados explícita
- si y solo si las derivadas se encuentran del lado izquierdo de la primer
- ecuación.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),u(t))\\
-y(t) & = & g(x(t),u(t))
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Aqui 
-\begin_inset Formula $\dot{x}(t)$
-\end_inset
-
-, 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\lang english
-
-\begin_inset Formula $u(t)$
-\end_inset
-
-
-\family default
-\series default
-\shape default
-\size default
-\emph default
-\bar default
-\strikeout default
-\uuline default
-\uwave default
-\noun default
-\color inherit
-\lang spanish
- y 
-\begin_inset Formula $y(t)$
-\end_inset
-
- son vectores y 
-\begin_inset Formula $f(t)$
-\end_inset
-
- y 
-\begin_inset Formula $g(t)$
-\end_inset
-
- son funciones vectoriales.
- Los modelos de espacio de estados que no han sido manipulados y llevados
- a esta forma se encuentra en una forma implícita.
- La forma semi-explícita de una DAE es de la siguiente manera:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),y(t),u(t))\\
-y(t) & = & g(x(t),u(t))
-\end{align*}
 
 \end_inset
 
@@ -4352,11 +4376,10 @@ textwidth}
 
 \begin_layout Plain Layout
 
-   
-\backslash
-includegraphics[width=
-\backslash
-textwidth]{graphics/bipartito_Tarjan.png}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
