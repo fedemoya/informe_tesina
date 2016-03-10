@@ -11038,6 +11038,141 @@ verb+simpleCausalizationStrategy+
 \end_layout
 
 \begin_layout Chapter
+Ejemplos
+\end_layout
+
+\begin_layout Section
+Circuito LC
+\end_layout
+
+\begin_layout Section
+Circuito LC con lazo algebraico
+\end_layout
+
+\begin_layout Section
+Transmisión de masa/energía en una dimensión
+\end_layout
+
+\begin_layout Standard
+El tercer ejemplo representa la transmisión de masa o energía en una dimensión.
+ La ecuación que representa este fenómeno es la siguiente:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\frac{\partial u(x,t)}{\partial t}+a\frac{\partial u(x,t)}{\partial x}=d\frac{\partial^{2}u(x,t)}{\partial x^{2}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+donde 
+\begin_inset Formula $u(x,t)$
+\end_inset
+
+ representa la concentración de masa o energía en la coordinada espacia
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ en el tiempo 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename graphics/ad.eps
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Discretización de la componente espacial.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La ecuación presenta derivadas en función de la componente espacial, lo
+ que la transforma en una ecuación en derivadas parciales.
+ Ésta es convertida en una ecuación diferencial ordinaria utilizando el
+ Método de Líneas 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "CK06"
+
+\end_inset
+
+ el cual discretiza la componente espacial usando diferencias finitas en
+ 
+\begin_inset Formula $N$
+\end_inset
+
+segmentos (ver Figura 5.1).
+ Cuanto mayor sea 
+\begin_inset Formula $N$
+\end_inset
+
+ mejor será la aproximación.
+ Una vez discretizada la componente espacial obtenemos el siguiente conjunto
+ de ODEs:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\dot{u}_{n}(t) & = & 0\\
+\dot{u}_{1}(t) & = & \frac{u_{1}(t)-u_{2}(t)}{\frac{1}{N}}\\
+\dot{u}_{i}(t) & = & \frac{u_{i+1}(t)-u_{i}(t)}{\frac{1}{N}}+\frac{u_{i-1}(t)-u_{i}(t)}{\frac{\gamma}{N}}\;
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+para 
+\begin_inset Formula $i\epsilon[2:N-1]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+En este caso estudiaremos la complejidad temporal de los algoritmos presentados
+ para distintos tamaños de 
+\begin_inset Formula $N$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Chapter
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Tests-unitarios"
