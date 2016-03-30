@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass book
@@ -15,6 +15,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{epstopdf}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -25,13 +26,13 @@
 \font_roman default
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -51,15 +52,24 @@
 \pdf_pdfusetitle true
 \papersize a4paper
 \use_geometry false
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
-\cite_engine natbib_numerical
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type numerical
+\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 1
 \index Index
 \shortcut idx
@@ -4549,7 +4559,7 @@ El compilador Modelicacc se desarrolló como un conjunto de componentes independ
 entes, cada uno de los cuales implementa una etapa diferente del proceso
  de compilación de un modelo Modelica.
  En este capítulo vamos a introducir los diferentes componentes que conforman
- el compilador Modelica explicando el rol de cada uno y cómo se conjugan
+ el compilador Modelica explicando el rol de cada uno y cómo se componen
  para lograr la compilación de un modelo Modelica.
 \end_layout
 
@@ -4654,8 +4664,10 @@ verb+connect+
 \begin_layout Standard
 El proceso de análisis sintáctico, semántico y aplanado es responsabilidad
  de un componente denominado flatter.
- La causalización del conjunto de ecuaciones del modelo es tarea de un component
-e denominda causalize.
+ La siguiente etapa consiste en reescribir el modelo utilizando un subconjunto
+ del lenguaje Modelica denominado μModelica.
+ Finalmente tenemos la causalización del conjunto de ecuaciones del modelo,
+ la cual es tarea de un componente denominda causalize.
  En las siguientes secciones vamos a describir con más detalle cada una
  de estos componentes.
 \end_layout
@@ -5683,7 +5695,751 @@ name "sec:micromodelica:"
 
 \end_inset
 
-Simplificación a microModelica: mmo
+Simplificación a μModelica: mmo
+\end_layout
+
+\begin_layout Standard
+La tarea del componente mmo es traducir el modelo aplanado a una versión
+ simplificada (un subconjunto) del lenguaje modelica denominada μModelica.
+ Esta transformación del modelo es necesaria porque para la etapa final
+ del proceso de compilación, la cual consiste en la generación de código
+ C y la posterior simulación, se utiliza el QSS Stand–Alone Solver 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "FernandezKofman12"
+
+\end_inset
+
+, el cual espera modelos escritos en μModelica 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MMO"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+El lenguaje μModelica tiene las siguientes restricciones respecto a Modelica:
+\end_layout
+
+\begin_layout Itemize
+El modelo se encuentra aplanado, es decir no se permiten clases.
+\end_layout
+
+\begin_layout Itemize
+Todas las variables pertenecen al tipo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+Real+
+\end_layout
+
+\end_inset
+
+ y solo hay tres categorias de variables: estados continuos, estados discretos
+ y variables algebraicas.
+\end_layout
+
+\begin_layout Itemize
+Los parametros también son de tipo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+Real+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Los arreglos esta permitidos.
+ Los índices de los arrays que se encuentran dentro de clausulas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+for+
+\end_layout
+
+\end_inset
+
+ estan restringidos a expresiones de la forma: 
+\begin_inset Formula $ai+b$
+\end_inset
+
+ donde 
+\begin_inset Formula $a$
+\end_inset
+
+ y 
+\begin_inset Formula $b$
+\end_inset
+
+ son expresiones enteras e 
+\series bold
+
+\begin_inset Formula $i$
+\end_inset
+
+
+\series default
+ es el índice de iteración.
+\end_layout
+
+\begin_layout Itemize
+La sección 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+verb+equation+
+\end_layout
+
+\end_inset
+
+ se compone de:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+definiciones de derivadas de variables de estado: 
+\begin_inset Formula $der(x)=f(x(t),d,a(t),t)$
+\end_inset
+
+; en forma ODE explícita.
+\end_layout
+
+\begin_layout Itemize
+definiciones de variables algebraicas: 
+\begin_inset Formula $(a_{1},...,a_{n})=g(x(t),d,(a(t),t)$
+\end_inset
+
+ con la restriccion de que cada variable algebraica solo puede depender
+ de variables de estado y de otras variables algebraicas previamente definidas.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Las discontinuidades se expresan solo por clausulas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+when+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+verb+elsewhen+
+\end_layout
+
+\end_inset
+
+ dentro de la sección 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+algorithm+
+\end_layout
+
+\end_inset
+
+.
+ En ambas casos las condiciones solo pueden ser relaciones y, dentro de
+ las clausulas, solo esta permitido la asignación de variables discretas
+ y la re-inicialización (
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+reinit+
+\end_layout
+
+\end_inset
+
+) de variables de estado continuas.
+\end_layout
+
+\begin_layout Standard
+Una especificación completa del lenguaje μModelica se puede encontrar en
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "MMO"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A continuación podemos ver el resultado de aplicar el componente mmo sobre
+ el modelo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+BouncingBall+
+\end_layout
+
+\end_inset
+
+ aplanado.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model BouncingBall
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange1_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange2_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange2_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_flange2_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_dy;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real spring1_dv;
+\end_layout
+
+\begin_layout Plain Layout
+
+      parameter Real spring1_b=10;
+\end_layout
+
+\begin_layout Plain Layout
+
+      parameter Real spring1_k=10000;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real fixed1_flange1_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real fixed1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real fixed1_flange1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      parameter Real fixed1_s0=0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real ball1_flange1_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real ball1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real ball1_flange1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      parameter Real ball1_m=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      parameter Real ball1_g=9.8;
+\end_layout
+
+\begin_layout Plain Layout
+
+      Real ball1_y(start=10);
+\end_layout
+
+\begin_layout Plain Layout
+
+      discrete Real d0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_dv = spring1_flange1_v-spring1_flange2_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_dy = spring1_flange1_s-spring1_flange2_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange1_f = pre(d0)*(spring1_b*spring1_dv+spring1_k*spring1_dy)+(1
+-pre(d0))*(0);
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange2_f = ((-spring1_flange1_f));
+\end_layout
+
+\begin_layout Plain Layout
+
+      fixed1_flange1_s = fixed1_s0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      fixed1_flange1_v = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(ball1_y) = ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      ball1_flange1_v = ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      ball1_y = ball1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      ball1_m*der(ball1_v) = ball1_flange1_f-ball1_m*ball1_g;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange2_f+fixed1_flange1_f = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange2_s = fixed1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange2_v = fixed1_flange1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange1_f+ball1_flange1_f = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange1_s = ball1_flange1_s;
+\end_layout
+
+\begin_layout Plain Layout
+
+      spring1_flange1_v = ball1_flange1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+    algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+      when spring1_dy<0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      elsewhen spring1_dy>=0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end when;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end BouncingBall;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La aplicación del componente mmo sustityo la ecuación
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  spring1_flange1_f =
+\end_layout
+
+\begin_layout Plain Layout
+
+    if spring1_dy<0 then spring1_b*spring1_dv+spring1_k*spring1_dy else
+ 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+la cual expresaba una discontinuidad por la ecuación continua
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  spring1_flange1_f =
+\end_layout
+
+\begin_layout Plain Layout
+
+    pre(d0)*(spring1_b*spring1_dv+spring1_k*spring1_dy)+(1-pre(d0))*(0);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+más una clausula 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+when+
+\end_layout
+
+\end_inset
+
+ dentro de una sección 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+algorithm+
+\end_layout
+
+\end_inset
+
+.
+ Con esta modificación el modelo resultante es compatible con la especificación
+ de μModelica.
+\end_layout
+
+\begin_layout Section
+Optimización: antialias
+\end_layout
+
+\begin_layout Standard
+Generalmente los modelos Modelica contienen miles de ecuaciones triviales
+ de la forma 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+a=b+
+\end_layout
+
+\end_inset
+
+, la mayoría provenientes de operadores 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+connect+
+\end_layout
+
+\end_inset
+
+.
+ Con el fin de simplificar las tareas de las etapas sucesivas estas variables
+ alias son eliminadas junto con las ecuaciones que las definen.
+ Luego las variables eliminadas son sustituidas en las otras ecuaciones
+ en las que aparecen por sus correspondientes alias.
+\end_layout
+
+\begin_layout Standard
+En el modelo de la sección anterior se pueden ver varias ecuaciones que
+ definen variables alias.
+ El modelo que vemos a continuación es el resultado de aplicar el componente
+ antialias al modelo de la sección anterior.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model BouncingBall
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_flange1_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_y(start=10);
+\end_layout
+
+\begin_layout Plain Layout
+
+    discrete Real d0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(ball1_y) = ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(ball1_v) = ball1_flange1_f-9.8;
+\end_layout
+
+\begin_layout Plain Layout
+
+      (-ball1_flange1_f) = pre(d0)*(10*ball1_v+10000*ball1_y);
+\end_layout
+
+\begin_layout Plain Layout
+
+    algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+      when ball1_y<0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      elsewhen ball1_y>=0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end when;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end BouncingBall;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Este modelo es una versión equivalente pero considerablemente más simple
+ (menos ecuaciones y variables) que el anterior.
 \end_layout
 
 \begin_layout Section
@@ -5691,16 +6447,141 @@ Causalización: causalize
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+La etapa de causalización tiene como principal responsabilidad la de ordenar
+ las ecuaciones del modelo de manera tal que cada ecuación posea del lado
+ izquierdo solo una incógnita y que las variables que aparezcan en el lado
+ derecho de la ecuación sean variables conocidas, es decir variables resueltas
+ por ecuaciones previas.
+\end_layout
+
+\begin_layout Standard
+Al aplicar el componente causalize al modelo de la sección anterior obtenemos
+ este otro modelo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-FB: falta todo esto
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model BouncingBall
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_flange1_f;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real ball1_y(start=10);
+\end_layout
+
+\begin_layout Plain Layout
+
+    discrete Real d0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(ball1_y) = ball1_v;
+\end_layout
+
+\begin_layout Plain Layout
+
+      ball1_flange1_f = (-10000*ball1_y*d0)-10*ball1_v*d0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(ball1_v) = ball1_flange1_f-9.8;
+\end_layout
+
+\begin_layout Plain Layout
+
+    algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+      when ball1_y<0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      elsewhen ball1_y>=0 then
+\end_layout
+
+\begin_layout Plain Layout
+
+        d0:=0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end when;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end BouncingBall;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+El modelo de la sección anterior no podia ser resuelto secuencialmente,
+ es decir comenzando por la primer ecuación, luego la segunda, y así sucesivamen
+te, porque la segunda ecuación depende de la variable 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+ball1_flange1_f+
+\end_layout
+
+\end_inset
+
+ la cual se resuelve con la tercer ecuación.
+ Al aplicarle el componente causalize la segunda y la tercer ecuación se
+ invierten.
+ El modelo resultante sí puede ser resuelto secuencialmente.
 \end_layout
 
 \begin_layout Part
@@ -9567,13 +10448,13 @@ verb+collectDegree1Verts+
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="6">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
@@ -10116,13 +10997,13 @@ verb+simpleCausalizationStrategy+
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="15" columns="6">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
@@ -11054,7 +11935,112 @@ Transmisión de masa/energía en una dimensión
 \end_layout
 
 \begin_layout Standard
-El tercer ejemplo representa la transmisión de masa o energía en una dimensión.
+En esta sección analizaremos el tiempo de ejecución de los algoritmos de
+ causalización presentados en el capítulo anterior.
+ Los tiempos los vamos a medir ejecutando los algoritmos de causalización
+ sobre un modelo de ejemplo.
+ Este modelo posee ecuaciones de tipo 
+\begin_inset Quotes eld
+\end_inset
+
+for equation
+\begin_inset Quotes erd
+\end_inset
+
+ lo cual resulta conveniente para el analisis ya que podemos incrementar
+ la cantidad de ecuaciones e incógnitas del modelo incrementando el rango
+ de valores del 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+for_index+
+\end_layout
+
+\end_inset
+
+ (ver sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Expansión-de-ecuaciones"
+
+\end_inset
+
+) y ver si el incremento de los tiempos de ejecución se condice con los
+ calculos de complejidad que realizamos en el capítulo anterior.
+\end_layout
+
+\begin_layout Standard
+El algoritmo de causalización implementado en el método 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+causalize+
+\end_layout
+
+\end_inset
+
+ de la clase 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+CausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ es en realidad la composición de dos algoritmos independientes.
+ Estos algoritmos estan implementados en los métodos privados 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+complexCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+.
+ Según lo expuesto en la sección del capítulo anterior, la incorporación
+ de la estrategía simple al proceso de causalización constituye una optimización
+ del mismo.
+ Lo que vamos a hacer en esta sección es causalizar un modelo de ejemplo
+ y medir el tiempo de ejecución de la estrategía simple, la estrategía compleja
+ y de la estrategía completa, es decir la composición de la simple con la
+ compleja.
+ 
+\end_layout
+
+\begin_layout Standard
+El ejemplo que vamos a utilizar representa la transmisión de masa o energía
+ en una dimensión.
  La ecuación que representa este fenómeno es la siguiente:
 \end_layout
 
@@ -11071,7 +12057,7 @@ donde
 \begin_inset Formula $u(x,t)$
 \end_inset
 
- representa la concentración de masa o energía en la coordinada espacia
+ representa la concentración de masa o energía en la coordenada espacial
  
 \begin_inset Formula $x$
 \end_inset
@@ -11082,38 +12068,6 @@ donde
 
 .
  
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename graphics/ad.eps
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Discretización de la componente espacial.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -11164,12 +12118,605 @@ para
 \end_layout
 
 \begin_layout Standard
-En este caso estudiaremos la complejidad temporal de los algoritmos presentados
- para distintos tamaños de 
-\begin_inset Formula $N$
+El modelo modelica correspondiente tiene la siguiente forma.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model OneDHeatTransferTI_FD
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L = 0.2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    constant Integer N = 100;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real T0 = 273.15;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real TN = 330;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real cp = 910;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real lambda = 237;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real rho = 2712;
+\end_layout
+
+\begin_layout Plain Layout
+
+    final parameter
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real dx = L / (N - 1);
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real T[N] ;
+\end_layout
+
+\begin_layout Plain Layout
+
+    initial algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+      for i in 1:N - 1 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+        T[i] := T0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+      T[N] := TN;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(T[N]) = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      for i in 2:N - 1 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+        der(T[i]) = lambda * ((T[i + 1] - T[i]) / dx + ((-T[i]) + T[i -
+ 1]) / dx) / cp / rho / dx;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(T[1]) = lambda * ((T[2] - T[1]) / dx) / cp / rho / dx;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end OneDHeatTransferTI_FD; 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Para medir los tiempos de ejecución de las diferentes estrategías armamos
+ un test, el cual recibe como entrada un modelo modelica y lo causaliza
+ utilizando las tres estrategias anteriormente mencionadas.
+ Al finalizar imprime el tiempo que demoro en ejecutarse cada estrategia.
+ El test se encuentra implementado en el archivo test/causalize/performance_test.
+cpp.
+ Al ejecutarlo sobre el modelo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+OneDHeatTransferTI_FD+
+\end_layout
+
+\end_inset
+
+ obtenemos una salida como la que siguiente:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+verb+Simple strategy: 0.020906 Tarjan strategy: 0.021469 Full Causalization
+ strategy: 0.020833+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En el gráfico 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:OneDHeatTransfer}
+\end_layout
+
+\end_inset
+
+ se puede ver el resultado de aplicar el test sobre modelos 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+OneDHeatTransferTI_FD+
+\end_layout
+
+\end_inset
+
+ con diferentes tamaños de la constante 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+N+
+\end_layout
+
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/OneDHeatTransfer.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{OneDHeatTransfer}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:OneDHeatTransfer}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Según los calculos realizados en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:ComplejidadTarjan1"
+
+\end_inset
+
+ la complejidad de la estrategia compleja es 
+\begin_inset Formula $O(V^{2})$
+\end_inset
+
+.
+ En el caso de la estrategía simple (ver sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Optimización"
+
+\end_inset
+
+), la complejidad temporal es 
+\begin_inset Formula $O(V+V\times\log V)$
+\end_inset
+
+.
+ En el gráfico 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:OneDHeatTransfer}
+\end_layout
+
+\end_inset
+
+ se puede apreciar que el crecimiento del tiempo de ejecución en función
+ de la cantidad de ecuaciones del sistema se condice con los valores de
+ complejidad calculados.
+ Respecto a la estrategía completa de causalización, lo que se puede ver
+ en el gráfico es que la curva es similar a la de la estrategía simple.
+ Esto es porque el modelo de ejemplo no posee lazos algebraicos y por lo
+ tanto solo es necesario la aplicación de la estrategía simple.
+\end_layout
+
+\begin_layout Standard
+Para analizar que sucede con la estrategía completa en el caso en el que
+ el modelo sí posee lazos algebraicos lo que hicimos fue agregar un lazo
+ al ejemplo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+OneDHeatTransferTI_FD+
+\end_layout
+
+\end_inset
+
+.
+ A continuación se puede ver el modelo modificado.
+ Las dos útltimas ecuaciones del modelo son las que contituyen el lazo algebraic
+o.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model OneDHeatTransferTI_FD
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L = 0.2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    constant Integer N = 100;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real T0 = 273.15;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real TN = 330;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real cp = 910;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real lambda = 237;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real rho = 2712;
+\end_layout
+
+\begin_layout Plain Layout
+
+    final parameter
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real dx = L / (N - 1);
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real T[N] ;
+\end_layout
+
+\begin_layout Plain Layout
+
+    initial algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+      for i in 1:N - 1 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+        T[i] := T0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+      T[N] := TN;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(T[N]) = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      for i in 2:N - 1 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+        der(T[i]) = der(T[i-1]) + lambda * ((T[i + 1] - T[i]) / dx + ((-T[i])
+ + T[i - 1]) / dx) / cp / rho / dx;
+\end_layout
+
+\begin_layout Plain Layout
+
+      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(T[1]) = lambda * ((T[2] - T[1]) / dx) / cp / rho / dx;
+\end_layout
+
+\begin_layout Plain Layout
+
+      a+b=T[1];
+\end_layout
+
+\begin_layout Plain Layout
+
+      a*3+b=T[1];
+\end_layout
+
+\begin_layout Plain Layout
+
+  end OneDHeatTransferTI_FD; 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Al ejecutar el test sobre este nuevo modelo, para los mismos valores de
+ la constante 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+N+
+\end_layout
+
+\end_inset
+
+, obtenemos el gráfico 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:OneDHeatTransfer_loop}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/OneDHeatTransfer_loop.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{OneDHeatTransfer with loop}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:OneDHeatTransfer_loop}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter
