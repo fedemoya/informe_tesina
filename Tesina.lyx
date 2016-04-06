@@ -97,7 +97,7 @@ Federico Moya
 \end_layout
 
 \begin_layout Title
-Casalización de modelos Modelica
+Causalización de modelos Modelica
 \end_layout
 
 \begin_layout Standard
@@ -199,8 +199,8 @@ Introducción
 
 \begin_layout Standard
 Modelica es un lenguaje orientado a objetos, para el modelado de sistemas
- complejos, con componentes, mecánicos, eléctricos, electrónicos, hidráulicos,
- térmicos, etc.
+ complejos, con componentes, mecánicos, eléctricos, electrónicos, hidráulicos
+ y térmicos entre otros.
  El lenguaje no tiene restricciones de uso 
 \begin_inset Foot
 status open
@@ -211,7 +211,14 @@ Licencia Modelica V2
 
 \end_inset
 
- y es desarrollado por la asociación sin fines de lucro Modelica Association.
+ y es desarrollado por la asociación sin fines de lucro Modelica Association
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fritzson98"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -269,26 +276,47 @@ Esto es exáctamente así?
 \end_layout
 
 \begin_layout Standard
-En nuestro caso para convertir ecuaciones DAE en ecuaciones ODE utilizamos
- un algoritmo de grafos que se conoce como 
-\begin_inset Quotes eld
-\end_inset
+Este trabajo se encuentra enmarcada en el desarrollo de un compilador Modelica.
+ Puntualmente, el trabajo hace foco en la etapa de causalización de ecuaciones.
+ Se analisan los algoritmos existentes para la realización de dicha tarea
+ y se presenta una implementación en el lenguaje C++ del componente 
+\begin_inset ERT
+status open
 
-El algoritmo de Tarjan
-\begin_inset Quotes erd
-\end_inset
+\begin_layout Plain Layout
 
- 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Tarjan72"
+
+\backslash
+verb+causalize+
+\end_layout
 
 \end_inset
 
 .
- Para aplicar dicho algoritmo es necesario construir un grafo a partir de
- las ecuaciones suponiendo que las ecuaciones y las variables son nodos
- y las aristas representan el uso de una variable en una ecuación.
+ Este componente es una aplicación independiente la cual espera modelos
+ modelica simplificados (el pipeline de compilación se describe en el capítulo
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Visión-general-del"
+
+\end_inset
+
+) y genera modelos modelica cuyas ecuaciones se encuentran en la forma ODE,
+ es decir ordenadas vertical y horizontalmente, de manera que el lado derecho
+ de cada ecuación sea una incógnita y el lado izquierdo sea una expresión
+ compuesta por variables conocidas, es decir variables que se resuelven
+ mediante alguna ecuacion anterior.
+\end_layout
+
+\begin_layout Standard
+En el resto de este capítulo se introducen los conceptos básicos involucrados
+ en el trabajo.
+ Se definen las nociones de modelado y simulación.
+ Se presenta una introducción al lenguaje modelica así como también se describe
+ brevemente la etapa de causalización.
+ Se presentan los motivos y objetivos del trabajo y finalmente se detalla
+ la organización del mismo.
 \end_layout
 
 \begin_layout Section
@@ -752,11 +780,73 @@ Organización del trabajo
 \end_layout
 
 \begin_layout Standard
-El resto del trabajo se conforma de la siguiente manera:
+En la Parte I se presenta el contexto en el que se realizo el trabajo.
+ En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Marco-teórico"
+
+\end_inset
+
+ vamos a encontrar el marco teórico donde se introducen los conceptos de
+ ecuación diferencial algebraica y ecuación diferencial ordinaria.
+ Luego introducimos los aspectos principales del lenguaje Modelica junto
+ con las técnicas númericas y simbólicas que se utilizan para simular modelos
+ Modelica.
+ Una de estas técnicas es la causalización de ecuaciones.
+ Finalmente en el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Visión-general-del"
+
+\end_inset
+
+ se describen los diferentes componentes que componen el compilador Modelica
+ C Compiler (ModelicaCC).
 \end_layout
 
 \begin_layout Standard
-....
+En la Parte II del trabajo se presentan las contribuciones.
+ El detalle de la implementación del componente 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+causalize+
+\end_layout
+
+\end_inset
+
+ se encuentra en el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Implementación-etapa-de"
+
+\end_inset
+
+.
+ En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Ejemplos"
+
+\end_inset
+
+ se presenta un caso de estudio a partir del cual se comparan las estrategías
+ de causalización implementadas.
+ En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Tests-unitarios"
+
+\end_inset
+
+ se encuentra el detalle de los tests unitarios implementados.
+ Finalmente en el capítulo 7 se presentan las conclusiones y el trabajo
+ a futuro.
 \end_layout
 
 \begin_layout Part
@@ -764,6 +854,12 @@ Preliminares
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Marco-teórico"
+
+\end_inset
+
 Marco teórico
 \end_layout
 
@@ -4551,6 +4647,12 @@ FB: falta todo esto
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Visión-general-del"
+
+\end_inset
+
 Visión general del Compilador
 \end_layout
 
@@ -6589,6 +6691,12 @@ Contribuciones
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Implementación-etapa-de"
+
+\end_inset
+
 Implementación etapa de causalización
 \end_layout
 
@@ -11919,6 +12027,12 @@ verb+simpleCausalizationStrategy+
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Ejemplos"
+
+\end_inset
+
 Ejemplos
 \end_layout
 
