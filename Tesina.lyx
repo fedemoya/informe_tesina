@@ -864,506 +864,6 @@ Marco teórico
 \end_layout
 
 \begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:Modelado-Físico-Acausal"
-
-\end_inset
-
-Modelado Físico Acausal
-\end_layout
-
-\begin_layout Standard
-El modelado acausal es un estilo declarativo de modelado, que significa
- modelado basado en ecuaciones más que en asignaciones.
- Las ecuaciones no especifican qué variables son de entrada y cuáles son
- de salida, mientras que en las asignaciones las variables del lado izquierda
- siempre son de salida y las variables del lado derecho siempre son entradas.
- Por la tanto la causalidad de los modelos basados en ecuaciones es indeterminda
- y solo se determina cuando los correspondientes sistemas de ecuaciones
- se resuelven.
- A esto es a lo que se denomina modelado acausal.
- El término modelado físico refleja el hecho de que el modelado acausal
- es muy apropiado para representar la estructura física de los sistemas
- modelados.
-\end_layout
-
-\begin_layout Standard
-La principal ventaja del modelado acausal es que la dirección de la solución
- de las ecuaciones es adaptable al flujo de datos del contexto en el que
- se computa la solución.
- El flujo de datos se define estableciendo qué variables son necesarias
- como 
-\shape italic
-salidas
-\shape default
-, y cuáles son 
-\shape italic
-entradas
-\shape default
- externas al sistema simulado.
- 
-\end_layout
-
-\begin_layout Section
-Modelos Matemáticos para Sistemas Continuos
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-FB: No se definió esto antes creo
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Previamente hemos definido una variable de estado como una variable que
- debe ser almacenada y actualizada durante la simulación para poder calcular
- las salidas del modelo.
- Para los sistemas de tiempo continuo estas variables son aquellas para
- las cuales sus derivadas respecto del tiempo aparecen en el modelo.
- Existe una formulación estandar de las ecuaciones de ciertos modelos matemático
-s de sistemas dinámicos denominada modelos de espacio de estados explicitos,
- en donde las derivadas de las variables de estado aparecen explícitamente
- del lado izquierdo de las ecuaciones.
-\end_layout
-
-\begin_layout Standard
-Estos modelos son atractivos como una representación matemática básica dado
- que usualmente resultan más eficientes de resolver y analizar que otros
- modelos más complicados, sirviendo a la vez para representar un espectro
- amplio de aplicaciones.
- Sin embargo hay que tener en cuenta que muchos modelos no pueden ser transforma
-dos a la forma de espacio de estados explicito.
-\end_layout
-
-\begin_layout Subsection
-Forma Explícita de Espacio de Estados
-\end_layout
-
-\begin_layout Standard
-La forma básica de ecuaciones continuas ODE en forma de espacio de estados
- explícita se presenta debajo, donde 
-\begin_inset Formula $x($
-\end_inset
-
-t) es el conjunto de variables de estados, 
-\begin_inset Formula $u(t)$
-\end_inset
-
-representa las variables de entrada, y 
-\begin_inset Formula $y(t)$
-\end_inset
-
-representa las variables de salida y/o las algebraicas.
- Se dice que el modelo se encuentra en forma de espacio de estados explícita
- si y solo si las derivadas se encuentran del lado izquierdo de la primer
- ecuación.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),u(t))\\
-y(t) & = & g(x(t),u(t))
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Aqui 
-\begin_inset Formula $\dot{x}(t)$
-\end_inset
-
-, 
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-\lang english
-
-\begin_inset Formula $u(t)$
-\end_inset
-
-
-\family default
-\series default
-\shape default
-\size default
-\emph default
-\bar default
-\strikeout default
-\uuline default
-\uwave default
-\noun default
-\color inherit
-\lang spanish
- y 
-\begin_inset Formula $y(t)$
-\end_inset
-
- son vectores y 
-\begin_inset Formula $f(t)$
-\end_inset
-
- y 
-\begin_inset Formula $g(t)$
-\end_inset
-
- son funciones vectoriales.
- Los modelos de espacio de estados que no han sido manipulados y llevados
- a esta forma se encuentra en una forma implícita.
- La forma semi-explícita de una DAE es de la siguiente manera:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),y(t),u(t))\\
-y(t) & = & g(x(t),u(t))
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Ecuaciones diferenciales ordinarias
-\end_layout
-
-\begin_layout Standard
-Las ecuaciones diferenciales ordinarias (o ODEs por sus siglas en inglés)
- aparecen en la mayoría de los modelos matemáticos de sistemas continuos
- dado que la dependencia respecto del tiempo en esos modelos generalmente
- se refleja por medio de derivadas respecto del tiempo de variables de estado
- correspondientes a dichos modelos.
- La ley de fuerza de Newton, la cual establece que la fuerza 
-\begin_inset Formula $F$
-\end_inset
-
- es igual a la masa 
-\begin_inset Formula $m$
-\end_inset
-
- por la segunda derivada 
-\begin_inset Formula $\ddot{s}$
-\end_inset
-
- de la posición 
-\begin_inset Formula $s$
-\end_inset
-
- con respecto al tiempo, es un ejemplo de ODE de segundo orden:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\begin{aligned}m\ddot{s}(t)\end{aligned}
- & = & F(t)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Introduciendo una variable 
-\begin_inset Formula $v(t)$
-\end_inset
-
- nos podemos deshacer de la segunda derivada.
- Después de reacomodar la primer ecuación tenemos a todas las derivadas
- del lado izquierdo y todas son derivadas de primer orden.
- Esto significa que hemos transformado el sistema en uno ODE explícito de
- primer orden:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & \frac{F(t)}{m}\\
-\dot{s}(t) & = & v(t)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Un sistema ODE de esta forma es especialmente eficiente para resolver númericame
-nte.
- La estructura general de un sistema ODE en forma espacio temporal explícita
- es la siguiente, con variables de entrada 
-\begin_inset Formula $u(t)$
-\end_inset
-
-, salidas 
-\begin_inset Formula $y(t)$
-\end_inset
-
-, y variables de estado 
-\begin_inset Formula $x(t)$
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-\dot{x}(t) & = & f(x(t),u(t))\\
-y(y) & = & g(x(t),u(t))
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Aqui también introdujimos variables de salida 
-\begin_inset Formula $y(t)$
-\end_inset
-
- que son directamente computables a partir de las variables de estado y
- las variables de entrada pero que no influencian la solución para las variables
- de estado 
-\begin_inset Formula $x(t)$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsubsection
-Ecuaciones algebraicas
-\end_layout
-
-\begin_layout Standard
-Las ecuaciones algebraicas son relaciones entre variables que no involucran
- derivadas de ninguna variable.
- Estas ecuaciones aparecen naturalmente en modelos de sistemas naturales
- o artificiales, especialmente cuando hay involucrada alguna restricción.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Incluir diagrama del péndulo
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Por ejemplo, las coordenadas cartesianas 
-\begin_inset Formula $\{x_{1},x_{2}\}$
-\end_inset
-
- de la masa en el péndulo de la figura 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-incluir ref
-\end_layout
-
-\end_inset
-
- satisfacen la siguiente ecuación algebraica donde se establece que la longitud
- del pendulo es 
-\begin_inset Formula $L$
-\end_inset
-
- según la ley de Pitagoras:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-x_{1}^{2}+x_{2}^{2} & = & L^{2}
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Las variables definidas por ecuaciones algebraicas y cuyas derivadas no
- aparecen en el modelo se denominan variables algebraicas.
- Alguna de estas variables también pueden ser variables de salida.
-\end_layout
-
-\begin_layout Standard
-La forma general de un sistema de ecuaciones algebraicas (sin incluir ecuaciones
- diferenciales) es se puede ver a continuación:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-g(x(t),u(t),y(t)) & = & 0
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Ecuaciones diferenciales algebraicas
-\end_layout
-
-\begin_layout Standard
-Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
- tanto ecuaciones difrenciales como ecuaciones algebraicas.
- Por ejemplo, el modelo que vemos a continuación, el cual corresponde a
- un péndulo, está compuesto por ecuaciones diferenciales algebraicas, cinco
- de las ecuaciones del modelo son diferenciales y dos son algebraicas.
- Las variables del modelo son 
-\begin_inset Formula $x_{1}$
-\end_inset
-
-, 
-\begin_inset Formula $x_{2}$
-\end_inset
-
-, 
-\begin_inset Formula $v_{1}$
-\end_inset
-
-, 
-\begin_inset Formula $v_{2}$
-\end_inset
-
-, 
-\begin_inset Formula $\varphi$
-\end_inset
-
-, 
-\begin_inset Formula $\omega$
-\end_inset
-
-, 
-\begin_inset Formula $F$
-\end_inset
-
- y las constantes 
-\begin_inset Formula $L$
-\end_inset
-
-, 
-\begin_inset Formula $m$
-\end_inset
-
-, 
-\begin_inset Formula $g$
-\end_inset
-
-.
- Hemos reemplazado la ecuación correspondiente a la ley de Pitagóras por
- dos ecuaciones algebraicas sobre las variables 
-\begin_inset Formula $x_{1}$
-\end_inset
-
- y 
-\begin_inset Formula $x_{2}$
-\end_inset
-
- respectivamente, las cuales aún preservan la restricción sobre la longitud
- del péndulo.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-m\dot{v} & = & -F\sin(\varphi)\\
-m\dot{v} & = & -F\cos(\varphi)-mg\\
-\dot{x_{1}} & = & v_{1}\\
-\dot{x}_{2} & = & v_{2}\\
-\dot{\varphi} & = & \omega\\
-x_{1} & = & L\sin(\varphi)\\
-x_{2} & = & -L\cos\left(\varphi\right)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-La forma general de un sistema DAE, de la cual el ejemplo anterior es un
- caso particular donde 
-\begin_inset Formula $x=\{x_{1},x_{2},v_{1},v_{2},\varphi\}$
-\end_inset
-
-, 
-\begin_inset Formula $u=\{\}$
-\end_inset
-
-, 
-\begin_inset Formula $y=\{$
-\end_inset
-
-
-\begin_inset Formula $\omega,F\}$
-\end_inset
-
-, se puede ver a continuación:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{align*}
-f(x(t),\dot{x}(t),u(t),y(t) & = & 0\\
-g(x(t),u(t),y(t) & = & 0
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Que pasa con las ecuaciones en diferencia, ecuaciones condicionales y DAEs
- híbridas? Las tendria que incluir en el marco teórico.
- Como se manejan en el compilador.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
 Modelica
 \end_layout
 
@@ -1380,15 +880,9 @@ n con el tiempo.
 
 \begin_layout Itemize
 Modelica está principalmente basado en ecuaciones en lugar de asignaciones.
- Esto permite un modelado acausal (ver sección 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Modelado-Físico-Acausal"
-
-\end_inset
-
-) lo cual facilita la reutilización de las clases ya que las ecuaciones
- no especifican una dirección particular para el flujo de datos.
+ Esto permite un modelado acausal lo cual facilita la reutilización de las
+ clases ya que las ecuaciones no especifican una dirección particular para
+ el flujo de datos.
  De esta manera una clase Modelica se puede adaptar a contextos con diferentes
  flujos de datos.
 \end_layout
@@ -2812,16 +2306,16 @@ end{lstlisting}
 
 \end_layout
 
-\begin_layout Subsection
-Tipos de ecuaciones presente en modelos matemáticos
+\begin_layout Section
+Modelos Matemáticos para Sistemas Continuos
 \end_layout
 
 \begin_layout Standard
 En esta sección vamos a ver un repaso de diferentes tipos de ecuaciones
- y variables, y cómo se relacionan con el lenguaje Modelica.
+ y variables presentes en modelos matemáticos de sistemas continuos.
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Categorías de variables y constantes
 \end_layout
 
@@ -3036,23 +2530,471 @@ Variables algebraicas:
 \end_layout
 
 \begin_layout Subsection
+Tipos de ecuaciones presente en modelos matemáticos
+\end_layout
+
+\begin_layout Standard
+Previamente hemos definido una variable de estado como una variable que
+ debe ser almacenada y actualizada durante la simulación para poder calcular
+ las salidas del modelo.
+ Para los sistemas de tiempo continuo estas variables son aquellas para
+ las cuales sus derivadas respecto del tiempo aparecen en el modelo.
+ Existe una formulación estandar de las ecuaciones de ciertos modelos matemático
+s de sistemas dinámicos denominada modelos de espacio de estados explicitos,
+ en donde las derivadas de las variables de estado aparecen explícitamente
+ del lado izquierdo de las ecuaciones.
+\end_layout
+
+\begin_layout Standard
+Estos modelos son atractivos como una representación matemática básica dado
+ que usualmente resultan más eficientes de resolver y analizar que otros
+ modelos más complicados, sirviendo a la vez para representar un espectro
+ amplio de aplicaciones.
+ Sin embargo hay que tener en cuenta que muchos modelos no pueden ser transforma
+dos a la forma de espacio de estados explicito.
+\end_layout
+
+\begin_layout Subsection
+Forma Explícita de Espacio de Estados
+\end_layout
+
+\begin_layout Standard
+La forma básica de ecuaciones continuas ODE en forma de espacio de estados
+ explícita se presenta debajo, donde 
+\begin_inset Formula $x($
+\end_inset
+
+t) es el conjunto de variables de estados, 
+\begin_inset Formula $u(t)$
+\end_inset
+
+representa las variables de entrada, y 
+\begin_inset Formula $y(t)$
+\end_inset
+
+representa las variables de salida y/o las algebraicas.
+ Se dice que el modelo se encuentra en forma de espacio de estados explícita
+ si y solo si las derivadas se encuentran del lado izquierdo de la primer
+ ecuación
+\begin_inset Formula 
+\begin{gather*}
+\dot{x}(t)=f(x(t),u(t))\\
+y(t)=g(x(t),u(t))
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Aqui 
+\begin_inset Formula $\dot{x}(t)$
+\end_inset
+
+, 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\lang english
+
+\begin_inset Formula $u(t)$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+\lang spanish
+ y 
+\begin_inset Formula $y(t)$
+\end_inset
+
+ son vectores y 
+\begin_inset Formula $f(t)$
+\end_inset
+
+ y 
+\begin_inset Formula $g(t)$
+\end_inset
+
+ son funciones vectoriales.
+ Los modelos de espacio de estados que no han sido manipulados y llevados
+ a esta forma se encuentra en una forma implícita.
+ La forma semi-explícita de una DAE es de la siguiente manera:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+\dot{x}(t)=f(x(t),y(t),u(t))\\
+y(t)=g(x(t),u(t))
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Ecuaciones diferenciales ordinarias
+\end_layout
+
+\begin_layout Standard
+Las ecuaciones diferenciales ordinarias (o ODEs por sus siglas en inglés)
+ aparecen en la mayoría de los modelos matemáticos de sistemas continuos
+ dado que la dependencia respecto del tiempo en esos modelos generalmente
+ se refleja por medio de derivadas respecto del tiempo de variables de estado
+ correspondientes a dichos modelos.
+ La ley de fuerza de Newton, la cual establece que la fuerza 
+\begin_inset Formula $F$
+\end_inset
+
+ es igual a la masa 
+\begin_inset Formula $m$
+\end_inset
+
+ por la segunda derivada 
+\begin_inset Formula $\ddot{s}$
+\end_inset
+
+ de la posición 
+\begin_inset Formula $s$
+\end_inset
+
+ con respecto al tiempo, es un ejemplo de ODE de segundo orden:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+\begin{aligned}m\ddot{s}(t)\end{aligned}
+=F(t)
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Introduciendo una variable 
+\begin_inset Formula $v(t)$
+\end_inset
+
+ nos podemos deshacer de la segunda derivada.
+ Después de reacomodar la primer ecuación tenemos a todas las derivadas
+ del lado izquierdo y todas son derivadas de primer orden.
+ Esto significa que hemos transformado el sistema en uno ODE explícito de
+ primer orden:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+\dot{x}(t)=\frac{F(t)}{m}\\
+\dot{s}(t)=v(t)
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Un sistema ODE de esta forma es especialmente eficiente para resolver númericame
+nte.
+ La estructura general de un sistema ODE en forma espacio temporal explícita
+ es la siguiente, con variables de entrada 
+\begin_inset Formula $u(t)$
+\end_inset
+
+, salidas 
+\begin_inset Formula $y(t)$
+\end_inset
+
+, y variables de estado 
+\begin_inset Formula $x(t)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+\dot{x}(t)=f(x(t),u(t))\\
+y(y)=g(x(t),u(t))
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Aqui también introdujimos variables de salida 
+\begin_inset Formula $y(t)$
+\end_inset
+
+ que son directamente computables a partir de las variables de estado y
+ las variables de entrada pero que no influencian la solución para las variables
+ de estado 
+\begin_inset Formula $x(t)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Ecuaciones algebraicas
+\end_layout
+
+\begin_layout Standard
+Las ecuaciones algebraicas son relaciones entre variables que no involucran
+ derivadas de ninguna variable.
+ Estas ecuaciones aparecen naturalmente en modelos de sistemas naturales
+ o artificiales, especialmente cuando hay involucrada alguna restricción.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Incluir diagrama del péndulo
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Por ejemplo, las coordenadas cartesianas 
+\begin_inset Formula $\{x_{1},x_{2}\}$
+\end_inset
+
+ de la masa en el péndulo de la figura 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+incluir ref
+\end_layout
+
+\end_inset
+
+ satisfacen la siguiente ecuación algebraica donde se establece que la longitud
+ del pendulo es 
+\begin_inset Formula $L$
+\end_inset
+
+ según la ley de Pitagoras:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+x_{1}^{2}+x_{2}^{2}=L^{2}
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Las variables definidas por ecuaciones algebraicas y cuyas derivadas no
+ aparecen en el modelo se denominan variables algebraicas.
+ Alguna de estas variables también pueden ser variables de salida.
+\end_layout
+
+\begin_layout Standard
+La forma general de un sistema de ecuaciones algebraicas (sin incluir ecuaciones
+ diferenciales) es se puede ver a continuación:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+g(x(t),u(t),y(t))=0
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Ecuaciones diferenciales algebraicas
+\end_layout
+
+\begin_layout Standard
+Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
+ tanto ecuaciones difrenciales como ecuaciones algebraicas.
+ Por ejemplo, el modelo que vemos a continuación, el cual corresponde a
+ un péndulo, está compuesto por ecuaciones diferenciales algebraicas, cinco
+ de las ecuaciones del modelo son diferenciales y dos son algebraicas.
+ Las variables del modelo son 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $v_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $v_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $\varphi$
+\end_inset
+
+, 
+\begin_inset Formula $\omega$
+\end_inset
+
+, 
+\begin_inset Formula $F$
+\end_inset
+
+ y las constantes 
+\begin_inset Formula $L$
+\end_inset
+
+, 
+\begin_inset Formula $m$
+\end_inset
+
+, 
+\begin_inset Formula $g$
+\end_inset
+
+.
+ Hemos reemplazado la ecuación correspondiente a la ley de Pitagóras por
+ dos ecuaciones algebraicas sobre las variables 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ y 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ respectivamente, las cuales aún preservan la restricción sobre la longitud
+ del péndulo.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+m\dot{v}=-F\sin(\varphi)\\
+m\dot{v}=-F\cos(\varphi)-mg\\
+\dot{x_{1}}=v_{1}\\
+\dot{x}_{2}=v_{2}\\
+\dot{\varphi}=\omega\\
+x_{1}=L\sin(\varphi)\\
+x_{2}=-L\cos\left(\varphi\right)
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La forma general de un sistema DAE, de la cual el ejemplo anterior es un
+ caso particular donde 
+\begin_inset Formula $x=\{x_{1},x_{2},v_{1},v_{2},\varphi\}$
+\end_inset
+
+, 
+\begin_inset Formula $u=\{\}$
+\end_inset
+
+, 
+\begin_inset Formula $y=\{$
+\end_inset
+
+
+\begin_inset Formula $\omega,F\}$
+\end_inset
+
+, se puede ver a continuación:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather*}
+f(x(t),\dot{x}(t),u(t),y(t)=0\\
+g(x(t),u(t),y(t)=0
+\end{gather*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Que pasa con las ecuaciones en diferencia, ecuaciones condicionales y DAEs
+ híbridas? Las tendria que incluir en el marco teórico.
+ Como se manejan en el compilador.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Manipulación simbólica de modelos Modelica
+\end_layout
+
+\begin_layout Standard
+Vamos a comenzar la sección detallando brevemente los pasos necesarios para
+ traducir y simular un modelo Modelica.
+ Luego profundizaremos en las técnicas de manipulación simbólica utilizadas
+ para convertir los modelos DAE en modelos ODE ordenados.
+\end_layout
+
+\begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Implementación-y-ejecución"
 
 \end_inset
 
-Simulación de modelos Modelica
+Compilación y Simulación de modelos Modelica
 \end_layout
 
 \begin_layout Standard
-En esta sección vamos a detallar brevemente los pasos necesarios para traducir
- y simular un modelo Modelica.
-\end_layout
-
-\begin_layout Standard
-En primer lugar se realiza un análisis sintáctico del código fuente Modelica
- del cual se obtiene un árbol sintáctico abstracto.
+El primer paso del proceso de compilación consisten en un análisis sintáctico
+ del código fuente Modelica del cual se obtiene un árbol sintáctico abstracto.
  Luego esta representación se analiza gramaticalmente, se realiza la verificació
 n de tipos, las clases se heredan y expanden, se realizan las modificaciones
  e instanciaciones correspondientes, las ecuaciones 
@@ -3186,30 +3128,14 @@ end{figure}
 
 \end_layout
 
-\begin_layout Section
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Técnicas-númericas-y"
-
-\end_inset
-
-Técnicas númericas y simbólicas para simular modelos Modelica
-\end_layout
-
 \begin_layout Subsection
 Simplificación Simbólica de Modelos Modelica
 \end_layout
 
 \begin_layout Standard
-Como ya hemos mencionado en la sección 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Implementación-y-ejecución"
-
-\end_inset
-
- luego del proceso de aplanado de la estructura de objetos lo que se obtiene
- es un sistema de ecuaciones diferenciales algebraicas.
+Como mencionamos previamente luego del proceso de aplanado de la estructura
+ de objetos lo que se obtiene es un sistema de ecuaciones diferenciales
+ algebraicas.
  Simular un modelo Modelica en general consiste en resolver sistemas de
  ese tipo.
  Esta tarea no es trivial por varias razones:
@@ -3411,11 +3337,11 @@ ente.
  Vamos a explicar la idea utilizando un ejemplo simple el cual consiste
  de 3 ecuaciones no lineales
 \begin_inset Formula 
-\begin{align*}
-h_{1}(z_{1},z_{3}) & = & 0\\
-h_{2}(z_{2}) & = & 0\\
-h_{3}(z_{1},z_{2}) & = & 0
-\end{align*}
+\begin{gather*}
+h_{1}(z_{1},z_{3})=0\\
+h_{2}(z_{2})=0\\
+h_{3}(z_{1},z_{2})=0
+\end{gather*}
 
 \end_inset
 
@@ -3424,8 +3350,8 @@ h_{3}(z_{1},z_{2}) & = & 0
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{align*}
-S_{1} & = & \begin{array}{c}
+\begin{gather*}
+S_{1}=\begin{array}{c}
 \begin{array}{ccc}
 z_{1} & z_{2} & z_{3}\end{array}\\
 \left[\begin{array}{ccc}
@@ -3434,7 +3360,7 @@ z_{1} & z_{2} & z_{3}\end{array}\\
 1 & 1 & 0
 \end{array}\right]
 \end{array}
-\end{align*}
+\end{gather*}
 
 \end_inset
 
@@ -3458,11 +3384,11 @@ describe la estructura del sistema de ecuaciones.
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{align*}
-h_{2}(z_{2}) & = & 0\\
-h_{3}(z_{1},z_{2}) & = & 0\\
-h_{1}(z_{1},z_{3}) & = & 0
-\end{align*}
+\begin{gather*}
+h_{2}(z_{2})=0\\
+h_{3}(z_{1},z_{2})=0\\
+h_{1}(z_{1},z_{3})=0
+\end{gather*}
 
 \end_inset
 
@@ -3471,8 +3397,8 @@ h_{1}(z_{1},z_{3}) & = & 0
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{align*}
-S_{2} & = & \begin{array}{c}
+\begin{gather*}
+S_{2}=\begin{array}{c}
 \begin{array}{ccc}
 z_{1} & z_{2} & z_{3}\end{array}\\
 \left[\begin{array}{ccc}
@@ -3481,7 +3407,7 @@ z_{1} & z_{2} & z_{3}\end{array}\\
 0 & 1 & 1
 \end{array}\right]
 \end{array}
-\end{align*}
+\end{gather*}
 
 \end_inset
 
@@ -3553,41 +3479,34 @@ Algoritmos de grafos para obtener la transformación BLT
 \end_layout
 
 \begin_layout Standard
-Duff 
+En el artículo 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Duff:1978:ITA:355780.355785"
 
 \end_inset
 
- prueba que la forma más eficiente de calcular la transformación BLT de
- una matriz es aplicando el algoritmo de Tarjan 
+ se demuestra que la forma más eficiente de calcular la transformación BLT
+ de una matriz es aplicando el algoritmo de Tarjan 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Tarjan72"
 
 \end_inset
 
- para grafos dirigidos.
+.
+ Este es un algoritmo perteneciente a la teoría de grafos, el cual permite
+ encontrar los componentes fuertemente conexos en un grafo dirigido.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-FB: es un grafo dirigido?
-\end_layout
-
+Dada una matriz 
+\begin_inset Formula $S$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Para poder describir el algoritmo de Tarjan resulta muy util asociar a la
- matriz un grafo dirigido compuesto por un conjunto de n nodos, etiquetados
- 
+, para poder aplicar el algoritmo de Tarjan y obtener una transformación
+ BLT, es necesario construir un grafo dirigido compuesto por un conjunto
+ de n nodos, etiquetados 
 \begin_inset Formula $1,2,3,\ldots,n$
 \end_inset
 
@@ -3651,7 +3570,7 @@ son numerados antes de los nodos de
 \end_layout
 
 \begin_layout Standard
-En 
+En el artículo
 \begin_inset CommandInset citation
 LatexCommand citep
 key "Duff:1978:ITA:355780.355785"
@@ -3683,19 +3602,6 @@ key "Duff:1978:ITA:355780.355785"
 \begin_layout Subsubsection
 Algoritmo de Tarjan para encontrar los componentes fuertemente conexos de
  un grafo
-\end_layout
-
-\begin_layout Standard
-El algoritmo de Tarjan es un algoritmo perteneciente a la teoría de grafos.
- Dicho algoritmo permite encontrar los componentes fuertemente conexos en
- un grafo dirigido 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Tarjan72"
-
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Standard
@@ -4136,19 +4042,6 @@ y f
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-FB: creo que en la figura b el orden de las columnas es z2 z1 z3 z5 z4
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset ERT
 status open
 
@@ -4402,7 +4295,7 @@ bordermatrix{
 
 \begin_layout Plain Layout
 
-    & z_1 & z_2 & z_3 & z_4 & z_5 
+    & z_2 & z_1 & z_3 & z_5 & z_4 
 \backslash
 cr
 \end_layout
@@ -4451,6 +4344,13 @@ cr
 
   
 \backslash
+label{fig:sistema_final}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
 subcaption{Sistema de ecuaciones en la forma BLT luego de haber sido ordenado
  topológicamente por el algorítmo de Tarjan.
 \backslash
@@ -4482,18 +4382,19 @@ textwidth}
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
+   
+\backslash
+includegraphics[width=1
+\backslash
+textwidth]{graphics/grafo_bipartito.png}
 \end_layout
 
 \begin_layout Plain Layout
 
    
 \backslash
-caption{Grafo bipartito correspondiente a la forma inicial del sistema de
- eucaciones.}
+subcaption{Grafo bipartito correspondiente a la forma inicial del sistema
+ de eucaciones.}
 \end_layout
 
 \begin_layout Plain Layout
@@ -4541,7 +4442,7 @@ Dado que el algoritmo de Tarjan aplica sobre un grafo dirigido es necesario
 El grafo dirigido lo construimos de la siguiente manera:
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 Calculamos un emparejamiento
 \begin_inset Foot
 status open
@@ -4563,12 +4464,12 @@ matching
  máximo sobre el grafo original.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 Los vértices correspondientes a incógnitas se colapsan contra su pareja
  correspondiente en el conjunto de vértices asociados a ecuaciones.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Enumerate
 Las aristas que no pertenecen al emparejamiento se reemplazan por aristas
  dirigidas entrantes en los vértices correspondientes a incógnitas.
 \end_layout
@@ -4582,12 +4483,57 @@ status open
 
 
 \backslash
-ref{fig:nodirigido2dirigido}
+ref{fig:matching}
 \end_layout
 
 \end_inset
 
- se puede ver como se obtiene el grafo dirigido a partir del grafo no dirigido.
+ se puede ver el matching para el grafo bipartito 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:grafo_pre_Tarjan}
+\end_layout
+
+\end_inset
+
+.
+ El grafo dirigido, resultante de aplicar los pasos 2 y 3, se puede ver
+ en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:colapsado}
+\end_layout
+
+\end_inset
+
+.
+ Finalemte en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:strong_components}
+\end_layout
+
+\end_inset
+
+ se pueden ver los componentes fuertemente conexos en los que fue particionado
+ el grafo luego de la aplicación del algoritmo de Tarjan.
+ En la figura también se aprecia el orden en el que se identificaron los
+ componentes.
 \end_layout
 
 \begin_layout Standard
@@ -4612,9 +4558,116 @@ centering
 
   
 \backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/matching_grafo.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
 caption{
 \backslash
-label{fig:nodirigido2dirigido}}
+label{fig:matching}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=1
+\backslash
+textwidth]{graphics/final_graph.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:colapsado}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=1
+\backslash
+textwidth]{graphics/strong_components.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:strong_components}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
 \end_layout
 
 \begin_layout Plain Layout
@@ -4622,23 +4675,6 @@ label{fig:nodirigido2dirigido}}
 
 \backslash
 end{figure}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Finalmente aplicamos el algoritmo de Tarjan ...
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-FB: falta todo esto
 \end_layout
 
 \end_inset
@@ -4657,9 +4693,9 @@ Visión general del Compilador
 \end_layout
 
 \begin_layout Standard
-El compilador Modelicacc se desarrolló como un conjunto de componentes independi
-entes, cada uno de los cuales implementa una etapa diferente del proceso
- de compilación de un modelo Modelica.
+El compilador ModelicaCC (Modelica C Compiler) se desarrolló como un conjunto
+ de componentes independientes, cada uno de los cuales implementa una etapa
+ diferente del proceso de compilación de un modelo Modelica.
  En este capítulo vamos a introducir los diferentes componentes que conforman
  el compilador Modelica explicando el rol de cada uno y cómo se componen
  para lograr la compilación de un modelo Modelica.
@@ -8128,8 +8164,16 @@ Cada arista del grafo de causalización se corresponde con la ocurrencia
  de una incógnita en una ecuación.
  Para poder construir el grafo necesitamos una manera de determinar si una
  incógnita pertenece a una ecuación.
- Para resolver esto escribimos un visitor, es decir, una clase que implementa
- el patrón de diseño Visitor.
+ Resolver esto implica que dada una incógnita y una ecuación, necesitamos
+ comparar la incógnita con cada una de las expresiones que componen la ecuación.
+\end_layout
+
+\begin_layout Standard
+Dado que las ecuaciones estan representadas mediante una estructura de tipo
+ AST (abstract syntax tree), y dado que la forma más adecuada de implementar
+ una algoritmo que opere sobre una estructura de este tipo es mediante la
+ apliación del patrón de diseño visitor, lo que hicimos fue justamente eso,
+ escribir una clase que implementa el patrón visitor.
  La clase es 
 \begin_inset ERT
 status open
@@ -8144,17 +8188,330 @@ verb+contains+
 \end_inset
 
  y se puede encontrar en el archivo util/ast_visitors/contains.h.
- 
-\begin_inset Note Note
+ La declaración de la clase se puede ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-Reescribir
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  class contains: public boost::static_visitor<bool> {
+\end_layout
+
+\begin_layout Plain Layout
+
+  public:
+\end_layout
+
+\begin_layout Plain Layout
+
+    contains(Expression);
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Integer v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Boolean v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(String v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Name v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Real v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(SubEnd v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(SubAll v) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(BinOp) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(UnaryOp) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Brace) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Bracket) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Call) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(FunctionExp) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(ForExp) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(IfExp) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Named) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Output) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Reference) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bool operator()(Range) const;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Expression exp;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }; 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+La clase 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+contains+
+\end_layout
+
+\end_inset
+
+ implementa el patron visitor heredando de 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+static_visitor+
+\end_layout
+
+\end_inset
+
+ la cual pertenece a la biblioteca Boost Variant 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Schling:2011:BCL:2049814"
+
+\end_inset
+
+.
+ Esto permite aplicar el visitor sobre una expresion utilizando la función
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+apply_visitor+
+\end_layout
+
+\end_inset
+
+ también perteneciente a la biblioteca Boost.
+ Para ver como se utiliza la clase contains mostramos un fragmento del código
+ de la clase 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+CausalizationStrategy+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  contains occurrs(_graph[unknownVertex].unknown); 
+\end_layout
+
+\begin_layout Plain Layout
+
+  const bool rl = boost::apply_visitor(occurrs,eq.left_ref());
+\end_layout
+
+\begin_layout Plain Layout
+
+  const bool ll = boost::apply_visitor(occurrs,eq.right_ref());
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(rl || ll) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    add_edge(eqVertex, unknownVertex, _graph);
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lo que vemos en esta porción de código es la declaración del objeto 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+occurs+
+\end_layout
+
+\end_inset
+
+ de tipo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+contains+
+\end_layout
+
+\end_inset
+
+.
+ Vemos que el objeto se inicializa con una incógnita.
+ Luego mediante la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+apply_visitor+
+\end_layout
+
+\end_inset
+
+ se aplica el visitor 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+occurs+
+\end_layout
+
+\end_inset
+
+ al lado izquierdo y posteriormente al lado derecho de una ecuación.
+ Finalmente, si la incógnita pertenece a la ecuación, se agrega una arista
+ al grafo.
 \end_layout
 
 \begin_layout Section
