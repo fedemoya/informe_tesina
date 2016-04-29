@@ -9877,7 +9877,7 @@ Si modificamos el algoritmo de manera tal que no sea necesario recorrer
 \end_layout
 
 \begin_layout Standard
-Una versión de este algoritmo modificada para ejecutarse en tiempo lineal
+Una versión de este algoritmo modificada para ejecutarse en tiempo logarítmico
  se implementó como parte de la etapa de causalización.
  Esta implementación se hizo en el método 
 \begin_inset ERT
@@ -10867,8 +10867,7 @@ verb+simpleCausalizationStrategy+
 \end_layout
 
 \begin_layout Standard
-En la tabla que se ve a continuación se puede ver el cálculo de complejidad
- de las funciones 
+A continuación se puede ver el cálculo de complejidad de las funciones 
 \begin_inset ERT
 status open
 
@@ -10908,29 +10907,39 @@ verb+collectDegree1Verts+
 \end_inset
 
 .
+ Notar que en el cálculo de complejidad no se considero el costo del despeje
+ de variables mediante la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+EquationSolver::solve+
+\end_layout
+
+\end_inset
+
+.
+ Esto es así porque para poder comparar el algoritmo simple con la aplicación
+ del algoritmo de Tarjan (que implica el cálculo del matching), solo debemos
+ considerar la parte del algoritmo que selecciona los pares ecuación-incógnita
+ y que realiza la ordenación vertical de las ecuaciones.
 \end_layout
 
 \begin_layout Standard
+\paragraph_spacing onehalf
 \begin_inset Tabular
-<lyxtabular version="3" rows="9" columns="6">
+<lyxtabular version="3" rows="12" columns="5">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
 <row>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -10939,7 +10948,7 @@ Función
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -10948,7 +10957,7 @@ Complejidad
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -10957,7 +10966,7 @@ Cantidad de invocaciones
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -10977,7 +10986,7 @@ Complejidad total
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -10986,6 +10995,44 @@ makeCausalBegining
 
 \end_inset
 </cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -10999,7 +11046,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11008,7 +11058,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11017,7 +11070,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11036,7 +11092,7 @@ push_back (std::list)
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11045,6 +11101,44 @@ makeCausalEnd
 
 \end_inset
 </cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11058,7 +11152,10 @@ operator[] (std::vector)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11067,7 +11164,10 @@ operator[] (std::vector)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11076,7 +11176,10 @@ operator[] (std::vector)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11095,7 +11198,7 @@ operator[] (std::vector)
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11104,6 +11207,44 @@ collectDegree1Verts
 
 \end_inset
 </cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11117,7 +11258,10 @@ target (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11126,7 +11270,10 @@ target (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+\begin_inset Formula $2$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11135,7 +11282,10 @@ target (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11154,15 +11304,6 @@ target (Boost Graph)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11176,7 +11317,10 @@ remove_edge (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-K (E/V)
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11185,7 +11329,10 @@ K (E/V)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11194,7 +11341,10 @@ K (E/V)
 \begin_inset Text
 
 \begin_layout Plain Layout
-K
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11210,15 +11360,6 @@ K
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11232,7 +11373,10 @@ out_degree (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-K (E/V)
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11241,7 +11385,10 @@ K (E/V)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11250,7 +11397,10 @@ K (E/V)
 \begin_inset Text
 
 \begin_layout Plain Layout
-K
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11266,15 +11416,6 @@ K
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11288,7 +11429,10 @@ getUniqueEdge
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11297,7 +11441,10 @@ getUniqueEdge
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11306,7 +11453,10 @@ getUniqueEdge
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11322,15 +11472,6 @@ getUniqueEdge
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11344,7 +11485,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11353,7 +11497,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11362,7 +11509,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11378,15 +11528,6 @@ push_back (std::list)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11400,7 +11541,10 @@ operator[] (CausalizationGraph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-log V
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11409,7 +11553,10 @@ log V
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+\begin_inset Formula $2$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11418,7 +11565,10 @@ log V
 \begin_inset Text
 
 \begin_layout Plain Layout
-log V
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11441,6 +11591,7 @@ log V
 \end_layout
 
 \begin_layout Standard
+\paragraph_spacing onehalf
 Habiendo calculado la complejidad de las subrutinas ahora si podemos calcular
  la complejidad de la función 
 \begin_inset ERT
@@ -11460,26 +11611,17 @@ verb+simpleCausalizationStrategy+
 \end_layout
 
 \begin_layout Standard
+\paragraph_spacing onehalf
 \begin_inset Tabular
-<lyxtabular version="3" rows="15" columns="6">
+<lyxtabular version="3" rows="17" columns="5">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
 <row>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11488,7 +11630,7 @@ Función
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11497,7 +11639,7 @@ Complejidad
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11506,7 +11648,7 @@ Cantidad invocaciones
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11526,7 +11668,7 @@ Complejidad total
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11535,6 +11677,44 @@ Inicialización de las listas eqDegree1Verts y unknownDegree1Verts
 
 \end_inset
 </cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11548,7 +11728,10 @@ vertices (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11557,7 +11740,10 @@ vertices (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $1$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11566,7 +11752,10 @@ vertices (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11575,7 +11764,7 @@ vertices (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $O(V+V\times\log V)$
+\begin_inset Formula $O(V\log V)$
 \end_inset
 
 
@@ -11585,15 +11774,6 @@ vertices (Boost Graph)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11607,7 +11787,10 @@ out_degree (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-K (E/V)
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11616,7 +11799,10 @@ K (E/V)
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11625,7 +11811,10 @@ V
 \begin_inset Text
 
 \begin_layout Plain Layout
-K * V
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11641,15 +11830,6 @@ K * V
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11663,7 +11843,10 @@ graph[] (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-log V
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11672,7 +11855,10 @@ log V
 \begin_inset Text
 
 \begin_layout Plain Layout
-3 * V
+\begin_inset Formula $3V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11681,7 +11867,10 @@ log V
 \begin_inset Text
 
 \begin_layout Plain Layout
-3 * V * log V
+\begin_inset Formula $O(V\log V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11697,15 +11886,6 @@ log V
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11719,7 +11899,10 @@ getUniqueEdge
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11728,7 +11911,10 @@ getUniqueEdge
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11737,7 +11923,10 @@ V
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11753,15 +11942,6 @@ V
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11775,7 +11955,10 @@ target (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11784,7 +11967,10 @@ target (Boost Graph)
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11793,7 +11979,10 @@ V
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11809,15 +11998,6 @@ V
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11831,7 +12011,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11840,7 +12023,10 @@ push_back (std::list)
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11849,7 +12035,10 @@ V
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -11865,7 +12054,7 @@ V
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11874,6 +12063,44 @@ Bucle while
 
 \end_inset
 </cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11887,7 +12114,7 @@ out_degree
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $K$
+\begin_inset Formula $O(K)$
 \end_inset
 
 
@@ -11899,7 +12126,7 @@ out_degree
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $V+K\times V$
+\begin_inset Formula $V+KV$
 \end_inset
 
 
@@ -11923,7 +12150,7 @@ out_degree
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $O(V+V\times\log V)$
+\begin_inset Formula $O(V\log V)$
 \end_inset
 
 
@@ -11933,15 +12160,6 @@ out_degree
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -11955,134 +12173,10 @@ push_back
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $2\times V$
+\begin_inset Formula $O(1)$
 \end_inset
 
 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $O(V)$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-graph[]
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\log V$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $V+2\times K\times V$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $O(V\times\log V)$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-remove_vertex
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1
 \end_layout
 
 \end_inset
@@ -12122,7 +12216,52 @@ remove_vertex
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+graph[]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $V+2KV$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V\log V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -12131,6 +12270,64 @@ remove_vertex
 
 \end_inset
 </cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+remove_vertex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $2V$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $O(V)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -12144,7 +12341,10 @@ remove_edge
 \begin_inset Text
 
 \begin_layout Plain Layout
-K
+\begin_inset Formula $O(K)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12153,7 +12353,10 @@ K
 \begin_inset Text
 
 \begin_layout Plain Layout
-V+K*V
+\begin_inset Formula $V+KV$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12162,7 +12365,10 @@ V+K*V
 \begin_inset Text
 
 \begin_layout Plain Layout
-O(V)
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12178,15 +12384,6 @@ O(V)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -12200,7 +12397,10 @@ makeCausalBegining
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12209,7 +12409,10 @@ makeCausalBegining
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12218,7 +12421,10 @@ V
 \begin_inset Text
 
 \begin_layout Plain Layout
-O(V)
+\begin_inset Formula $O(V)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12234,15 +12440,6 @@ O(V)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -12256,7 +12453,10 @@ makeCausalEnd
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+\begin_inset Formula $O(1)$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12265,7 +12465,10 @@ makeCausalEnd
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12293,15 +12496,6 @@ V
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -12327,7 +12521,10 @@ collectDegree1Verts
 \begin_inset Text
 
 \begin_layout Plain Layout
-V
+\begin_inset Formula $V$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -12377,10 +12574,22 @@ verb+simpleCausalizationStrategy+
 \end_inset
 
  es 
-\begin_inset Formula $O(V+V\times\log V)$
+\begin_inset Formula $O(V\log V)$
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+En la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Transmisión-de-masa/energía"
+
+\end_inset
+
+ realizamos una comparación de los tiempos de ejecución resultantes de aplicar
+ el algoritmo simple y el algorimo de Tarjan sobre un modelo de ejemplo.
 \end_layout
 
 \begin_layout Chapter
@@ -12394,14 +12603,443 @@ Ejemplos
 \end_layout
 
 \begin_layout Section
-Circuito LC
+Circuito eléctrico RLC
+\end_layout
+
+\begin_layout Standard
+A continuación vemos el diagrama correspondiente a un circuito electrico
+ RLC convencional.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/rlc.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{RLC}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:RLC}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dado que en el circuito hay cinco elementos, y cada uno define dos variables,
+ denominadas la tensión y la intensidad de corriente a través de dicho elemento,
+ necesitamos diez ecuaciones para describir el modelo, p.
+ ej.
+ las cinco ecuaciones correspondientes a cada elemento, las cuales definen
+ la relación entre la tensión y la intensidad de corriente a través del
+ elemento, más tres ecuaciones de malla en el voltaje de malla, más dos
+ ecuaciones de nodos en la corriente del nodo.
+ Un posible conjunto de ecuaciones es el siguiente:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+u_{0} & = & f\left(t\right)\\
+u_{1} & = & R_{1}i_{1}\\
+u_{2} & = & R_{2}i_{2}\\
+u_{L} & = & L\frac{du_{C}}{dt}\\
+i_{C} & = & C\frac{du_{C}}{dt}\\
+u_{0} & = & u_{1}+u_{2}\\
+u_{L} & = & u_{1}+u_{2}\\
+u_{C} & = & u_{2}\\
+i_{0} & = & i_{1}+i_{L}\\
+i_{1} & = & i_{2}+i_{C}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El modelo modelica correspondiente a este sistema de ecuaciones se puede
+ ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model RLC
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iC;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uC;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real C;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      u0 = sin(12);
+\end_layout
+
+\begin_layout Plain Layout
+
+      u1 = R1 * i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      u2 = R2 * i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      uL = L * der(iL);
+\end_layout
+
+\begin_layout Plain Layout
+
+      iC = C *der(uC);
+\end_layout
+
+\begin_layout Plain Layout
+
+      u0 = u1 + uC;
+\end_layout
+
+\begin_layout Plain Layout
+
+      uL = u1 + u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      uC = u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i0 = i1 + iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i1 = i2 + iC;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end RLC;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Al ejecutar el causalizador sobre el modelo obtenemos un nuevo modelo cuyas
+ ecuaciones se encuentran ordenadas vertical y horizontalmente.
+ El modelo resultante se puede ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model RLC
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iC;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uC;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real C;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      u0 = sin(12);
+\end_layout
+
+\begin_layout Plain Layout
+
+      u2 = uC;
+\end_layout
+
+\begin_layout Plain Layout
+
+      u1 = (-uC)+u0;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i2 = u2*(1/(R2));
+\end_layout
+
+\begin_layout Plain Layout
+
+      i1 = (1/(R1))*u1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      iC = (-i2)+i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      uL = u1+u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(uC) = iC*(1/(C));
+\end_layout
+
+\begin_layout Plain Layout
+
+      der(iL) = (1/(L))*uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i0 = i1+iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end RLC; 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En el modelo resultante las ecuaciones estan formadas por incógnitas del
+ lado izquierdo y por expresiones formadas por variables conocidas del lado
+ derecho.
+\end_layout
+
+\begin_layout Subsection
+Circuito RLC con lazo algebraico
 \end_layout
 
 \begin_layout Section
-Circuito LC con lazo algebraico
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Transmisión-de-masa/energía"
 
-\begin_layout Section
+\end_inset
+
 Transmisión de masa/energía en una dimensión
 \end_layout
 
