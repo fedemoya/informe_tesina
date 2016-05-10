@@ -2,3 +2,9 @@
 *.dia~
 
 *.pdf
+
+Tesina.lyx~
+
+*.lyx#
+
+*.emergency

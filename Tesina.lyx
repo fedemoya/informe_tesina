@@ -2762,7 +2762,7 @@ Aqui también introdujimos variables de salida
 .
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Ecuaciones algebraicas
 \end_layout
 
@@ -2842,7 +2842,7 @@ g(x(t),u(t),y(t))=0
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Subsection
 Ecuaciones diferenciales algebraicas
 \end_layout
 
@@ -13033,6 +13033,356 @@ En el modelo resultante las ecuaciones estan formadas por incógnitas del
 Circuito RLC con lazo algebraico
 \end_layout
 
+\begin_layout Standard
+Si sustituimos el capacitor del ejemplo anterior por otra resistencia obtenemos
+ el diagrama que se ve en el siguiente diagrama.
+\end_layout
+
+\begin_layout Standard
+El sistema de ecuaciones que modela el comportamiento del circuito es el
+ siguiente.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+u_{0} & = & f\left(t\right)\\
+u_{1} & = & R_{1}i_{1}\\
+u_{2} & = & R_{2}i_{2}\\
+u_{3} & = & R_{3}i_{3}\\
+u_{L} & = & L\frac{di_{L}}{dt}\\
+u_{0} & = & u_{1}+u_{3}\\
+u_{L} & = & u_{1}+u_{2}\\
+u_{3} & = & u_{2}\\
+i_{0} & = & i_{1}+i_{L}\\
+i_{1} & = & i_{2}+i_{3}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La traducción a Modelica queda como se puede apreciar a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model RLC
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u3
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+      u0 = sin(12);
+\end_layout
+
+\begin_layout Plain Layout
+
+      u1 = R1 * i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+      u2 = R2 * i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      u3 = R3 * i3; 
+\end_layout
+
+\begin_layout Plain Layout
+
+      uL = L * der(iL); 
+\end_layout
+
+\begin_layout Plain Layout
+
+      u0 = u1 + u3; 
+\end_layout
+
+\begin_layout Plain Layout
+
+      uL = u1 + u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      u3 = u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i0 = i1 + iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+      i1 = i2 + i3;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end RLC;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Al ejecutar el causalizador sobre el modelo obtenemos un nuevo modelo, cuyas
+ ecuaciones se encuentran reordenadas de la siguiente manera.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}[language=Modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+  model RLC
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u3
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real u0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i0;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real i3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real R3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    parameter Real L;
+\end_layout
+
+\begin_layout Plain Layout
+
+    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+    u0 = sin(12);
+\end_layout
+
+\begin_layout Plain Layout
+
+    i1 = (1/(R1*R2+R1*R3+R2*R3))*(u0*R3+u0*R2);
+\end_layout
+
+\begin_layout Plain Layout
+
+    u2 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2*R3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    i3 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    u1 = (1/(R1*R2+R1*R3+R2*R3))*(u0*R1*R2+u0*R1*R3);
+\end_layout
+
+\begin_layout Plain Layout
+
+    u3 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2*R3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    i2 = u0*(1/(R1*R2+R1*R3+R2*R3))*R3;
+\end_layout
+
+\begin_layout Plain Layout
+
+    uL = u1+u2;
+\end_layout
+
+\begin_layout Plain Layout
+
+    der(iL) = (1/(L))*uL;
+\end_layout
+
+\begin_layout Plain Layout
+
+    i0 = i1+iL;
+\end_layout
+
+\begin_layout Plain Layout
+
+  end RLC;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 \begin_inset CommandInset label
 LatexCommand label
@@ -14142,6 +14492,505 @@ A continuación vamos a describir cada uno de los unit tests.
 process_for_equation_test
 \end_layout
 
+\begin_layout Standard
+Para probar la expanción de ecuaciones de tipo For-Equation decidimos armar
+ diferentes modelos modelica, cada uno capturando alguna de las alternativas
+ que existen para escribir este tipo de ecuaciones.
+ Luego escribimos un test unitario para cada uno de estos modelos.
+ Los test verifican que la cantidad de ecuaciones generadas coincida con
+ lo que se definio en el 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+for_index+
+\end_layout
+
+\end_inset
+
+ (ver sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Expansión-de-ecuaciones"
+
+\end_inset
+
+) y que la instanciación y evaluación de cada ecuación sea la correcta.
+\end_layout
+
+\begin_layout Standard
+Los diferentes modelos se pueden ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.5
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+	    model ForExample
+\end_layout
+
+\begin_layout Plain Layout
+
+	      Real a[10];
+\end_layout
+
+\begin_layout Plain Layout
+
+	    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+	      for i in 1:10 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+	        a[i] = i;
+\end_layout
+
+\begin_layout Plain Layout
+
+	      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+	    end ForExample;
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+end{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+subcaption{
+\backslash
+label{fig:for_model_1}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.5
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+	    model ForExample
+\end_layout
+
+\begin_layout Plain Layout
+
+	      constant Integer N = 11;
+\end_layout
+
+\begin_layout Plain Layout
+
+	      constant Integer S = 1;
+\end_layout
+
+\begin_layout Plain Layout
+
+	      constant Integer M = 20;
+\end_layout
+
+\begin_layout Plain Layout
+
+	      Real a[10];
+\end_layout
+
+\begin_layout Plain Layout
+
+	    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+	      for i in N:S:M loop
+\end_layout
+
+\begin_layout Plain Layout
+
+	        a[i] = i;
+\end_layout
+
+\begin_layout Plain Layout
+
+	      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+	    end ForExample;
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+end{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+      
+\backslash
+subcaption{
+\backslash
+label{fig:for_model_2}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.5
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+	    model ForExample
+\end_layout
+
+\begin_layout Plain Layout
+
+	      Real a[10];
+\end_layout
+
+\begin_layout Plain Layout
+
+	    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+	      for i in {1,2,3,4,5} loop 
+\end_layout
+
+\begin_layout Plain Layout
+
+	          a[i] = i; 
+\end_layout
+
+\begin_layout Plain Layout
+
+	      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+	    end ForExample;
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+end{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  	
+\backslash
+subcaption{
+\backslash
+label{fig:for_model_3}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.5
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+begin{lstlisting}[language=modelica]
+\end_layout
+
+\begin_layout Plain Layout
+
+	    model ForExample
+\end_layout
+
+\begin_layout Plain Layout
+
+	      Real a[10];
+\end_layout
+
+\begin_layout Plain Layout
+
+	    equation
+\end_layout
+
+\begin_layout Plain Layout
+
+	      for i in 1:10 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+	          a[i+1] = i+1; 
+\end_layout
+
+\begin_layout Plain Layout
+
+	      end for;
+\end_layout
+
+\begin_layout Plain Layout
+
+	    end ForExample;
+\end_layout
+
+\begin_layout Plain Layout
+
+	  
+\backslash
+end{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  	
+\backslash
+subcaption{
+\backslash
+label{fig:for_model_4}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Los primeros tres modelos permiten verificar el procesamiento del 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+for_index+
+\end_layout
+
+\end_inset
+
+ en sus diferentes variantes.
+ El cuarto modelo permite verificar la evaluación de las expresiones resultantes
+ de la instanciación del índice de iteración.
+ En todos los modelos se verifica que la cantidad de ecuaciones generadas
+ y la instanciación del índice en cada una sea la correcta.
+\end_layout
+
+\begin_layout Standard
+El unit test que armamos se puede ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  int r;
+\end_layout
+
+\begin_layout Plain Layout
+
+  AST_Class ast_c = parseClass("for_example.mo",&r);
+\end_layout
+
+\begin_layout Plain Layout
+
+  if (r!=0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    cout << "Couldn't open for_example.mo file" << endl;
+\end_layout
+
+\begin_layout Plain Layout
+
+    return;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  TypeSymbolTable tyEnv = newTypeSymbolTable();
+\end_layout
+
+\begin_layout Plain Layout
+
+  MMO_Class c = newMMO_Class(ast_c, tyEnv);
+\end_layout
+
+\begin_layout Plain Layout
+
+  process_for_equations(c);
+\end_layout
+
+\begin_layout Plain Layout
+
+  int equationsAfter = c->getEquations()->size();
+\end_layout
+
+\begin_layout Plain Layout
+
+  BOOST_CHECK(equationsAfter == 10);
+\end_layout
+
+\begin_layout Plain Layout
+
+  MMO_EquationList equations = c->getEquations();
+\end_layout
+
+\begin_layout Plain Layout
+
+  MMO_EquationListIterator eqsIter = equations->begin();
+\end_layout
+
+\begin_layout Plain Layout
+
+  int i=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+  foreach(eqsIter, equations) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    MMO_Equation eq = current_element(eqsIter);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 apply_Tarjan_test
 \end_layout
@@ -14498,8 +15347,303 @@ end{lstlisting}
 
 \end_layout
 
+\begin_layout Section
+causalization_strategy_test
+\end_layout
+
+\begin_layout Standard
+Este es el test asociado a la clase 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+CausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ (ver capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Implementación-etapa-de"
+
+\end_inset
+
+).
+ El mismo permite validar que el modelo resultante de aplicar el método
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+CausalizationStrategy::causalize+
+\end_layout
+
+\end_inset
+
+ es un modelo causal.
+ Para validar la causalidad de un modelo escibimos la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+check_causality+
+\end_layout
+
+\end_inset
+
+.
+ La función se definio en el archivo test/causalize/causalization_strategy_test.c
+pp.
+ La función recibe como parámetros el modelo a validar y la lista de incógnitas
+ de dicho modelo.
+ La validación se realiza ecuación por ecuación, verificando para cada una
+ que la incógnita del lado izquierda pueda ser calculada a partir de las
+ variables que aparecen del lado derecho.
+ Dicho de otra manera lo que verificamos es que las variables que aparecen
+ del lado derecho de cada ecuación sean variables conocidas (porque ya fueron
+ calculadas por una ecuación anterior).
+ El código de la función se puede ver a continuación.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+  void check_causality(MMO_Class &mmoClass, ExpList unknowns) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  const EquationList &causalEqs = mmoClass.equations_ref().equations_ref();
+\end_layout
+
+\begin_layout Plain Layout
+
+  ExpList knowns;
+\end_layout
+
+\begin_layout Plain Layout
+
+  foreach_(Equation equation, causalEqs) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    Equality eqEq = boost::get<Equality>(equation);
+\end_layout
+
+\begin_layout Plain Layout
+
+    foreach_(Expression unknown, unknowns) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Modelica::contains occurrs(unknown);
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (boost::apply_visitor(occurrs, eqEq.right_ref())) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        bool isKnown = false;
+\end_layout
+
+\begin_layout Plain Layout
+
+        foreach_(Expression known, knowns) {
+\end_layout
+
+\begin_layout Plain Layout
+
+          if(known == unknown) {
+\end_layout
+
+\begin_layout Plain Layout
+
+            isKnown = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+          }
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+        BOOST_CHECK(isKnown);
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    Expression leftExpression = eqEq.left_ref();
+\end_layout
+
+\begin_layout Plain Layout
+
+    if (is<Reference>(leftExpression)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      knowns.push_back(leftExpression);
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else if (is<Call>(leftExpression)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Call call = boost::get<Call>(leftExpression);
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (call.name()=="der")
+\end_layout
+
+\begin_layout Plain Layout
+
+        knowns.push_back(leftExpression);
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else if (is<Output>(leftExpression)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      Output output = boost::get<Output>(leftExpression);
+\end_layout
+
+\begin_layout Plain Layout
+
+      foreach_(OptExp oe, output.args()) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        if (oe)
+\end_layout
+
+\begin_layout Plain Layout
+
+          knowns.push_back(oe.get());
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+      ERROR("Unexpected type for equation's left expression
+\backslash
+n");
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La función declara una lista de variables conocidas.
+ Luego itera sobre las ecuaciones del modelo que recibe como parámetro.
+ Lo primero que hacemos para cada ecuación es validar que las variables
+ incógnitas que aparecen en el lado derecho de la ecuación se encuentren
+ en la lista de variables conocidas.
+ Luego agregamos la variable (o variables) que aparece en lado izquierdo
+ de la ecuación a la lista de variables conocidas.
+ Si el test se ejecuta satisfactoriamente es porque para cada ecuación,
+ evaluada en el orden en el que se encuentra definida en el modelo, las
+ variables del lado derecho son todas variables conocidas y de esta manera
+ es posible resolver la ecuación y obtener el valor de la variable que se
+ encuentra en el lado izquierdo.
+\end_layout
+
+\begin_layout Standard
+Los casos de prueba que utilizamos fueron los presentados en el capítulo
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Ejemplos"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Chapter
-Conclusiones
+Conclusiones.
 \end_layout
 
 \begin_layout Section
