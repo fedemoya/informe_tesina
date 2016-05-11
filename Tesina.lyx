@@ -12633,7 +12633,7 @@ centering
 
   
 \backslash
-includegraphics[width=0.8
+includegraphics[width=0.5
 \backslash
 textwidth]{graphics/rlc.png}
 \end_layout
@@ -13035,7 +13035,60 @@ Circuito RLC con lazo algebraico
 
 \begin_layout Standard
 Si sustituimos el capacitor del ejemplo anterior por otra resistencia obtenemos
- el diagrama que se ve en el siguiente diagrama.
+ el diagrama que se ve en la siguiente imágen.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.5
+\backslash
+textwidth]{graphics/rlc_loop.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{RLC con bucle}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:RLC_Loop}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -13045,7 +13098,7 @@ El sistema de ecuaciones que modela el comportamiento del circuito es el
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{eqnarray*}
+\begin{eqnarray}
 u_{0} & = & f\left(t\right)\\
 u_{1} & = & R_{1}i_{1}\\
 u_{2} & = & R_{2}i_{2}\\
@@ -13056,7 +13109,7 @@ u_{L} & = & u_{1}+u_{2}\\
 u_{3} & = & u_{2}\\
 i_{0} & = & i_{1}+i_{L}\\
 i_{1} & = & i_{2}+i_{3}
-\end{eqnarray*}
+\end{eqnarray}
 
 \end_inset
 
@@ -13064,7 +13117,70 @@ i_{1} & = & i_{2}+i_{3}
 \end_layout
 
 \begin_layout Standard
-La traducción a Modelica queda como se puede apreciar a continuación.
+Este modelo posee un lazo algebraico, es decir un conjunto de ecuaciones
+ mutuamente dependientes.
+ Para ver fácilmente el bucle algebraico, mostramos el grafo asociado al
+ sistema de ecuaciones.
+ Los nodos de las ecuaciones e incógnitas pertenecientes al bucle aparecen
+ destacados con un fondo gris.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.5
+\backslash
+textwidth]{graphics/rlc_loop_graph.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{Grafo circuito RLC}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:RLC}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La traducción a Modelica de las ecuaciones que describen el circuito rlc
+ queda como se puede apreciar a continuación.
 \end_layout
 
 \begin_layout Standard
@@ -13381,6 +13497,46 @@ end{lstlisting}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Al igual que con el caso de la sección anterior, el modelo resultante se
+ encuantra ordenado vertical y horizontalmente.
+ En este caso el bucle pudo ser resuelto (todos los lados derechos de las
+ ecuaciones dependen solo de la variable 
+\begin_inset Formula $u_{0}$
+\end_inset
+
+) porque las ecuaciones que lo conformaban eran lineales.
+ Si ese no hubiese sido el caso lo que hubiesemos obtenido es un sistema
+ parcialmente ordenado, es decir, con el bucle internamente intacto pero
+ correctamente ordenado entre las ecuaciones 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+u0 = sin(12)+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+der(iL) = (1/(L))*uL+
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -14473,17 +14629,6 @@ reference "sub:Optimización"
 ).
 \end_layout
 
-\begin_layout Itemize
-La clase clase EvalExp (ver 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:EvalExp"
-
-\end_inset
-
-)
-\end_layout
-
 \begin_layout Standard
 A continuación vamos a describir cada uno de los unit tests.
 \end_layout
@@ -14881,7 +15026,9 @@ verb+for_index+
 \end_layout
 
 \begin_layout Standard
-El unit test que armamos se puede ver a continuación.
+A continuación vemos el código del unit test para el primer caso de prueba.
+ Los otros tests, muy similares al que mostramos acá, se pueden encontrar
+ en el archivo test/causalize/for_unrolling/process_for_equations_test.cpp.
 \end_layout
 
 \begin_layout Standard
@@ -14897,86 +15044,183 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-  int r;
+  void unrolling_test_1() {
 \end_layout
 
 \begin_layout Plain Layout
 
-  AST_Class ast_c = parseClass("for_example.mo",&r);
+   bool r;
 \end_layout
 
 \begin_layout Plain Layout
 
-  if (r!=0) {
+    StoredDef sd=parseFile("for_example_1.mo",r);
 \end_layout
 
 \begin_layout Plain Layout
 
-    cout << "Couldn't open for_example.mo file" << endl;
+    if (!r) {
 \end_layout
 
 \begin_layout Plain Layout
 
-    return;
+      cout << "Couldn't open for_example.mo file" << endl;
+\end_layout
+
+\begin_layout Plain Layout
+
+      return;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    Class ast_c = boost::get<Class>(sd.classes().front());
+\end_layout
+
+\begin_layout Plain Layout
+
+    MMO_Class c(ast_c); 
+\end_layout
+
+\begin_layout Plain Layout
+
+    int equationsBefore = c.equations().equations().size(); 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Causalize::process_for_equations(c);
+\end_layout
+
+\begin_layout Plain Layout
+
+    int equationsAfter = c.equations().equations().size();
+\end_layout
+
+\begin_layout Plain Layout
+
+    BOOST_CHECK(equationsAfter == 10);
+\end_layout
+
+\begin_layout Plain Layout
+
+    int i=1;
+\end_layout
+
+\begin_layout Plain Layout
+
+    foreach_(Equation eq, c.equations().equations()) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(is<Equality>(eq));
+\end_layout
+
+\begin_layout Plain Layout
+
+      Equality eqEq = get<Equality>(eq);
+\end_layout
+
+\begin_layout Plain Layout
+
+      Expression expLeft = eqEq.left();
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(is<Reference>(expLeft));
+\end_layout
+
+\begin_layout Plain Layout
+
+      Reference array = get<Reference>(expLeft);
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(array.ref().size() == 1);
+\end_layout
+
+\begin_layout Plain Layout
+
+      ExpList indexes = get<1>(array.ref().front());
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(indexes.size() == 1);
+\end_layout
+
+\begin_layout Plain Layout
+
+      Expression index = indexes.front();
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(get<Modelica::AST::Real>(index) || get<Modelica::AST::Integer>
+(index));
+\end_layout
+
+\begin_layout Plain Layout
+
+      if (is<Real>(index)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        BOOST_CHECK((int)get<Modelica::AST::Real>(index) == i);
+\end_layout
+
+\begin_layout Plain Layout
+
+      } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+        BOOST_CHECK((int)get<Modelica::AST::Integer>(index) == i);
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+      Expression expRight = eqEq.right();
+\end_layout
+
+\begin_layout Plain Layout
+
+      is<Integer>(expRight);
+\end_layout
+
+\begin_layout Plain Layout
+
+      BOOST_CHECK(get<Integer>(expRight) == i);
+\end_layout
+
+\begin_layout Plain Layout
+
+      i++;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
 \end_layout
 
 \begin_layout Plain Layout
 
   }
-\end_layout
-
-\begin_layout Plain Layout
-
-  TypeSymbolTable tyEnv = newTypeSymbolTable();
-\end_layout
-
-\begin_layout Plain Layout
-
-  MMO_Class c = newMMO_Class(ast_c, tyEnv);
-\end_layout
-
-\begin_layout Plain Layout
-
-  process_for_equations(c);
-\end_layout
-
-\begin_layout Plain Layout
-
-  int equationsAfter = c->getEquations()->size();
-\end_layout
-
-\begin_layout Plain Layout
-
-  BOOST_CHECK(equationsAfter == 10);
-\end_layout
-
-\begin_layout Plain Layout
-
-  MMO_EquationList equations = c->getEquations();
-\end_layout
-
-\begin_layout Plain Layout
-
-  MMO_EquationListIterator eqsIter = equations->begin();
-\end_layout
-
-\begin_layout Plain Layout
-
-  int i=1;
-\end_layout
-
-\begin_layout Plain Layout
-
-  foreach(eqsIter, equations) {
-\end_layout
-
-\begin_layout Plain Layout
-
-    MMO_Equation eq = current_element(eqsIter);
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout
@@ -14989,6 +15233,19 @@ end{lstlisting}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+La primer aserción que aparece en el test es la que verfica que la cantidad
+ de ecuaciones generadas sea la correcta, en nuestro caso el número correcto
+ es 10.
+ Luego se verifica que cada ecuación se haya generado correctamente.
+ Primero se revisa que la variable del lado izquierdo de cada ecuación sea
+ un arreglo unidimensional y que la instanciación del índice del arreglo
+ sea la correcta.
+ Luego se verifica que la expresión del lado derecho sea de tipo entero
+ y que la instanciación y evaluación (en este caso trivial) de la misma
+ sea que corresponde.
 \end_layout
 
 \begin_layout Section
