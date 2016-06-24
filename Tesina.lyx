@@ -101,71 +101,11 @@ Causalización de modelos Modelica
 \end_layout
 
 \begin_layout Standard
-\begin_inset CommandInset toc
-LatexCommand tableofcontents
-
-\end_inset
-
-
-\begin_inset Note Note
+\begin_inset Phantom VPhantom
 status open
 
 \begin_layout Plain Layout
-Causalización
-\end_layout
 
-\begin_layout Enumerate
-Conversión de un conjunto de ecuaciones diferenciales algebraicas en un
- conjunto de ecuaciones diferenciales ordinarias.
-\end_layout
-
-\begin_layout Enumerate
-Ordenación horizontal y vertical de un conjunto de ecuaciones diferenciales
- algebraicas de manera que ninguna variable sea utilizada antes de que su
- valor sea computado.
-\end_layout
-
-\begin_layout Plain Layout
-Ambas se pueden considerar definiciones de Causalización? Cual es la relación
- entre un conjunto de ecuaciones diferenciales ordinarias y un conjunto
- de ecuaciones ordenado de manera tal que ninguna variable sea utilizada
- (aparezca en una ecuación) antes de que su valor sea computado.
-\end_layout
-
-\begin_layout Plain Layout
-Para muchos sistemas físicos es muy fácil formular un modelo donde las derivadas
- de los estados (state derivatives) aparecen implícitas o incluso de manera
- no linear en cualquier parte de una ecuación.
- A las descripciones de sistemas que consisten en un mix de ecuaciones algebraic
-as implícitas y ecuaciones diferenciales las denominamos ecuaciones diferenciale
-s algebraicas.
-\end_layout
-
-\begin_layout Plain Layout
-El algoritmo de causalización por medio del despeje simbólico despeja las
- derivadas de los estados...
- O sea que separa las derivadas de los estados del resto de la ecuación.
- Al hacer esto la ecuación pasa de ser DAE a ODE?
-\end_layout
-
-\begin_layout Plain Layout
-La ordenación vertical es lo que determina, ayuda a decidir, que variable
- despejar en cada ecuación.
-\end_layout
-
-\begin_layout Plain Layout
-Por lo tanto por medio de la ordenación vertical determinamos que variable
- debe despejarse de que ecuación y luego por medio de la ordenación horizontal
- se despeja la variable que se 
-\begin_inset Quotes eld
-\end_inset
-
-selecciono
-\begin_inset Quotes erd
-\end_inset
-
- para cada ecuación.
- De esta manera el sistema DAE pasa a ser uno ODE.
 \end_layout
 
 \end_inset
@@ -174,23 +114,174 @@ selecciono
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
+\begin_inset Phantom VPhantom
 status open
 
 \begin_layout Plain Layout
-State-Space Model
-\end_layout
 
-\begin_layout Plain Layout
-Una representación de espacios de estados es un modelo matemático de un
- sistema físico descrito mediante un conjunto de entradas, salidas y variables
- de estado relacionadas por ecuaciones diferenciales de primer orden que
- se combinan en una ecuación diferencial matricial de primer orden
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+emph{A mis viejos, Ines y Tony, porque sin su apoyo esto no hubiese sido
+ posible.}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+emph{Al amor de mi vida, Victoria, por su enorme paciencia.}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Preliminares
 \end_layout
 
 \begin_layout Chapter
@@ -254,19 +345,16 @@ Ordinary differential equation
 
 \end_inset
 
-.
- La conversión de un conjunto de DAEs en ODEs es lo que denominamos causalizació
-n 
-\begin_inset Note Note
-status open
 
-\begin_layout Plain Layout
-Esto es exáctamente así?
-\end_layout
+\begin_inset CommandInset citation
+LatexCommand citep
+key "FernandezKofman12"
 
 \end_inset
 
- de ecuaciones.
+.
+ La conversión de un conjunto de DAEs en ODEs es lo que denominamos causalizació
+n de ecuaciones.
  Dependiendo de las características de cada modelo se pueden aplicar distintos
  algoritmos para convertir descripciones DAE en descripciones ODE.
  En los casos más simples la conversión se puede realizar aplicando simples
@@ -276,26 +364,13 @@ Esto es exáctamente así?
 \end_layout
 
 \begin_layout Standard
-Este trabajo se encuentra enmarcada en el desarrollo de un compilador Modelica.
+Este trabajo se encuentra enmarcado en el desarrollo de un compilador Modelica.
  Puntualmente, el trabajo hace foco en la etapa de causalización de ecuaciones.
- Se analisan los algoritmos existentes para la realización de dicha tarea
- y se presenta una implementación en el lenguaje C++ del componente 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+causalize+
-\end_layout
-
-\end_inset
-
-.
- Este componente es una aplicación independiente la cual espera modelos
- modelica simplificados (el pipeline de compilación se describe en el capítulo
- 
+ Se analizan los algoritmos existentes y se presenta una implementación
+ en el lenguaje C++ del componente responsable de realizar dicha tarea.
+ Este componente se implemento como una aplicación independiente la cual
+ espera modelos modelica simplificados (el pipeline de compilación se describe
+ en el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "chap:Visión-general-del"
@@ -773,6 +848,26 @@ Por este fin se planteó el desarrollo de un compilador de Modelica propio
 En este trabajo se describe la implementación de un componente de dicho
  compilador cuya tarea es la causalización de ecuaciones diferenciales algebraic
 as.
+ Esta implementación, si bien no maneja los modelos de gran escala de manera
+ óptima (porque expande los arreglos y las estructuras repetitivas ver sección
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Expansión-de-ecuaciones"
+
+\end_inset
+
+), constituye el puntapié inicial para una implementación futura, en donde,
+ se realice la causalización de ecuaciones sin la necesidad de expandir
+ los arreglos ni las estructuras repetitivas presentes en el modelo.
+ Una implementación de este tipo se puede ver en el siguiente artículo 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -847,10 +942,6 @@ reference "sec:Tests-unitarios"
  se encuentra el detalle de los tests unitarios implementados.
  Finalmente en el capítulo 7 se presentan las conclusiones y el trabajo
  a futuro.
-\end_layout
-
-\begin_layout Part
-Preliminares
 \end_layout
 
 \begin_layout Chapter
@@ -1308,20 +1399,75 @@ verb+der()+
 \end_layout
 
 \begin_layout Standard
-Nuestro segundo ejemplo es un poco más complicado.
- Es el modelo matemático de un sistema físico, un péndulo plano.
- Las 5 ecuaciones del modelo se ven a continuación.
- 
-\begin_inset Note Note
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-Falta el diagrama.
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.2
+\backslash
+textwidth]{graphics/pendulum.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{Péndulo plano}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:pendulo}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
 \end_layout
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Nuestro segundo ejemplo es un poco más complicado, es el modelo matemático
+ de un péndulo plano (ver figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:pendulo}
+\end_layout
+
+\end_inset
+
+).
+ Las 5 ecuaciones del modelo se ven a continuación.
 \end_layout
 
 \begin_layout Standard
@@ -1475,7 +1621,9 @@ Por último hacemos una observación importante en relación a los modelos
  Modelica simulables.
 \end_layout
 
-\begin_layout Quotation
+\begin_layout Verse
+
+\emph on
 El número de variables debe ser igual al número de ecuaciones.
 \end_layout
 
@@ -12602,6 +12750,12 @@ name "chap:Ejemplos"
 Ejemplos
 \end_layout
 
+\begin_layout Standard
+En este breve capítulo mostramos el resultado de aplicar el proceso de causaliza
+ción sobre el modelo de un sístema muy conocido en el área de la ingeniería
+ eléctrica, los circuitos RLC.
+\end_layout
+
 \begin_layout Section
 Circuito eléctrico RLC
 \end_layout
@@ -13029,7 +13183,7 @@ En el modelo resultante las ecuaciones estan formadas por incógnitas del
  derecho.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Circuito RLC con lazo algebraico
 \end_layout
 
@@ -13539,124 +13693,48 @@ verb+der(iL) = (1/(L))*uL+
 .
 \end_layout
 
-\begin_layout Section
+\begin_layout Chapter
+Prueba de eficiencia
+\end_layout
+
+\begin_layout Standard
+En la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Optimización"
+
+\end_inset
+
+ se presento una optimización del proceso de causalización la cual consistio
+ en incluir un algoritmo que conbinado con el de Tarjan realiza la causalizacón
+ de manera óptima.
+\end_layout
+
+\begin_layout Standard
+Para medir los tiempos de ejecución de las diferentes estrategías armamos
+ un test, el cual recibe como entrada un modelo modelica y lo causaliza
+ utilizando las tres estrategias anteriormente mencionadas.
+ Al finalizar imprime el tiempo que demoro en ejecutarse cada estrategia.
+ El test se encuentra implementado en el archivo test/causalize/performance_test.
+cpp.
+\end_layout
+
+\begin_layout Standard
+Para realizar las puebas de eficiencia elegimos un modelo que representa
+ al fenómino de transmisión de masa/energía en una dimensión.
+ Este sistema resulta apropiado para la prueba de eficiencia porque, como
+ vamos a ver cuando presentemos el modelos modelica, podemos controlar el
+ tamaño del mismo modificando un solo parámetro.
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Transmisión-de-masa/energía"
 
 \end_inset
 
-Transmisión de masa/energía en una dimensión
-\end_layout
-
-\begin_layout Standard
-En esta sección analizaremos el tiempo de ejecución de los algoritmos de
- causalización presentados en el capítulo anterior.
- Los tiempos los vamos a medir ejecutando los algoritmos de causalización
- sobre un modelo de ejemplo.
- Este modelo posee ecuaciones de tipo 
-\begin_inset Quotes eld
-\end_inset
-
-for equation
-\begin_inset Quotes erd
-\end_inset
-
- lo cual resulta conveniente para el analisis ya que podemos incrementar
- la cantidad de ecuaciones e incógnitas del modelo incrementando el rango
- de valores del 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+for_index+
-\end_layout
-
-\end_inset
-
- (ver sección 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Expansión-de-ecuaciones"
-
-\end_inset
-
-) y ver si el incremento de los tiempos de ejecución se condice con los
- calculos de complejidad que realizamos en el capítulo anterior.
-\end_layout
-
-\begin_layout Standard
-El algoritmo de causalización implementado en el método 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+causalize+
-\end_layout
-
-\end_inset
-
- de la clase 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+CausalizationStrategy+
-\end_layout
-
-\end_inset
-
- es en realidad la composición de dos algoritmos independientes.
- Estos algoritmos estan implementados en los métodos privados 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+simpleCausalizationStrategy+
-\end_layout
-
-\end_inset
-
- y 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+complexCausalizationStrategy+
-\end_layout
-
-\end_inset
-
-.
- Según lo expuesto en la sección del capítulo anterior, la incorporación
- de la estrategía simple al proceso de causalización constituye una optimización
- del mismo.
- Lo que vamos a hacer en esta sección es causalizar un modelo de ejemplo
- y medir el tiempo de ejecución de la estrategía simple, la estrategía compleja
- y de la estrategía completa, es decir la composición de la simple con la
- compleja.
- 
-\end_layout
-
-\begin_layout Standard
-El ejemplo que vamos a utilizar representa la transmisión de masa o energía
- en una dimensión.
- La ecuación que representa este fenómeno es la siguiente:
+La ecuación que representa este fenómeno es la siguiente:
 \end_layout
 
 \begin_layout Standard
@@ -13876,26 +13954,8 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-Para medir los tiempos de ejecución de las diferentes estrategías armamos
- un test, el cual recibe como entrada un modelo modelica y lo causaliza
- utilizando las tres estrategias anteriormente mencionadas.
- Al finalizar imprime el tiempo que demoro en ejecutarse cada estrategia.
- El test se encuentra implementado en el archivo test/causalize/performance_test.
-cpp.
- Al ejecutarlo sobre el modelo 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+OneDHeatTransferTI_FD+
-\end_layout
-
-\end_inset
-
- obtenemos una salida como la que siguiente:
+Al ejecutar el test de performance sobre el modelo obtenemos una salida
+ como la que siguiente:
 \end_layout
 
 \begin_layout Standard
@@ -14096,9 +14156,21 @@ verb+OneDHeatTransferTI_FD+
 \end_inset
 
 .
+ La modificación consistió en agregar el arreglo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+U+
+\end_layout
+
+\end_inset
+
+ junto con un conjunto de ecuaciones todas incluidas en un bucle algebraico.
  A continuación se puede ver el modelo modificado.
- Las dos útltimas ecuaciones del modelo son las que contituyen el lazo algebraic
-o.
 \end_layout
 
 \begin_layout Standard
@@ -14164,7 +14236,12 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-    Real T[N] ;
+    Real T[N];
+\end_layout
+
+\begin_layout Plain Layout
+
+    Real U[N]; 
 \end_layout
 
 \begin_layout Plain Layout
@@ -14204,6 +14281,11 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
+      U[1]*U[2]=0;
+\end_layout
+
+\begin_layout Plain Layout
+
       for i in 2:N - 1 loop
 \end_layout
 
@@ -14211,6 +14293,11 @@ begin{lstlisting}[language=Modelica]
 
         der(T[i]) = der(T[i-1]) + lambda * ((T[i + 1] - T[i]) / dx + ((-T[i])
  + T[i - 1]) / dx) / cp / rho / dx;
+\end_layout
+
+\begin_layout Plain Layout
+
+        U[i] = U[i+1]+U[i-1]; 
 \end_layout
 
 \begin_layout Plain Layout
@@ -14225,12 +14312,7 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-      a+b=T[1];
-\end_layout
-
-\begin_layout Plain Layout
-
-      a*3+b=T[1];
+      U[N] = U[N-1]*2+sin(U[N]); 
 \end_layout
 
 \begin_layout Plain Layout
@@ -14312,7 +14394,7 @@ textwidth]{graphics/OneDHeatTransfer_loop.pdf}
 
   
 \backslash
-caption{OneDHeatTransfer with loop}
+caption{OneDHeatTransfer con bucle algebraico}
 \end_layout
 
 \begin_layout Plain Layout
@@ -14332,6 +14414,28 @@ end{figure}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+La línea semi-punteada representa los tiempos de ejecución resultantes de
+ aplicar solo el algoritmo de Tarjan.
+ La línea punteada representa los tiempos de ejecución de la estrategía
+ de causalización completa, es decir ejecutando el algoritmo simple antes
+ de aplicar Tarjan.
+ La línea continua grafica los tiempos de la estrategía simple.
+ Dada la existencia del bucle algebraico el algoritmo simple no termina
+ por lo tanto no tiene sentido incluirlo (de manera aislada) en la comparación.
+ La diferencia de crecimiento entre las curvas que representan la aplicación
+ de Tarjan y la aplicación de la estrategía completa se condice con los
+ resultados obtenidos en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Optimización"
+
+\end_inset
+
+ y permite ver más claramente como la inclusión del algoritmo simple constituye
+ una optimización del proceso de causalización.
 \end_layout
 
 \begin_layout Chapter
@@ -15164,33 +15268,7 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-      BOOST_CHECK(get<Modelica::AST::Real>(index) || get<Modelica::AST::Integer>
-(index));
-\end_layout
-
-\begin_layout Plain Layout
-
-      if (is<Real>(index)) {
-\end_layout
-
-\begin_layout Plain Layout
-
-        BOOST_CHECK((int)get<Modelica::AST::Real>(index) == i);
-\end_layout
-
-\begin_layout Plain Layout
-
-      } else {
-\end_layout
-
-\begin_layout Plain Layout
-
-        BOOST_CHECK((int)get<Modelica::AST::Integer>(index) == i);
-\end_layout
-
-\begin_layout Plain Layout
-
-      }
+      BOOST_CHECK((int)get<Modelica::AST::Integer>(index) == i);
 \end_layout
 
 \begin_layout Plain Layout
@@ -15658,9 +15736,8 @@ verb+check_causality+
 
 \end_inset
 
-.
- La función se definio en el archivo test/causalize/causalization_strategy_test.c
-pp.
+ la cual se puede encontrar en el archivo test/causalize/causalization_strategy_
+test.cpp.
  La función recibe como parámetros el modelo a validar y la lista de incógnitas
  de dicho modelo.
  La validación se realiza ecuación por ecuación, verificando para cada una
@@ -15876,10 +15953,10 @@ end{lstlisting}
 La función declara una lista de variables conocidas.
  Luego itera sobre las ecuaciones del modelo que recibe como parámetro.
  Lo primero que hacemos para cada ecuación es validar que las variables
- incógnitas que aparecen en el lado derecho de la ecuación se encuentren
- en la lista de variables conocidas.
- Luego agregamos la variable (o variables) que aparece en lado izquierdo
- de la ecuación a la lista de variables conocidas.
+ que aparecen en el lado derecho de la ecuación se encuentren en la lista
+ de variables conocidas.
+ Esta lista se popula con las variables que aparecen en lado izquierdo de
+ cada ecuación.
  Si el test se ejecuta satisfactoriamente es porque para cada ecuación,
  evaluada en el orden en el que se encuentra definida en el modelo, las
  variables del lado derecho son todas variables conocidas y de esta manera
@@ -15900,11 +15977,90 @@ reference "chap:Ejemplos"
 \end_layout
 
 \begin_layout Chapter
-Conclusiones.
+Conclusiones
 \end_layout
 
 \begin_layout Section
 Conclusiones generales
+\end_layout
+
+\begin_layout Standard
+En este trabajo se presento la implementación en C++ de la etapa de causalizació
+n de ecucaciones de un compilador Modelica.
+ El trabajo estuvo enmarcado dentro del proyecto de investigación “Modelado,
+ Simulación y Control en Tiempo Real con Aplicaciones en Electrónica de
+ Potencia” de la Universidad Nacional de Rosario.
+ Uno de los objectivos de dicho proyecto es el desarrollo de un compilador
+ Modelica, denominado ModelicaCC (Modelica C Compiler), a partir del cual
+ poder investigar distintos algoritmos en relación a modelos de gran escala.
+ Puntualmente, la implementación aquí presentada de la etapa de causalización
+ constituye el puntapié inicial para la implementación de un algoritmo de
+ causalización vectorial, es decir, un algoritmo que realice la causalización
+ de ecuaciones sin la necesidad de expandir los arreglos ni las estructuras
+ repetitivas (como por ejmplo las For-Equation) presentes en el modelo.
+ Dicha implementación se puede ver en el siguiente artículo 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+En la primer parte del trabajo se introdujo el lenguaje Modelica, así como
+ también se introdujeron las nociones de ecuacion diferencial ordinaria
+ y ecuación diferencial algebraica.
+ Se planteo la necesidad de incluir en el proceso de compilación de un modelo
+ Modelica, un componente capaz de transformar los modelos representados
+ por ecuaciones diferenciales algebraicas en modelos equivalentes representados
+ por ecuaciones diferenciales ordinarias.
+ Esta necesidad surge a partir de el hecho de que la mayoria de los resolvedores
+ númericos, necesarios para la simulación de un modelo Modelica, esperan
+ modelos respresentados mediante eucaciones diferenciales ordinarias.
+ También presentamos el algoritmo de Tarjan como el más adecuado para resolver
+ la tarea de causalizaión de ecuaciones, es decir la transformación de ecuacione
+s diferenciales algebraicas en ecuaciones diferenciales ordinarias.
+ Por último introdujimos el compilador 
+\shape italic
+modelicacc
+\shape default
+, su arquitectura general y los diferentes componentes que implementan cada
+ una de las etapas de compilación.
+\end_layout
+
+\begin_layout Standard
+En la segunda parte del trabajo detallamos la implementación del componente
+ de causalización.
+ Presentamos la biblioteca Boost Graph como la utilizada para la implementación
+ del algoritmo de Tarjan, así como también para la representacion de los
+ grafos.
+ Detallamos el proceso de construcción del grafo bipartito a partir de un
+ modelo modelica, y cómo se realizo la aplicación del algoritmo de Tarjan.
+ Dado que la aplicacion del algoritmo de Tarjan hace que la complejidad
+ temporal del proceso de causalización sea cuadrática (por la necesidad
+ del cálculo de un matching sobre el grafo obtenido del modelo), se presento
+ una optimización consistente en la implementación de un algoritmo más simple,
+ el cual, permite resolver los modelos que no presentan bucles algebraicos
+ en un tiempo logarítmico lo cual resulta más optimo que aplicar el algoritmo
+ de Tarjan.
+ Este algoritmo resulto una optimización en todos los casos, ya que para
+ los modelos con que sí presentan bucles algebraicos, el algoritmo simple
+ reduce el tamaño del grafo eliminando (y causalizando) los vértices que
+ no pertenecen a algún bucle.
+ En la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Transmisión-de-masa/energía"
+
+\end_inset
+
+ se presento un ejemplo que permite ver más claramente de que manera la
+ inclusión del algoritmo simple resulta en una optimización del proceso
+ de causalización.
+ Por último, se incluyo el detalle de los tests unitarios escritos para
+ validar los diferentes componentes desarrollados.
 \end_layout
 
 \begin_layout Section
@@ -15920,7 +16076,21 @@ Tearing
 \end_layout
 
 \begin_layout Itemize
-Causalización de ecuaciones for sin expanción
+Causalización de ecuaciones for sin expanción: En esta versión del causalizador
+ de ecuaciones las estructuras repetitivas como las ecuaciones for se expanden.
+ Esta solución no es eficiente para modelo de gran escala.
+ En 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica"
+
+\end_inset
+
+ se plantea una versión vectorial del algoritmo de tarjan la cual permite
+ realizar la causalización de ecuaciones sin la necesidad de expandir las
+ estructuras repetitivas.
+ La implementación de dicho algoritmo vectorial queda pendiente para futuras
+ versiones del causalizador.
 \end_layout
 
 \begin_layout Standard
