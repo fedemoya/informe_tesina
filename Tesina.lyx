@@ -38,9 +38,11 @@
 \output_sync 0
 \bibtex_command default
 \index_command default
-\paperfontsize default
-\spacing single
+\paperfontsize 10
+\spacing other 1.2
 \use_hyperref true
+\pdf_title "Causalización de modelos Modelica"
+\pdf_author "Federico Moya"
 \pdf_bookmarks true
 \pdf_bookmarksnumbered true
 \pdf_bookmarksopen false
@@ -75,13 +77,17 @@
 \shortcut idx
 \color #008000
 \end_index
-\secnumdepth 3
-\tocdepth 3
+\leftmargin 7cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 2
+\tocdepth 2
 \paragraph_separation indent
 \paragraph_indentation default
 \quotes_language english
 \papercolumns 1
-\papersides 1
+\papersides 2
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
@@ -94,6 +100,10 @@
 
 \begin_layout Author
 Federico Moya
+\begin_inset Newline newline
+\end_inset
+
+M-1234/5
 \end_layout
 
 \begin_layout Title
@@ -272,6 +282,80 @@ emph{Al amor de mi vida, Victoria, por su enorme paciencia.}
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center} 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace{1.9cm}     
+\backslash
+huge{Resumen}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+El modelado y simulación computacional se ha convertido en una herramienta
+ fundamental para el desarrollo de la ciencia y la ingeniería.
+ En general los sistemas dinámicos son descriptos matemáticamiente mediante
+ ecuaciones diferenciales que luego son simuladas por métodos de integración
+ numérica.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+El lenguaje de modelado orientado a objetos Modelica es el estandar de facto
+ para describir computacionalmente esta clase de modelos.
+ En él se representan los sistemas dinámicos como un conjunto de ecuaciones
+ diferenciales algebraicas (DAE).
+ La integración de DAEs es compleja y poco robusta por lo cual las herramientas
+ de Modelica convierten simbólicamente las ecuaciones DAEs en una formulación
+ de ecuación diferencial ordinaria (ODE) para luego ser resultas por métodos
+ de integración para ODEs.
+\end_layout
+
+\begin_layout Plain Layout
+
+En este trabajo se presenta el diseño e implementación de un algoritmo de
+ causalización, que convierte modelos DAEs en ODEs para modelos Modelica.
+ Se estudian diferentes implementaciones analizando la complejidad algorítimca
+ de cada una y luego se validan experimentalmente tanto el resultado correcto
+ de ellas como su performance computacional.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
@@ -368,8 +452,8 @@ Este trabajo se encuentra enmarcado en el desarrollo de un compilador Modelica.
  Puntualmente, el trabajo hace foco en la etapa de causalización de ecuaciones.
  Se analizan los algoritmos existentes y se presenta una implementación
  en el lenguaje C++ del componente responsable de realizar dicha tarea.
- Este componente se implemento como una aplicación independiente la cual
- espera modelos modelica simplificados (el pipeline de compilación se describe
+ Este componente se implementó como una aplicación independiente la cual
+ espera modelos Modelica simplificados (el pipeline de compilación se describe
  en el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -377,18 +461,18 @@ reference "chap:Visión-general-del"
 
 \end_inset
 
-) y genera modelos modelica cuyas ecuaciones se encuentran en la forma ODE,
- es decir ordenadas vertical y horizontalmente, de manera que el lado derecho
- de cada ecuación sea una incógnita y el lado izquierdo sea una expresión
+) y genera modelos Modelica cuyas ecuaciones se encuentran en la forma ODE,
+ es decir ordenadas vertical y horizontalmente, de manera que el lado izquierdo
+ de cada ecuación sea una incógnita y el lado derecho sea una expresión
  compuesta por variables conocidas, es decir variables que se resuelven
- mediante alguna ecuacion anterior.
+ mediante alguna ecuación anterior.
 \end_layout
 
 \begin_layout Standard
 En el resto de este capítulo se introducen los conceptos básicos involucrados
  en el trabajo.
  Se definen las nociones de modelado y simulación.
- Se presenta una introducción al lenguaje modelica así como también se describe
+ Se presenta una introducción al lenguaje Modelica así como también se describe
  brevemente la etapa de causalización.
  Se presentan los motivos y objetivos del trabajo y finalmente se detalla
  la organización del mismo.
@@ -408,7 +492,7 @@ Se dice que las computadoras están revolucionando la ciencia y la ingeniería.
  Queremos crear diseños más complejos como mejores naves espaciales, autos,
  medicinas, sistemas de telefonía celular computarizados, etc.
  Queremos entender aspectos más profundos de la naturaleza.
- Estos son solo algunos ejemplos de modelado y simulación soportado por
+ Éstos son solo algunos ejemplos de modelado y simulación soportado por
  computadoras.
  Son necesarias herrimientas y conceptos más poderosos para ayudar a manejar
  tal nivel de complejidad.
@@ -429,7 +513,7 @@ Sistemas y experimentos
 \end_layout
 
 \begin_layout Itemize
-Un sistema es un objecto o una colección de objetos cuyas propiedades queremos
+Un sistema es un objeto o una colección de objetos cuyas propiedades queremos
  estudiar.
 \end_layout
 
@@ -531,7 +615,7 @@ El sistema necesario para el experimento puede que todavía no exista.
 Las desventajas del método experimental nos llevan al concepto de modelo.
  Si construimos un modelo del sistema, este modelo puede ser investigado
  y puede servir para responder muchas preguntas sobre el sistema real si
- el modelo es lo suficientemente realistico.
+ el modelo es lo suficientemente realista.
 \end_layout
 
 \begin_layout Subsubsection
@@ -766,8 +850,8 @@ reference "sec:Modelica"
 \end_layout
 
 \begin_layout Standard
-Para ordenar las ecuaciones se realiza un procesamiento del modelo denominado
- causalización.
+Para ordenar las ecuaciones se realiza un procesamiento simbólico del modelo
+ denominado causalización.
  Esta etapa del proceso de compilación constituye el tema principal de esta
  tesina.
 \end_layout
@@ -777,12 +861,20 @@ El proceso de causalización consiste en ordenar topológicamente un conjunto
  de ecuaciones acausales de acuerdo a las dependencias del flujo de datos
  entre ellas.
  El objetivo de este ordenamiento es que las ecuaciones puedan resolverse
- de manera secuencial uno después de la otra.
+ de manera secuencial una después de la otra.
 \end_layout
 
 \begin_layout Standard
 Para lograr la causalización de las ecuaciones de un modelo Modelica se
- utiliza un algoritmo de teoría de grafos denominado Algoritmo de Tarjan.
+ utiliza un algoritmo de teoría de grafos denominado Algoritmo de Tarjan
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Tarjan72"
+
+\end_inset
+
+.
  Dicho algoritmo permite encontrar los componentes fuertementes conexos
  de un grafo.
  Este algoritmo posee la propiedad de que ningún componente fuertemente
@@ -790,8 +882,8 @@ Para lograr la causalización de las ecuaciones de un modelo Modelica se
  De esta manera el orden en que los componentes fuertemente conexos son
  encontrados representa un orden topológico reverso del grafo dirigido acíclico
  formado por los componentes fuertemente conexos.
- Esta propiedad del algoritmo de Tarjan es la lo hace apropiado para resolver
- el problema de causalización de ecuaciones.
+ Esta propiedad del algoritmo de Tarjan es la que lo hace apropiado para
+ resolver el problema de causalización de ecuaciones.
  En la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -832,7 +924,21 @@ key "Fritzson98"
  con los fines de investigar distintos algoritmos en relación a modelos
  de gran escala.
  Existen diversas herramientas de modelado y simulación Modelica libres
- como OpenModelica, JModelica.
+ como OpenModelica 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fri05"
+
+\end_inset
+
+, JModelica 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "jmod"
+
+\end_inset
+
+.
  Aunque estas herramientas son software libre la experimentación con nuevos
  algoritmos no resulta sencilla, ya sea porque están programadas en un lenguaje
  propio como es el caso de OpenModelica o porque la inclusión de código
@@ -875,7 +981,7 @@ Organización del trabajo
 \end_layout
 
 \begin_layout Standard
-En la Parte I se presenta el contexto en el que se realizo el trabajo.
+En la Parte I se presenta el contexto en el que se realizó el trabajo.
  En el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -940,8 +1046,14 @@ reference "sec:Tests-unitarios"
 \end_inset
 
  se encuentra el detalle de los tests unitarios implementados.
- Finalmente en el capítulo 7 se presentan las conclusiones y el trabajo
- a futuro.
+ Finalmente en el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Conclusiones"
+
+\end_inset
+
+ se presentan las conclusiones y el trabajo a futuro.
 \end_layout
 
 \begin_layout Chapter
@@ -959,10 +1071,10 @@ Modelica
 \end_layout
 
 \begin_layout Standard
-Modelica es un lenguaje de modelado que permite la especificación de modelos
- matemáticos de complejos sistemas naturales o artificiales con el propósito
- de posibilitar la simulación computarizada de sistemas dinámicos que evoluciona
-n con el tiempo.
+Modelica es un lenguaje de modelado (estandar abierto) que permite la especifica
+ción de modelos matemáticos de complejos sistemas naturales o artificiales
+ con el propósito de posibilitar la simulación computarizada de sistemas
+ dinámicos que evolucionan con el tiempo.
  Modelica es también un lenguaje de programación orientado a objetos y basado
  en ecuaciones, pensado para aplicaciones de mucha complejidad que requieren
  una alta eficiencia.
@@ -980,7 +1092,7 @@ Modelica está principalmente basado en ecuaciones en lugar de asignaciones.
 
 \begin_layout Itemize
 Modelica permite describir y conectar componentes de modelos pertenecientes
- a diferentes dominios como electricidad, mecánica, termodinámica, hidráulica,
+ a diferentes dominios como eléctricos, mecánicos, termodinámica, hidráulica,
  biología, control, etc.
 \end_layout
 
@@ -1124,14 +1236,17 @@ Hello World
 .
  Dado que Modelica es un lenguaje de modelado basado en ecuaciones, imprimir
  una cadena de caracteres no tiene mucho sentido.
- En su lugar nuestro primer programa Modelica resuelve una ecuación diferencial
- trivial.
+ En su lugar nuestro primer 
+\emph on
+modelo
+\emph default
+ Modelica resuelve una ecuación diferencial trivial.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\dot{x}=-a\times x
+\dot{x(t)}=-a\times x(t)
 \]
 
 \end_inset
@@ -1141,13 +1256,13 @@ Hello World
 
 \begin_layout Standard
 La variable 
-\begin_inset Formula $x$
+\begin_inset Formula $x(t)$
 \end_inset
 
- en esta ecuación es una variable dinámica (en este ejemplo también es una
- variables de estado) cuyo valor puede variar con el transcurso del tiempo.
- La derivada del tiempo 
-\begin_inset Formula $\dot{x}$
+ en esta ecuación es una variable dinámica cuyo valor puede variar con el
+ transcurso del tiempo.
+ La expresión 
+\begin_inset Formula $\dot{x(t)}$
 \end_inset
 
  es la derivada temporal de 
@@ -1321,6 +1436,19 @@ verb+Real+
 
 \end_inset
 
+ esto es valores que pertenecen al eje real 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$
+\backslash
+mathbf{R}$
+\end_layout
+
+\end_inset
+
 .
 \end_layout
 
@@ -1381,7 +1509,43 @@ verb+=+
 
  siempre significa igualdad, esto es, define una ecuación y no una asignación
  como en la mayoría de los lenguajes de programación.
- La derivada temporal de una variable se indica mediante la pseudo-función
+ Esto es, podríamos haber descripto la misma ecuación como:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+0 = der(x) + a*x;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+donde se ve explícitamente que no es una asignación sino una igualdad.
+\end_layout
+
+\begin_layout Standard
+La derivada temporal de una variable se indica mediante la pseudo-función
  
 \begin_inset ERT
 status open
@@ -1520,7 +1684,7 @@ verb+HelloWorld+
 .
  Los sistemas de ecuaciones que contienen tanto ecuaciones diferenciales
  como ecuaciones algebraicas se denominan sistemas de ecuaciones diferenciales
- algebraicas (o DAEs por sus siglas en ingles).
+ algebraicas (o DAEs por sus siglas en inglés).
  Debajo se encuentra el modelo Modelica del péndulo.
 \end_layout
 
@@ -1735,8 +1899,7 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-Este ejemplo contiene la declaración de dos variables dinámicas (las cuales
- en este caso también son variables de estado) 
+Este ejemplo contiene la declaración de dos variables dinámicas 
 \begin_inset ERT
 status open
 
@@ -1808,8 +1971,8 @@ verb+parameter+
 
 \end_inset
 
- es una variable constante que permite al usuario modificar de manera sencilla
- el comportamiento de un modelo, por ejemplo modificando el parámetro 
+ es una constante que permite al usuario modificar de manera sencilla el
+ comportamiento de un modelo, por ejemplo modificando el parámetro 
 \begin_inset ERT
 status open
 
@@ -1865,7 +2028,7 @@ Arreglos
 
 \begin_layout Standard
 Un arreglo es una colección de variables todas del mismo tipo.
- Los elementos de un arreglo se acceden por medio de indices enteros cuyos
+ Los elementos de un arreglo se acceden por medio de índices enteros cuyos
  valores van desde 1 hasta el tamaño de la respectiva dimensión.
  Una variable de tipo arreglo se puede declarar agregando dimensiones entre
  corchetes después del nombre de una clase, como en Java, o después del
@@ -1962,8 +2125,7 @@ Las conexiones entre objetos generan ecuaciones.
 
 \begin_layout Standard
 Las ecuaciones son más poderosas que las asignaciones.
- Por ejemplo, consideremos la ecuación de una resistencia R que multiplicada
- por la corriente i es igual a el voltaje v.
+ Por ejemplo, consideremos la ecuación característca de una resistencia:
 \end_layout
 
 \begin_layout Standard
@@ -1975,6 +2137,21 @@ R\times i & =v
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+donde 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+$R$
+\end_layout
+
+\end_inset
+
+ es el valor de la resistencia.
 \end_layout
 
 \begin_layout Standard
@@ -1999,7 +2176,7 @@ R & :=\frac{v}{i}
 \end_layout
 
 \begin_layout Standard
-Las ecuaciones en Modelica se pueden clasificar de forma informal en cuatro
+Las ecuaciones en Modelica se pueden clasificar informalmente en cuatro
  grupos dependiendo en el contexto sintáctico en el que aparezcan:
 \end_layout
 
@@ -2058,7 +2235,7 @@ verb+start+
 
 .
  Estas ecuaciones se utilizan para resolver el problema de inicialización
- al momento de inicio de la ejecución.
+ al momento de inicio de la simulación.
 \end_layout
 
 \begin_layout Standard
@@ -2300,7 +2477,7 @@ A veces surge la necesidad de expresar convenientemente conjuntos de ecuaciones
  con estructuras que se repiten.
  Para estos casos Modelica ofrece un tipo particular de ecuación denonimado
  loop equation.
- Notar que esto no es un bucle en el sentido algoritmico de la palabra sino
+ Notar que esto no es un bucle en el sentido algorítmico de la palabra sino
  que es una forma abreviada de expresar un conjunto de ecuaciones.
 \end_layout
 
@@ -2688,7 +2865,7 @@ Previamente hemos definido una variable de estado como una variable que
  Para los sistemas de tiempo continuo estas variables son aquellas para
  las cuales sus derivadas respecto del tiempo aparecen en el modelo.
  Existe una formulación estandar de las ecuaciones de ciertos modelos matemático
-s de sistemas dinámicos denominada modelos de espacio de estados explicitos,
+s de sistemas dinámicos denominada modelos de espacio de estados explícitos,
  en donde las derivadas de las variables de estado aparecen explícitamente
  del lado izquierdo de las ecuaciones.
 \end_layout
@@ -2699,7 +2876,16 @@ Estos modelos son atractivos como una representación matemática básica dado
  modelos más complicados, sirviendo a la vez para representar un espectro
  amplio de aplicaciones.
  Sin embargo hay que tener en cuenta que muchos modelos no pueden ser transforma
-dos a la forma de espacio de estados explicito.
+dos directamente a la forma de espacio de estados explicito sino que primero
+ deben aplicarse algoritmos de reducción de índice (como el de Pantelides
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Pan88"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Subsection
@@ -2856,7 +3042,7 @@ Introduciendo una variable
 \begin_layout Standard
 \begin_inset Formula 
 \begin{gather*}
-\dot{x}(t)=\frac{F(t)}{m}\\
+\dot{v}(t)=\frac{F(t)}{m}\\
 \dot{s}(t)=v(t)
 \end{gather*}
 
@@ -2940,11 +3126,14 @@ Por ejemplo, las coordenadas cartesianas
 \end_inset
 
  de la masa en el péndulo de la figura 
-\begin_inset Note Note
+\begin_inset ERT
 status open
 
 \begin_layout Plain Layout
-incluir ref
+
+
+\backslash
+ref{fig:pendulo}
 \end_layout
 
 \end_inset
@@ -2960,7 +3149,7 @@ incluir ref
 \begin_layout Standard
 \begin_inset Formula 
 \begin{gather*}
-x_{1}^{2}+x_{2}^{2}=L^{2}
+x^{2}+y^{2}=L^{2}
 \end{gather*}
 
 \end_inset
@@ -3096,7 +3285,7 @@ La forma general de un sistema DAE, de la cual el ejemplo anterior es un
 \begin_inset Formula 
 \begin{gather*}
 f(x(t),\dot{x}(t),u(t),y(t)=0\\
-g(x(t),u(t),y(t)=0
+g(x(t),u(t),y(t))=0
 \end{gather*}
 
 \end_inset
@@ -3183,8 +3372,8 @@ key "Fritzson98"
  algebraica, métodos de reducción de índices, etc., elimina la mayoría de
  las ecuaciones dejando solo un conjunto mínimo que eventualmente va a ser
  resuelto numéricamente.
- Por ejemplo, si dos ecuaciones sintácticamente equivalentes aparecen solo
- se conserva una.
+ Por ejemplo, si dos variables son sintácticamente equivalentes solo se
+ conserva una.
 \end_layout
 
 \begin_layout Standard
@@ -3195,8 +3384,8 @@ es en asignaciones.
  Si aparece un conjunto de ecuaciones fuertemente conectadas (un bucle algebraic
 o) se realizan transformaciones simbólicas que ejecutan una serie de transformac
 iones algebraicas para simplificar las dependencias entre las variables.
- En ciertos casos se puede resolver el sistema de ecuaciones diferenciales
- si este posee solución simbólica.
+ En ciertos casos se puede resolver el sistema de ecuaciones que representa
+ el lazo si este posee solución simbólica.
 \end_layout
 
 \begin_layout Standard
@@ -3367,7 +3556,7 @@ Las orientación a objetos da lugar a que los usuarios escriban modelos muy
 
 \begin_layout Standard
 Muchas de estas dificultades pueden ser resueltas manipulando simbólicamente
- el sistema de ecuaciones antes de aplicar un resolvedor numérico.
+ el sistema de ecuaciones antes de aplicar un método de integración numérico.
  En la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3388,14 +3577,14 @@ key "Tarjan72"
  ecuaciones mutuamente dependientes, i.e bucles algebraicos.
  El particionado del sistema de ecuaciones posibilita una solución más eficiente
  reduciendo la cantidad de variables que tienen que ser manejadas por el
- resolvedor numérico en cada subsistema de ecuaciones.
+ método de integración en cada subsistema de ecuaciones.
  
 \end_layout
 
 \begin_layout Standard
-Algunos de los subsitemas de ecuaciones simultaneas encontrados por el particion
-ado BLT son lineales y pueden ser resueltos por resolvedores estandar de
- ecuaciones lineales.
+Algunos de los subsistemas de ecuaciones simultaneas encontrados por el
+ particionado BLT son lineales y pueden ser resueltos por algoritmos de
+ álgebra estandar de sistemas de ecuaciones lineales.
  Otros sistemas resultan ser no lineales.
  Una técnica denominada 
 \shape italic
@@ -3418,24 +3607,38 @@ tearing variable
 \end_layout
 
 \begin_layout Standard
-La necesidad de diferenciar numéricamente utilizando resolvedores númericos
- de DAEs puede ser reducida o eliminada empleando el algoritmo de Pantelides
- para la 
+La necesidad de diferenciar numéricamente utilizando métodos de integración
+ númericos de DAEs puede ser reducida o eliminada empleando el algoritmo
+ de Pantelides para la 
 \shape italic
-reducción de indice 
+reducción de índice 
 \shape default
 el cual transforma simbólicamente el sistema de ecuaciones a una forma de
  menor índice.
  El sistema de ecuaciones resultantes con índice no mayor a 1 puede ser
- resuelto por resolvedores numéricos de DAE como el DASSL 
+ resuelto por algoritmos de integración numérica como DASSL 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "Fritzson98"
+key "DASSL"
+
+\end_inset
+
+ o DOPRI 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "DP80"
 
 \end_inset
 
  y incluso en algunos casos utilizando simples métodos de resolución de
- ODEs.
+ ODEs como Euler 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CK06"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -3466,7 +3669,8 @@ Transformación BLT - Causalización
 \begin_layout Standard
 Los sistemas de ecuaciones diferenciales algebraicas resultantes de aplanar
  la estructura de objetos de un modelo Modelica por lo general son grandes,
- ralos (una matriz asociada con muchos ceros) y no lineales 
+ ralos (una matriz de incidencia asociada con muchos ceros) y no lineales
+ 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "elmqvist2005"
@@ -3479,7 +3683,7 @@ key "elmqvist2005"
 \begin_layout Standard
 Permutando las ecuaciones y las variables es posible transformar el sistema
  de ecuaciones, o mejor dicho la matriz asociada, a una forma triangular
- inferior de a bloques (o BLT por sus siglas en ingles).
+ inferior de a bloques (o BLT por sus siglas en inglés).
  Una vez llevado a esta forma BLT el sistema puede ser resuelto casi secuencialm
 ente.
  Vamos a explicar la idea utilizando un ejemplo simple el cual consiste
@@ -3525,7 +3729,7 @@ describe la estructura del sistema de ecuaciones.
 \begin_inset Formula $_{ij}$
 \end_inset
 
- es 1 si la variable i aparece en la ecuacion j y 0 en caso contrario.
+ es 1 si la variable i aparece en la ecuación j y 0 en caso contrario.
  Permutando las ecuaciones y las variables este conjunto de ecuaciones puede
  ser llevado a la forma BLT:
 \end_layout
@@ -3575,7 +3779,11 @@ Este proceso se denomina particionado del conjunto de ecuaciones.
 \begin_inset Formula $z_{2}$
 \end_inset
 
-, luego podemos resolver 
+, luego, conociendo 
+\begin_inset Formula $z_{2}$
+\end_inset
+
+ podemos resolver 
 \begin_inset Formula $h3$
 \end_inset
 
@@ -3589,6 +3797,14 @@ Este proceso se denomina particionado del conjunto de ecuaciones.
 
  a partir de 
 \begin_inset Formula $h_{1}$
+\end_inset
+
+ ya conociendo 
+\begin_inset Formula $z_{2}$
+\end_inset
+
+ y 
+\begin_inset Formula $z_{1}$
 \end_inset
 
 .
@@ -3683,7 +3899,7 @@ Se dice que un subgrafo es fuertemente conexo si existe un camino desde
  Claramente, cada nodo puede pertenecer solo a un componente fuertemente
  conexo (que puede componerse de un solo nodo) por lo tanto los componentes
  fuertemente conexos determinan una partición del grafo.
- Deber haber al menos un componente fuertemente conexo tal que no exista
+ Debe haber al menos un componente fuertemente conexo tal que no exista
  camino de ninguno de sus nodos hacia algún nodo de otro componente.
  Denominemos 
 \begin_inset Formula $C_{1}$
@@ -3729,9 +3945,16 @@ key "Duff:1978:ITA:355780.355785"
  fuertemente conexos son identificados en un orden tal que los nodos de
  cada componente pueden poseer caminos que conducen a nodos de componentes
  previos pero nunca a nodos de componentes posteriores.
- Estos algoritmos son el de Sargent and Westerber y el de Tarjan.
+ Estos algoritmos son el de Sargent and Westerber 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "sargent1964speed"
+
+\end_inset
+
+ y el de Tarjan.
  Mientras el algoritmo de Sargent and Westerber presenta una complejidad
- temporal en el peor caso de 
+ temporal (en función de la cantidad de variables) en el peor caso de 
 \begin_inset Formula $O(n^{2})$
 \end_inset
 
@@ -4181,7 +4404,25 @@ y f
 \begin_inset script subscript
 
 \begin_layout Plain Layout
-5
+5 
+\end_layout
+
+\end_inset
+
+y las variables z
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+
+y z
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+5 
 \end_layout
 
 \end_inset
@@ -4830,6 +5071,12 @@ end{figure}
 
 \end_layout
 
+\begin_layout Standard
+Como veremos en los siguientes capítulos este enfoque presenta una complejidad
+ computacional cuadrática con respecto a la cantidad de nodos a causalizar.
+ 
+\end_layout
+
 \begin_layout Chapter
 \begin_inset CommandInset label
 LatexCommand label
@@ -4841,9 +5088,16 @@ Visión general del Compilador
 \end_layout
 
 \begin_layout Standard
-El compilador ModelicaCC (Modelica C Compiler) se desarrolló como un conjunto
- de componentes independientes, cada uno de los cuales implementa una etapa
- diferente del proceso de compilación de un modelo Modelica.
+El compilador ModelicaCC 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica,ModelicaCC"
+
+\end_inset
+
+ (Modelica C Compiler) se desarrolló como un conjunto de componentes independien
+tes, cada uno de los cuales implementa una etapa diferente del proceso de
+ compilación de un modelo Modelica.
  En este capítulo vamos a introducir los diferentes componentes que conforman
  el compilador Modelica explicando el rol de cada uno y cómo se componen
  para lograr la compilación de un modelo Modelica.
@@ -4857,7 +5111,7 @@ Introducción
 La compilación de un modelo Modelica es el proceso mediante el cual se transform
 a un modelo de alto nivel, el cual puede contener clases y ecuaciones acausales,
  en un modelo plano, sin clases, y donde las ecuciones se encuentran ordenadas
- o causalizadas.
+ o causalizadas listas para su simulación.
  Un modelo plano con las ecuaciones ordenadas de manera tal que para cada
  ecuación las variables del lado derecho se pueden considerar conocidas
  es un modelo apropiado para la generación de código C (o de cualquier otro
@@ -5324,7 +5578,7 @@ verb+Flange+
  Las constantes representan la masa de la pelota y la fuerza de gravedad.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 El modelo 
 \begin_inset ERT
 status open
@@ -5349,7 +5603,7 @@ verb+Ball+
  La última ecuación corresponde a la primer ley de Newton.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 El siguiente modelo declarado en el paquete, denominado 
 \begin_inset ERT
 status open
@@ -5435,10 +5689,7 @@ verb+k+
 \end_inset
 
  correspondiente a la rigidez.
-\end_layout
-
-\begin_layout Standard
-Las dos primeras ecuaciones del modelo 
+ Las dos primeras ecuaciones del modelo 
 \begin_inset ERT
 status open
 
@@ -5505,7 +5756,7 @@ verb+dy < 0+
  La última ecuación se corresponde con la ley de acción y reacción de Newton.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 El último componente de nuestro sistema es el piso el cual se encuentra
  representado por el modelo denominado 
 \begin_inset ERT
@@ -5552,7 +5803,7 @@ verb+Real+
  velocidad del conector son siempre 0.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
 El sistema completo está representado por el último modelo, el modelo denominado
  
 \begin_inset ERT
@@ -5709,7 +5960,21 @@ verb+connect+
 
 .
  Estas dos expresiones establecen que la pelota se ecuentra conectada al
- amortiguador y que el amortiguador se encuentra conectado al suelo.
+ amortiguador y que el amortiguador se encuentra conectado al suelo como
+ muestra la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:bouncing_ball}
+\end_layout
+
+\end_inset
+
+ .
 \end_layout
 
 \begin_layout Section
@@ -5986,7 +6251,7 @@ Simplificación a μModelica: mmo
 
 \begin_layout Standard
 La tarea del componente mmo es traducir el modelo aplanado a una versión
- simplificada (un subconjunto) del lenguaje modelica denominada μModelica.
+ simplificada (un subconjunto) del lenguaje Modelica denominada μModelica.
  Esta transformación del modelo es necesaria porque para la etapa final
  del proceso de compilación, la cual consiste en la generación de código
  C y la posterior simulación, se utiliza el QSS Stand–Alone Solver 
@@ -5999,7 +6264,7 @@ key "FernandezKofman12"
 , el cual espera modelos escritos en μModelica 
 \begin_inset CommandInset citation
 LatexCommand citep
-key "MMO"
+key "MMO,BFF12"
 
 \end_inset
 
@@ -6050,8 +6315,8 @@ verb+Real+
 \end_layout
 
 \begin_layout Itemize
-Los arreglos esta permitidos.
- Los índices de los arrays que se encuentran dentro de clausulas 
+Sólo arreglos unidimensionales están permitidos.
+ Los índices de los arrays que se encuentran dentro de cláusulas 
 \begin_inset ERT
 status open
 
@@ -6064,7 +6329,7 @@ verb+for+
 
 \end_inset
 
- estan restringidos a expresiones de la forma: 
+ están restringidos a expresiones de la forma: 
 \begin_inset Formula $ai+b$
 \end_inset
 
@@ -6094,6 +6359,8 @@ status open
 
 \begin_layout Plain Layout
 
+
+\backslash
 verb+equation+
 \end_layout
 
@@ -6113,10 +6380,10 @@ definiciones de derivadas de variables de estado:
 
 \begin_layout Itemize
 definiciones de variables algebraicas: 
-\begin_inset Formula $(a_{1},...,a_{n})=g(x(t),d,(a(t),t)$
+\begin_inset Formula $(a_{1},...,a_{n})=g(x(t),d,a(t),t)$
 \end_inset
 
- con la restriccion de que cada variable algebraica solo puede depender
+ con la restricción de que cada variable algebraica solo puede depender
  de variables de estado y de otras variables algebraicas previamente definidas.
 \end_layout
 
@@ -6141,6 +6408,8 @@ status open
 
 \begin_layout Plain Layout
 
+
+\backslash
 verb+elsewhen+
 \end_layout
 
@@ -6176,6 +6445,11 @@ verb+reinit+
 \end_inset
 
 ) de variables de estado continuas.
+\end_layout
+
+\begin_layout Standard
+Estas restricciones del lenguajes son necesarias para que el simulador encuentre
+ fácilmente las discontinuidades y se pueda generar código de forma sencilla.
 \end_layout
 
 \begin_layout Standard
@@ -6216,7 +6490,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -6468,7 +6742,7 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-La aplicación del componente mmo sustityo la ecuación
+La aplicación del componente mmo sustityó la ecuación
 \end_layout
 
 \begin_layout Standard
@@ -6479,7 +6753,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -6517,7 +6791,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -6628,7 +6902,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -6753,7 +7027,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -6849,7 +7123,7 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-El modelo de la sección anterior no podia ser resuelto secuencialmente,
+El modelo de la sección anterior no podía ser resuelto secuencialmente,
  es decir comenzando por la primer ecuación, luego la segunda, y así sucesivamen
 te, porque la segunda ecuación depende de la variable 
 \begin_inset ERT
@@ -6870,6 +7144,12 @@ verb+ball1_flange1_f+
  El modelo resultante sí puede ser resuelto secuencialmente.
 \end_layout
 
+\begin_layout Standard
+Cabe aclarar que el resultado obtenido fue realizado con los algoritmos
+ desarrollados en esta tesina.
+ En la siguiente Parte veremos cómo se diseñó e implementó este componente.
+\end_layout
+
 \begin_layout Part
 Contribuciones
 \end_layout
@@ -6886,13 +7166,13 @@ Implementación etapa de causalización
 
 \begin_layout Standard
 En este capítulo se describe la implementación de una de las etapas del
- proceso de compilación del compilador Modelica descrito en el capitulo
+ proceso de compilación del compilador Modelica descrito en el capítulo
  anterior.
  Dicha etapa es la de causalización.
  La principal tarea que se lleva a cabo en esta etapa es la aplicación del
  algoritmo de Tarjan para lograr la transformación a la forma triangular
- inferior de a bloques (o BLT) de la matriz de coeficientes asociada al
- sistema de ecuaciones diferenciales algebraicas de un modelo Modelica aplanado.
+ inferior de a bloques (o BLT) de la matriz de incidencia asociada al sistema
+ de ecuaciones diferenciales algebraicas de un modelo Modelica aplanado.
  Como ya vimos en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -6902,7 +7182,7 @@ reference "sub:Transformación-BLT--"
 
  un sistema de ecuaciones reordenado según la forma BLT de su matriz asociada
  puede ser resuelto casi secuencialmente.
- Para los subsitemas de ecuaciones que no pueden ser resueltos secuencialmente
+ Para los subsistemas de ecuaciones que no pueden ser resueltos secuencialmente
  sino que deben ser resueltos simultáneamente, denominados bucles algebraicos,
  el algoritmo de Tarjan garantiza que su tamaño es el mínimo posible.
 \end_layout
@@ -6965,7 +7245,7 @@ reference "sub:Optimización"
 
 \end_inset
 
- se describe una optimización del proceso de causalización.
+ se describe una novedosa optimización del proceso de causalización.
  La optimización consta de un algoritmo que se aplica previo al algoritmo
  de Tarjan.
  Dicho algoritmo tiene una complejidad logarítmica respecto de la cantidad
@@ -7032,8 +7312,8 @@ reference "sub:Definición-del-grafo"
 Una vez introducida la estructura de datos que utilizamos como representación
  para el grafo bipartito pasamos a describir el proceso de construcción
  del mismo.
- Para construir el grafo necesitamos acceder al modelo y a partir de este
- identificar las ecuaciones, las incógnitas y en que ecuación aparece cada
+ Para construir el grafo necesitamos acceder al modelo y a partir de éste
+ identificar las ecuaciones, las incógnitas y en qué ecuación aparece cada
  incógnita.
  El modelo es representado por una objeto de tipo 
 \begin_inset ERT
@@ -7392,6 +7672,20 @@ La estructura VertexProperties define el tipo de los objetos que adjuntamos
  a los vértices del grafo.
  Estos objetos contienen las ecuaciones o incógnitas que los vértices del
  grafo representan.
+ Las aristas en este caso son no dirigidas y no poseen propiedades 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb|boost::undirectedS|
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -7798,7 +8092,7 @@ verb+in expression+
 \end_layout
 
 \begin_layout Standard
-La expanción de las For-Equations existentes en un modelo es responsabilidad
+La expansión de las For-Equations existentes en un modelo es responsabilidad
  de la función 
 \begin_inset ERT
 status open
@@ -7881,7 +8175,7 @@ verb+for_index+
 \end_inset
 
  en el prefijo el cual a su vez debe incluir la expresión que define el
- rango, es decir no estan soportados los rangos implícitos.
+ rango, es decir no están soportados los rangos implícitos.
  Por lo tanto procesar el prefijo implica evaluar la expresión del 
 \begin_inset ERT
 status open
@@ -8149,6 +8443,140 @@ verb+EvalExp+
  y su implementación en el archivo util/ast_visitors/evalexp.cpp.
 \end_layout
 
+\begin_layout Standard
+Por ejemplo el siguiente código:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+model Adv
+\end_layout
+
+\begin_layout Plain Layout
+
+  Real a[5]; 
+\end_layout
+
+\begin_layout Plain Layout
+
+equation
+\end_layout
+
+\begin_layout Plain Layout
+
+  for i in 1:5 loop
+\end_layout
+
+\begin_layout Plain Layout
+
+    a[i]=i;   
+\end_layout
+
+\begin_layout Plain Layout
+
+  end for; 
+\end_layout
+
+\begin_layout Plain Layout
+
+end Adv;
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+es expandido en:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+model Adv
+\end_layout
+
+\begin_layout Plain Layout
+
+  Real a[5];
+\end_layout
+
+\begin_layout Plain Layout
+
+equation   
+\end_layout
+
+\begin_layout Plain Layout
+
+  a[1] = 1;
+\end_layout
+
+\begin_layout Plain Layout
+
+  a[2] = 2;
+\end_layout
+
+\begin_layout Plain Layout
+
+  a[3] = 3;
+\end_layout
+
+\begin_layout Plain Layout
+
+  a[4] = 4;
+\end_layout
+
+\begin_layout Plain Layout
+
+  a[5] = 5; 
+\end_layout
+
+\begin_layout Plain Layout
+
+end Adv; 
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
@@ -8160,15 +8588,18 @@ Identificación de incógnitas
 \end_layout
 
 \begin_layout Standard
-Para poder construir el grafo sobre el cual se aplica el algoritmo de causalizac
-ión es necesario identificar cuáles de todas las variables declaradas en
+El grafo inicialmente cuenta con un nodo para cada ecuación.
+ Luego debemos crear un nodo para cada incógnita.
+ Para poder construir el grafo sobre el cual se aplica el algoritmo de causaliza
+ción es necesario identificar cuáles de todas las variables declaradas en
  el modelo son incógnitas y cuáles no.
  Una variable es una incógnita si satisface las siguientes condiciones:
 \end_layout
 
 \begin_layout Itemize
 Es una variable continua.
- Es decir que varia de manera continua respecto del tiempo.
+ Es decir que varia de manera continua respecto del tiempo (no un parámetro
+ o constante).
 \end_layout
 
 \begin_layout Itemize
@@ -8184,7 +8615,7 @@ Es la derivada respecto del tiempo de una variable.
 La clase encargada de identificar y recolectar las incógnitas es UnknownsCollect
 or definida en el archivo causalize/unknowns_collector.h.
  Esta clase recibe como parámetro de su constructor la instancia del modelo
- que se esta causalizando, es decir un objeto de tipo 
+ que se está causalizando, es decir un objeto de tipo 
 \begin_inset ERT
 status open
 
@@ -8198,7 +8629,7 @@ verb+MMO_Class+
 \end_inset
 
 .
- La interfaz de la clase esta compuesta por un único método con la siguiente
+ La interfaz de la clase está compuesta por un único método con la siguiente
  firma:
 \end_layout
 
@@ -8256,8 +8687,8 @@ verb+MMO_Class+
 El proceso de identificación de estados es responsabiliad de la clase StateVaria
 blesFinder declarada en el archivo causalize/state_variables_finder.h.
  De la misma manera que el UnkownsCollector esta clase recibe como parámetro
- de su constructor la instancia del modelo que se esta causalizando.
- Su interfaz esta compuesta por un único método cuya firma es la siguiente:
+ de su constructor la instancia del modelo que se está causalizando.
+ Su interfaz está compuesta por un único método cuya firma es la siguiente:
 \end_layout
 
 \begin_layout Standard
@@ -8311,17 +8742,24 @@ Ocurrencia de una incógnita en una ecuación
 Cada arista del grafo de causalización se corresponde con la ocurrencia
  de una incógnita en una ecuación.
  Para poder construir el grafo necesitamos una manera de determinar si una
- incógnita pertenece a una ecuación.
+ incógnita aparece (o es usada) en una ecuación.
  Resolver esto implica que dada una incógnita y una ecuación, necesitamos
  comparar la incógnita con cada una de las expresiones que componen la ecuación.
 \end_layout
 
 \begin_layout Standard
-Dado que las ecuaciones estan representadas mediante una estructura de tipo
+Dado que las ecuaciones están representadas mediante una estructura de tipo
  AST (abstract syntax tree), y dado que la forma más adecuada de implementar
  una algoritmo que opere sobre una estructura de este tipo es mediante la
- apliación del patrón de diseño visitor, lo que hicimos fue justamente eso,
- escribir una clase que implementa el patrón visitor.
+ apliación del patrón de diseño visitor 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "gamma1994design"
+
+\end_inset
+
+, lo que hicimos fue justamente eso, escribir una clase que implementa el
+ patrón visitor.
  La clase es 
 \begin_inset ERT
 status open
@@ -8496,7 +8934,7 @@ verb+contains+
 
 \end_inset
 
- implementa el patron visitor heredando de 
+ implementa el patrón visitor heredando de 
 \begin_inset ERT
 status open
 
@@ -8532,7 +8970,7 @@ verb+apply_visitor+
 \end_inset
 
  también perteneciente a la biblioteca Boost.
- Para ver como se utiliza la clase contains mostramos un fragmento del código
+ Para ver cómo se utiliza la clase contains mostramos un fragmento del código
  de la clase 
 \begin_inset ERT
 status open
@@ -8772,7 +9210,7 @@ verb+causalize::Component+
 \end_inset
 
  representa un componenten fuertemente conexo.
- Este se encuentra definido en el mismo archivo que la función 
+ Éste se encuentra definido en el mismo archivo que la función 
 \begin_inset ERT
 status open
 
@@ -8785,7 +9223,7 @@ verb+apply_Tarjan+
 
 \end_inset
 
- y se declaro de la siguiente manera:
+ y se declaró de la siguiente manera:
 \end_layout
 
 \begin_layout Standard
@@ -8880,7 +9318,7 @@ verb+apply_Tarjan+
 
 \end_inset
 
- declara dos argumentos.
+ toma dos argumentos.
  El primero es el grafo sobre el cual se va a aplicar el algoritmo de Tarjan.
  El segundo argumento es una referencia a un diccionario o mapa ordenado
  donde las clave son índices y los valores son componententes fuertemente
@@ -8898,7 +9336,7 @@ verb+Component+
 \end_inset
 
 .
- Dicho diccionario sera populado con los componentes fuertemente conexos
+ Dicho diccionario será populado con los componentes fuertemente conexos
  identificados por el algoritmo de Tarjan.
  Los índices corresponden a los identificadores que le asigna el algoritmo
  a cada componente conforme lo va encontrando.
@@ -9082,7 +9520,11 @@ verb+apply_Tarjan+
 
 \end_inset
 
- son el cálculo del matching mediante la función 
+ son
+\end_layout
+
+\begin_layout Itemize
+el cálculo del matching mediante la función 
 \begin_inset ERT
 status open
 
@@ -9095,8 +9537,15 @@ verb+checked_edmonds_maximum_cardinality_matching+
 
 \end_inset
 
-, la construcción del grafo dirigido, la aplicación del algoritmo de Tarjan
- implementado por la función 
+, 
+\end_layout
+
+\begin_layout Itemize
+la construcción del grafo dirigido, 
+\end_layout
+
+\begin_layout Itemize
+la aplicación del algoritmo de Tarjan implementado por la función 
 \begin_inset ERT
 status open
 
@@ -9109,7 +9558,11 @@ verb+strong_components+
 
 \end_inset
 
- y la construcción del objeto 
+ y 
+\end_layout
+
+\begin_layout Itemize
+la construcción del objeto 
 \begin_inset ERT
 status open
 
@@ -9126,7 +9579,7 @@ verb+components+
 \end_layout
 
 \begin_layout Standard
-Como se puede corroborar aquí 
+Como se puede corroborar en 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "SJLA01"
@@ -9384,7 +9837,7 @@ verb+add_vertex+
 
 \end_inset
 
- se ejecuta en timpo amortizado constante 
+ se ejecuta en tiempo amortizado constante 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "SJLA01"
@@ -9433,7 +9886,7 @@ verb+buildCollapsedGraph+
 
 .
  Podemos concluir que la construcción del grafo dirigido a partir del grafo
- no dirigo se ejecuta en tiempo lineal.
+ no dirigido se ejecuta en tiempo lineal.
 \end_layout
 
 \begin_layout Standard
@@ -9799,13 +10252,13 @@ Optimización del proceso de causalización
 \begin_layout Standard
 En esta sección se describe la implementación de un algoritmo simple el
  cual permite optmizar el proceso de causalización de ecuaciones.
- Dicho algorítmo presenta una mejor complejudad que el algoritmo de Tarjan
+ Dicho algorítmo presenta una mejor complejidad que el algoritmo de Tarjan
  para los casos que no presentan búcles algebraicos.
  La característica principal es que aplica directamente sobre el grafo no
  dirigido lo cual ahorra el costo del cálculo del matching que sí es necesario
  para poder aplicar el algorítmo de Tarjan.
  El algorítmo representa una optimización del proceso en todos los casos,
- es decir inclusive en aquellos que si presentan bucles algebraicos.
+ es decir inclusive en aquellos que sí presentan bucles algebraicos.
  En estos casos, el algoritmo simple causaliza todas las ecuaciones que
  no se encuentren involucradas en un bucle algebraico dejando un modelo
  mucho más reducido.
@@ -9998,6 +10451,11 @@ V+(V-2)+((V-2)-2)+\ldots=\sum_{i=0}^{\frac{V}{2}}(V-2i)=\frac{V^{2}}{4}-\frac{V}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+de donde vemos que finalmente esta versión simplificada (si fuera implementada
+ como está descripta) sigue teniendo complejidad cuadrática.
 \end_layout
 
 \begin_layout Standard
@@ -10705,9 +11163,16 @@ verb+EquationSolver::solve+
 \end_inset
 
  la cual fue implementada utilizando la biblioteca de manipulación simbólica
- GiNaC.
- La ecuación, reordenada de manera que del lado derecho quede solo la incógnita,
- se agrega a la lista 
+ GiNaC 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "bauer2002introduction"
+
+\end_inset
+
+.
+ La ecuación, reordenada de manera que del lado izquierdo quede solo la
+ incógnita, se agrega a la lista 
 \begin_inset ERT
 status open
 
@@ -11055,7 +11520,7 @@ verb+collectDegree1Verts+
 \end_inset
 
 .
- Notar que en el cálculo de complejidad no se considero el costo del despeje
+ Notar que en el cálculo de complejidad no se consideró el costo del despeje
  de variables mediante la función 
 \begin_inset ERT
 status open
@@ -12726,6 +13191,8 @@ verb+simpleCausalizationStrategy+
 \end_inset
 
 .
+ Vemos aquí que la complejidad de esta nueva versión es mejor que la obtenida
+ al aplicar Tarjan directamente (que era cuadrática).
 \end_layout
 
 \begin_layout Standard
@@ -12851,7 +13318,7 @@ i_{1} & = & i_{2}+i_{C}
 \end_layout
 
 \begin_layout Standard
-El modelo modelica correspondiente a este sistema de ecuaciones se puede
+El modelo Modelica correspondiente a este sistema de ecuaciones se puede
  ver a continuación.
 \end_layout
 
@@ -13027,7 +13494,7 @@ status open
 
 
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -13178,7 +13645,7 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-En el modelo resultante las ecuaciones estan formadas por incógnitas del
+En el modelo resultante las ecuaciones están formadas por incógnitas del
  lado izquierdo y por expresiones formadas por variables conocidas del lado
  derecho.
 \end_layout
@@ -13333,7 +13800,7 @@ end{figure}
 \end_layout
 
 \begin_layout Standard
-La traducción a Modelica de las ecuaciones que describen el circuito rlc
+La traducción a Modelica de las ecuaciones que describen el circuito RLC
  queda como se puede apreciar a continuación.
 \end_layout
 
@@ -13655,7 +14122,7 @@ end{lstlisting}
 
 \begin_layout Standard
 Al igual que con el caso de la sección anterior, el modelo resultante se
- encuantra ordenado vertical y horizontalmente.
+ encuentra ordenado vertical y horizontalmente.
  En este caso el bucle pudo ser resuelto (todos los lados derechos de las
  ecuaciones dependen solo de la variable 
 \begin_inset Formula $u_{0}$
@@ -13663,8 +14130,40 @@ Al igual que con el caso de la sección anterior, el modelo resultante se
 
 ) porque las ecuaciones que lo conformaban eran lineales.
  Si ese no hubiese sido el caso lo que hubiesemos obtenido es un sistema
- parcialmente ordenado, es decir, con el bucle internamente intacto pero
- correctamente ordenado entre las ecuaciones 
+ ordenado, con el bucle internamente intacto resuelto numéricao mente con
+ una función externa como
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+(u0,i1,u2,i3,u1,u3,i2)=fsolve(u0);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+correctamente ordenado entre las ecuaciones 
 \begin_inset ERT
 status open
 
@@ -13705,14 +14204,14 @@ reference "sub:Optimización"
 
 \end_inset
 
- se presento una optimización del proceso de causalización la cual consistio
- en incluir un algoritmo que conbinado con el de Tarjan realiza la causalizacón
+ se presentó una optimización del proceso de causalización la cual consistió
+ en incluir un algoritmo que combinado con el de Tarjan realiza la causalizacón
  de manera óptima.
 \end_layout
 
 \begin_layout Standard
-Para medir los tiempos de ejecución de las diferentes estrategías armamos
- un test, el cual recibe como entrada un modelo modelica y lo causaliza
+Para medir los tiempos de ejecución de las diferentes estrategias armamos
+ un test, el cual recibe como entrada un modelo Modelica y lo causaliza
  utilizando las tres estrategias anteriormente mencionadas.
  Al finalizar imprime el tiempo que demoro en ejecutarse cada estrategia.
  El test se encuentra implementado en el archivo test/causalize/performance_test.
@@ -13723,7 +14222,7 @@ cpp.
 Para realizar las puebas de eficiencia elegimos un modelo que representa
  al fenómino de transmisión de masa/energía en una dimensión.
  Este sistema resulta apropiado para la prueba de eficiencia porque, como
- vamos a ver cuando presentemos el modelos modelica, podemos controlar el
+ vamos a ver cuando presentemos el modelos Modelica, podemos controlar el
  tamaño del mismo modificando un solo parámetro.
 \end_layout
 
@@ -13769,7 +14268,7 @@ La ecuación presenta derivadas en función de la componente espacial, lo
  Ésta es convertida en una ecuación diferencial ordinaria utilizando el
  Método de Líneas 
 \begin_inset CommandInset citation
-LatexCommand citet
+LatexCommand citep
 key "CK06"
 
 \end_inset
@@ -13779,7 +14278,7 @@ key "CK06"
 \begin_inset Formula $N$
 \end_inset
 
-segmentos (ver Figura 5.1).
+ segmentos.
  Cuanto mayor sea 
 \begin_inset Formula $N$
 \end_inset
@@ -13811,7 +14310,7 @@ para
 \end_layout
 
 \begin_layout Standard
-El modelo modelica correspondiente tiene la siguiente forma.
+El modelo Modelica correspondiente tiene la siguiente forma.
 \end_layout
 
 \begin_layout Standard
@@ -13997,6 +14496,10 @@ end{figure}
 \end_layout
 
 \begin_layout Standard
+donde cada estrategia reporta (en segundos) el tiempo utilizado.
+\end_layout
+
+\begin_layout Standard
 En el gráfico 
 \begin_inset ERT
 status open
@@ -14140,7 +14643,7 @@ ref{fig:OneDHeatTransfer}
 \end_layout
 
 \begin_layout Standard
-Para analizar que sucede con la estrategía completa en el caso en el que
+Para analizar qué sucede con la estrategía completa en el caso en el que
  el modelo sí posee lazos algebraicos lo que hicimos fue agregar un lazo
  al ejemplo 
 \begin_inset ERT
@@ -14434,7 +14937,7 @@ reference "sub:Optimización"
 
 \end_inset
 
- y permite ver más claramente como la inclusión del algoritmo simple constituye
+ y permite ver más claramente cómo la inclusión del algoritmo simple constituye
  una optimización del proceso de causalización.
 \end_layout
 
@@ -14742,12 +15245,12 @@ process_for_equation_test
 \end_layout
 
 \begin_layout Standard
-Para probar la expanción de ecuaciones de tipo For-Equation decidimos armar
- diferentes modelos modelica, cada uno capturando alguna de las alternativas
+Para probar la expansión de ecuaciones de tipo For-Equation decidimos armar
+ diferentes modelos Modelica, cada uno capturando alguna de las alternativas
  que existen para escribir este tipo de ecuaciones.
  Luego escribimos un test unitario para cada uno de estos modelos.
  Los test verifican que la cantidad de ecuaciones generadas coincida con
- lo que se definio en el 
+ lo que se definió en el 
 \begin_inset ERT
 status open
 
@@ -14798,7 +15301,7 @@ textwidth}
 
 	  
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -14872,7 +15375,7 @@ textwidth}
 
 	  
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -14961,7 +15464,7 @@ textwidth}
 
 	  
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -15035,7 +15538,7 @@ textwidth}
 
 	  
 \backslash
-begin{lstlisting}[language=modelica]
+begin{lstlisting}[language=Modelica]
 \end_layout
 
 \begin_layout Plain Layout
@@ -15977,6 +16480,12 @@ reference "chap:Ejemplos"
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Conclusiones"
+
+\end_inset
+
 Conclusiones
 \end_layout
 
@@ -15985,8 +16494,8 @@ Conclusiones generales
 \end_layout
 
 \begin_layout Standard
-En este trabajo se presento la implementación en C++ de la etapa de causalizació
-n de ecucaciones de un compilador Modelica.
+En este trabajo se presentó la implementación en C++ de la etapa de causalizació
+n de ecuaciones de un compilador Modelica.
  El trabajo estuvo enmarcado dentro del proyecto de investigación “Modelado,
  Simulación y Control en Tiempo Real con Aplicaciones en Electrónica de
  Potencia” de la Universidad Nacional de Rosario.
@@ -16012,11 +16521,11 @@ key "lsmodelica"
 En la primer parte del trabajo se introdujo el lenguaje Modelica, así como
  también se introdujeron las nociones de ecuacion diferencial ordinaria
  y ecuación diferencial algebraica.
- Se planteo la necesidad de incluir en el proceso de compilación de un modelo
+ Se planteó la necesidad de incluir en el proceso de compilación de un modelo
  Modelica, un componente capaz de transformar los modelos representados
  por ecuaciones diferenciales algebraicas en modelos equivalentes representados
  por ecuaciones diferenciales ordinarias.
- Esta necesidad surge a partir de el hecho de que la mayoria de los resolvedores
+ Esta necesidad surge a partir de el hecho de que la mayoría de los integradores
  númericos, necesarios para la simulación de un modelo Modelica, esperan
  modelos respresentados mediante eucaciones diferenciales ordinarias.
  También presentamos el algoritmo de Tarjan como el más adecuado para resolver
@@ -16024,7 +16533,7 @@ En la primer parte del trabajo se introdujo el lenguaje Modelica, así como
 s diferenciales algebraicas en ecuaciones diferenciales ordinarias.
  Por último introdujimos el compilador 
 \shape italic
-modelicacc
+ModelicaCC
 \shape default
 , su arquitectura general y los diferentes componentes que implementan cada
  una de las etapas de compilación.
@@ -16037,15 +16546,15 @@ En la segunda parte del trabajo detallamos la implementación del componente
  del algoritmo de Tarjan, así como también para la representacion de los
  grafos.
  Detallamos el proceso de construcción del grafo bipartito a partir de un
- modelo modelica, y cómo se realizo la aplicación del algoritmo de Tarjan.
+ modelo Modelica, y cómo se realizo la aplicación del algoritmo de Tarjan.
  Dado que la aplicacion del algoritmo de Tarjan hace que la complejidad
  temporal del proceso de causalización sea cuadrática (por la necesidad
- del cálculo de un matching sobre el grafo obtenido del modelo), se presento
+ del cálculo de un matching sobre el grafo obtenido del modelo), se presentó
  una optimización consistente en la implementación de un algoritmo más simple,
  el cual, permite resolver los modelos que no presentan bucles algebraicos
- en un tiempo logarítmico lo cual resulta más optimo que aplicar el algoritmo
+ en un tiempo logarítmico lo cual resulta mejor que aplicar el algoritmo
  de Tarjan.
- Este algoritmo resulto una optimización en todos los casos, ya que para
+ Este algoritmo resultó una optimización en todos los casos, ya que para
  los modelos con que sí presentan bucles algebraicos, el algoritmo simple
  reduce el tamaño del grafo eliminando (y causalizando) los vértices que
  no pertenecen a algún bucle.
@@ -16059,24 +16568,63 @@ reference "sec:Transmisión-de-masa/energía"
  se presento un ejemplo que permite ver más claramente de que manera la
  inclusión del algoritmo simple resulta en una optimización del proceso
  de causalización.
- Por último, se incluyo el detalle de los tests unitarios escritos para
- validar los diferentes componentes desarrollados.
+ Por último, se incluyó el detalle de los tests unitarios escritos para
+ validar los diferentes componentes desarrollados durante esta tesina.
 \end_layout
 
 \begin_layout Section
 Trabajo a futuro
 \end_layout
 
-\begin_layout Itemize
-Singularidades estructurales
+\begin_layout Standard
+Algunos puntos quedan como trabajo a futuro de esta tesina:
 \end_layout
 
 \begin_layout Itemize
-Tearing
+Singularidades estructurales: La transformación de ecuaciones diferenciales
+ algebráicas en ecuaciones diferenciales ordinarias no siempre puede ser
+ llevada a cabo utilizando los algoritmos presentados en este trabajo.
+ Ciertos modelos presentan lo que se conoce como 
+\begin_inset Quotes eld
+\end_inset
+
+singularidad estructural
+\begin_inset Quotes erd
+\end_inset
+
+ lo que llevará al algoritmo de Tarjan (o sus variantes) a fallar debido
+ a que algunos nodos quedan desconectados.
+ En este caso debe ser aplicado previamente el algoritmo de Pantelides 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Pan88"
+
+\end_inset
+
+para transformar al sistema en uno que sí se pueda causalizar.
 \end_layout
 
 \begin_layout Itemize
-Causalización de ecuaciones for sin expanción: En esta versión del causalizador
+Otro punto a tratar es la resolución de lazos algebraicos.
+ Los algoritmos aquí presentados se encargan de detectar e identificar las
+ variables y ecuaciones que deben ser resueltas en conjunto pero este lazo
+ puede ser de gran tamaño.
+ Una opción para reducir el tamaño del lazo es aplicar la técnica conocida
+ como Tearing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CK06"
+
+\end_inset
+
+ la cual considera conocida una variable del lazo y trata de despejar las
+ otras a partir de esta.
+ En la presente implementación esta técnica no es utilizado por lo cual
+ los lazo algebraicos quedan del tamaño con el cual son identificados.
+\end_layout
+
+\begin_layout Itemize
+Causalización de ecuaciones for sin expansión: En esta versión del causalizador
  de ecuaciones las estructuras repetitivas como las ecuaciones for se expanden.
  Esta solución no es eficiente para modelo de gran escala.
  En 
