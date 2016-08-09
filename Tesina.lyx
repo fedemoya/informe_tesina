@@ -4,6 +4,8 @@
 \begin_header
 \textclass book
 \begin_preamble
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
 \usepackage{alltt}
 \renewcommand{\ttdefault}{txtt}
 \usepackage[cm]{fullpage}
@@ -98,16 +100,227 @@
 
 \begin_body
 
-\begin_layout Author
-Federico Moya
-\begin_inset Newline newline
-\end_inset
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
 
-M-1234/5
+\begin_layout Plain Layout
+
 \end_layout
 
-\begin_layout Title
-Causalización de modelos Modelica
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textbf{{
+\backslash
+Huge Causalización de Modelos Modelica}}
+\backslash
+
+\backslash
+[0.5cm]
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\backslash
+Large Tesina de Grado}
+\backslash
+
+\backslash
+[2cm]
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\backslash
+large Alumno: Federico Moya}
+\backslash
+
+\backslash
+[1cm]
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\backslash
+large Director: Federico Bergero}
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\backslash
+large Co-director: Ernesto Kofman}
+\backslash
+
+\backslash
+[2cm]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.2
+\backslash
+textwidth]{graphics/logo_unr.jpg}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textbf{{
+\backslash
+large Licenciatura en Cs.
+ de la Computación}}
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+textbf{{
+\backslash
+large Universidad Nacional de Rosario}}
+\backslash
+
+\backslash
+[2cm]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -252,7 +465,7 @@ status open
 
 
 \backslash
-emph{A mis viejos, Ines y Tony, porque sin su apoyo esto no hubiese sido
+emph{A mis viejos, Inés y Tony, porque sin su apoyo esto no hubiese sido
  posible.}
 \end_layout
 
@@ -1028,8 +1241,17 @@ reference "chap:Ejemplos"
 
 \end_inset
 
- se presenta un caso de estudio a partir del cual se comparan las estrategias
- de causalización implementadas.
+ se presenta a modo de ejemplo la aplicación del componente de causalización
+ sobre dos modelos pertenecientes al dominio de la ingeniería eléctrica.
+ En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Prueba-de-eficiencia"
+
+\end_inset
+
+ se puede encontrar un caso de estudio a partir del cual se comparan las
+ estrategias de causalización implementadas.
  En el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1173,10 +1395,6 @@ Variable de estado
 \series default
 : una variable que no es ni de entrada ni de salida y que aparece su derivada
  respecto del tiempo, usualmente denotada por 
-\begin_inset Formula $x(t)$
-\end_inset
-
-, y su derivada temporal 
 \begin_inset Formula $\dot{x}(t)$
 \end_inset
 
@@ -1222,11 +1440,8 @@ Tipos de ecuaciones presente en modelos matemáticos
 \end_layout
 
 \begin_layout Standard
-Previamente hemos definido una variable de estado como una variable que
- debe ser almacenada y actualizada durante la simulación para poder calcular
- las salidas del modelo.
- Para los sistemas de tiempo continuo estas variables son aquellas para
- las cuales sus derivadas respecto del tiempo aparecen en el modelo.
+Previamente hemos definido una variable de estado como una variable para
+ la cual su derivada respecto del tiempo aparece en el modelo.
  Existe una formulación estándar de las ecuaciones de ciertos modelos matemático
 s de sistemas dinámicos denominada modelos de espacio de estados explícitos,
  en donde las derivadas de las variables de estado aparecen explícitamente
@@ -1467,15 +1682,108 @@ G(x(t),u(t),y(t))=0
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Ecuaciones-diferenciales-algebra"
+
+\end_inset
+
 Ecuaciones diferenciales algebraicas
 \end_layout
 
 \begin_layout Standard
 Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
  tanto ecuaciones diferenciales como ecuaciones algebraicas.
- Por ejemplo, el modelo que vemos a continuación, el cual corresponde a
- un péndulo, está compuesto por ecuaciones diferenciales algebraicas, cinco
- de las ecuaciones del modelo son diferenciales y dos son algebraicas.
+ Por ejemplo, el sistema que vemos en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:pendulo}
+\end_layout
+
+\end_inset
+
+, el cual corresponde a un péndulo plano, se modela mediante ecuaciones
+ diferenciales algebraicas.
+ El sistema de ecuaciones se puede ver a continuación: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{gather}
+m\dot{v_{x}}=-F\sin(\varphi)\nonumber \\
+m\dot{v_{y}}=-F\cos(\varphi)-mg\nonumber \\
+\dot{x}=v_{x}\nonumber \\
+\dot{y}=v_{y}\label{eq:pendulo}\\
+\dot{\varphi}=\omega\nonumber \\
+x=L\sin(\varphi)\nonumber \\
+y=-L\cos\left(\varphi\right)\nonumber 
+\end{gather}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[h]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[width=0.2
+\backslash
+textwidth]{graphics/pendulum.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{Péndulo plano}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+label{fig:pendulo}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Cinco de las ecuaciones del modelo son diferenciales y dos son algebraicas.
  Las variables del modelo son 
 \begin_inset Formula $x$
 \end_inset
@@ -1528,23 +1836,6 @@ Un sistema de ecuaciones algebraico (DAE, por sus siglas en inglés) incluye
 
  respectivamente, las cuales aún preservan la restricción sobre la longitud
  del péndulo.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{gather*}
-m\dot{v_{x}}=-F\sin(\varphi)\\
-m\dot{v_{y}}=-F\cos(\varphi)-mg\\
-\dot{x}=v_{x}\\
-\dot{y}=v_{y}\\
-\dot{\varphi}=\omega\\
-x=L\sin(\varphi)\\
-y=-L\cos\left(\varphi\right)
-\end{gather*}
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -1638,21 +1929,6 @@ reference "sub:Transformación-BLT--"
 .
 \end_layout
 
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Que pasa con las ecuaciones en diferencia, ecuaciones condicionales y DAEs
- híbridas? Las tendria que incluir en el marco teórico.
- Como se manejan en el compilador.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 El lenguaje Modelica
 \end_layout
@@ -1665,7 +1941,7 @@ ción de modelos matemáticos de complejos sistemas naturales o artificiales
  Modelica es también un lenguaje de programación orientado a objetos y basado
  en ecuaciones, pensado para aplicaciones de mucha complejidad que requieren
  una alta eficiencia.
- Las cuatro características principales son:
+ Las tres características principales son:
 \end_layout
 
 \begin_layout Itemize
@@ -2150,59 +2426,6 @@ verb+der()+
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{figure}[h]
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-centering
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-includegraphics[width=0.2
-\backslash
-textwidth]{graphics/pendulum.png}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-caption{Péndulo plano}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-label{fig:pendulo}
-\end_layout
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{figure}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 Nuestro segundo ejemplo es un poco más complicado, es el modelo matemático
  de un péndulo plano (ver figura 
 \begin_inset ERT
@@ -2218,75 +2441,15 @@ ref{fig:pendulo}
 \end_inset
 
 ).
- Las 5 ecuaciones del modelo se ven a continuación.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-m\dot{v}_{y} & = & -\frac{x}{L}F\\
-m\dot{v}_{y} & = & -\frac{y}{L}F-mg\\
-\dot{x} & = & v_{x}\\
-\dot{y} & = & v_{y}\\
-x^{2}+y^{2} & = & L^{2}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Las ecuaciones son las ecuaciones de movimiento de Newton para la masa del
- péndulo bajo la influencia de la gravedad junto con una restricción geométrica,
- la 5ª ecuación, que especifica que la posición 
-\begin_inset Formula $(x,y)$
-\end_inset
-
- del péndulo debe encontrarse dentro de un circulo con radio 
-\begin_inset Formula $L$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-Lo interesante de este modelo es que la 5ª ecuación es diferente al resto,
- es una ecuación algebraica la cual involucra solo operaciones algebraicas
- sobre las variables pero no derivadas.
- Las otras cuatro ecuaciones son ecuaciones diferenciales, como la ecuación
- del ejemplo 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+HelloWorld+
-\end_layout
+ Las ecuaciones del modelo son las presentadas en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Ecuaciones-diferenciales-algebra"
 
 \end_inset
 
 .
- Los sistemas de ecuaciones que contienen tanto ecuaciones diferenciales
- como ecuaciones algebraicas se denominan sistemas de ecuaciones diferenciales
- algebraicas (o DAEs por sus siglas en inglés).
- Debajo se encuentra el modelo Modelica del péndulo.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Corregir.
- Ver el modelo original
-\end_layout
-
-\end_inset
-
-
+ El código modelica para este sistema es el que se puede ver a continuación.
 \end_layout
 
 \begin_layout Standard
@@ -2307,17 +2470,17 @@ class Pendulum "Planar Pendulum"
 
 \begin_layout Plain Layout
 
-  constant Real PI=3.141592653589793;
-\end_layout
-
-\begin_layout Plain Layout
-
   parameter Real m=1, g=9.81, L=O.5;
 \end_layout
 
 \begin_layout Plain Layout
 
-  Real F; output Real x(start=O.5) ,y(start=O);
+  Real F, phi, omega;
+\end_layout
+
+\begin_layout Plain Layout
+
+  output Real x(start=O.5) ,y(start=O);
 \end_layout
 
 \begin_layout Plain Layout
@@ -2332,22 +2495,37 @@ class Pendulum "Planar Pendulum"
 
 \begin_layout Plain Layout
 
-    m*der(vx)=-(x/L)*F;
+    m*der(vx)=-F*sin(phi);
 \end_layout
 
 \begin_layout Plain Layout
 
-    m*der(vy)=-(y/L)*F-m*g;
+    m*der(vy)=-F*cos(phi)-m*g;
 \end_layout
 
 \begin_layout Plain Layout
 
-    der(x)=vx; der(y)=vy;
+    der(x)=vx;
 \end_layout
 
 \begin_layout Plain Layout
 
-    x^2 + y^2 = L^2 ;
+    der(y)=vy;
+\end_layout
+
+\begin_layout Plain Layout
+
+    der(phi)=omega;
+\end_layout
+
+\begin_layout Plain Layout
+
+    x=L*sin(phi);
+\end_layout
+
+\begin_layout Plain Layout
+
+    y=-L*cos(phi);
 \end_layout
 
 \begin_layout Plain Layout
@@ -2365,6 +2543,30 @@ end{lstlisting}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Lo interesante de este modelo es que las dos últimas ecuaciones son diferentes
+ al resto, son ecuaciones algebraicas, es decir, involucran solo operaciones
+ algebraicas sobre las variables pero no derivadas.
+ Las otras cinco ecuaciones son ecuaciones diferenciales, como la ecuación
+ del ejemplo 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+HelloWorld+
+\end_layout
+
+\end_inset
+
+.
+ Los sistemas de ecuaciones que contienen tanto ecuaciones diferenciales
+ como ecuaciones algebraicas se denominan sistemas de ecuaciones diferenciales
+ algebraicas (o DAEs por sus siglas en inglés).
 \end_layout
 
 \begin_layout Standard
@@ -3301,8 +3503,8 @@ iones algebraicas para simplificar las dependencias entre las variables.
 \begin_layout Standard
 Finalmente se genera código en algún lenguaje de programación convencional,
  usualmente C, y se lo enlaza con algún método de integración numérica el
- cual es el encargado de resolver el sistema de ecuaciones resultante el
- cual ya a sido drásticamente reducido.
+ cual es el encargado de resolver el sistema de ecuaciones resultante, sistema
+ que ya a sido drásticamente reducido.
 \end_layout
 
 \begin_layout Standard
@@ -3501,7 +3703,14 @@ Algunos de los subsistemas de ecuaciones simultaneas encontrados por el
 tearing
 \shape default
  puede reducir aún más el tamaño y contribuir a mejorar la eficiencia cuando
- se resuelven este tipo de sistemas de ecuaciones no lineales.
+ se resuelven este tipo de sistemas de ecuaciones no lineales 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CK06"
+
+\end_inset
+
+.
  La técnica de tearing permite resolver de manera secuencial pero iterativamente
  las ecuaciones de un subsistema eligiendo en cada iteración la 
 \begin_inset Quotes eld
@@ -3594,8 +3803,7 @@ key "elmqvist2005"
 Permutando las ecuaciones y las variables es posible transformar el sistema
  de ecuaciones, o mejor dicho la matriz asociada, a una forma triangular
  inferior de a bloques (o BLT por sus siglas en inglés).
- Una vez llevado a esta forma BLT el sistema puede ser resuelto casi secuencialm
-ente.
+ Una vez llevado a esta forma BLT el sistema puede ser resuelto secuencialmente.
  Vamos a explicar la idea utilizando un ejemplo simple el cual consiste
  de 3 ecuaciones no lineales
 \begin_inset Formula 
@@ -3662,7 +3870,7 @@ h_{1}(z_{1},z_{3})=0
 \begin{gather*}
 S_{2}=\begin{array}{c}
 \begin{array}{ccc}
-z_{1} & z_{2} & z_{3}\end{array}\\
+z_{2} & z_{1} & z_{3}\end{array}\\
 \left[\begin{array}{ccc}
 1 & 0 & 0\\
 1 & 1 & 0\\
@@ -3744,7 +3952,9 @@ En general no es posible transformar la matriz asociada a la forma triangular
 
  corresponden a sistemas de ecuaciones que tienen que ser resueltos simultáneame
 nte.
- En otras palabras los algoritmos de particionado encuentra bucles algebraicos
+ A estos sub-sistemas de ecuaciones mutuamente dependientes se los denomina
+ lazos algebraicos.
+ En otras palabras los algoritmos de particionado encuentra lazos algebraicos
  de dimensiones mínimas.
 \end_layout
 
@@ -3922,8 +4132,8 @@ o.
 \end_layout
 
 \begin_layout Standard
-Al final de la llamada que explora v y sus descendientes sabemos si v posee
- algún camino hacia un nodo ingresado previamente en la pila.
+Al final de la llamada que explora el nodo v y sus descendientes sabemos
+ si este posee algún camino hacia un nodo ingresado previamente en la pila.
  De ser así la llamada retorna dejando el vértice v en la pila para preservar
  el invariante.
  En caso contrario v debe ser la raíz de su componente fuertemente conexo
@@ -4269,7 +4479,7 @@ ref{fig:pre_Tarjan}
  junto con su matriz de adyacencia asociada.
  La matriz de adyacencia posee una fila por cada ecuación y una columna
  por cada incógnita.
- Una entrada (i,j) de la matriz toma el valor 1 si la variable j ocurren
+ Una entrada (i,j) de la matriz toma el valor 1 si la variable j ocurre
  en la ecuación i.
  En caso contrario la entrada de la matriz es 0.
  La figura 
@@ -4973,6 +5183,15 @@ end{subfigure}
 
 
 \backslash
+caption{Aplicación del algoritmo de Tarjan
+\backslash
+label{fig:aplicacion_tarjan}}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
 end{figure}
 \end_layout
 
@@ -5021,7 +5240,7 @@ Introducción
 La compilación de un modelo Modelica es el proceso mediante el cual se transform
 a un modelo de alto nivel, el cual puede contener clases y ecuaciones acausales,
  en un modelo plano, sin clases, y donde las ecuciones se encuentran ordenadas
- o causalizadas listas para su simulación.
+ o causalizadas.
  Un modelo plano con las ecuaciones ordenadas de manera tal que para cada
  ecuación las variables del lado derecho se pueden considerar conocidas
  es un modelo apropiado para la generación de código C (o de cualquier otro
@@ -5488,7 +5707,7 @@ verb+Flange+
  Las constantes representan la masa de la pelota y la fuerza de gravedad.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
 El modelo 
 \begin_inset ERT
 status open
@@ -5513,7 +5732,7 @@ verb+Ball+
  La última ecuación corresponde a la primer ley de Newton.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
 El siguiente modelo declarado en el paquete, denominado 
 \begin_inset ERT
 status open
@@ -5666,7 +5885,7 @@ verb+dy < 0+
  La última ecuación se corresponde con la ley de acción y reacción de Newton.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
 El último componente de nuestro sistema es el piso el cual se encuentra
  representado por el modelo denominado 
 \begin_inset ERT
@@ -5713,7 +5932,7 @@ verb+Real+
  velocidad del conector son siempre 0.
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Standard
 El sistema completo está representado por el último modelo, el modelo denominado
  
 \begin_inset ERT
@@ -5892,9 +6111,17 @@ Análisis sintáctico, semántico y aplanado: flatter
 \end_layout
 
 \begin_layout Standard
-El modelo que vemos a continuación es equivalente al modelo anterior solo
- que las clases fueron expandidas y las ecuaciones connect se convirtieron
- en ecuaciones comunes.
+El componente flatter es el encargado de realizar en primer lugar el análisis
+ sintáctico y semántico del modelo que se recibe como entrada.
+ Luego este componente realiza el aplanado del modelo, lo cual consiste
+ en eliminar la estructura de clases del modelo orientado a objetos generando
+ como salida un modelo plano.
+\end_layout
+
+\begin_layout Standard
+El resultado de aplicar el componente flatter sobre el modelo anterior es
+ otro modelo equivalente en el cual las clases fueron expandidas y las ecuacione
+s connect se convirtieron en ecuaciones comunes.
  Las dos ecuaciones 
 \begin_inset ERT
 status open
@@ -9255,21 +9482,7 @@ verb+Component+
 \end_layout
 
 \begin_layout Standard
-La implementación de la función 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+apply_Tarjan+
-\end_layout
-
-\end_inset
-
- se realizo en el archivo causalize/apply_Tarjan.cpp.
- Para calcular el matching sobre el grafo no dirigido utilizamos la función
+Para calcular el matching sobre el grafo no dirigido utilizamos la función
  
 \begin_inset ERT
 status open
@@ -13106,10 +13319,10 @@ verb+simpleCausalizationStrategy+
 \end_layout
 
 \begin_layout Standard
-En la sección 
+En el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Transmisión-de-masa/energía"
+reference "chap:Prueba-de-eficiencia"
 
 \end_inset
 
@@ -14040,8 +14253,8 @@ Al igual que con el caso de la sección anterior, el modelo resultante se
 
 ) porque las ecuaciones que lo conformaban eran lineales.
  Si ese no hubiese sido el caso lo que hubiésemos obtenido es un sistema
- ordenado, con el bucle internamente intacto resuelto numérico mente con
- una función externa como
+ ordenado donde el bucle se sustituye por una función externa como la que
+ se ve a continuación.
 \end_layout
 
 \begin_layout Standard
@@ -14057,7 +14270,7 @@ begin{lstlisting}
 
 \begin_layout Plain Layout
 
-(u0,i1,u2,i3,u1,u3,i2)=fsolve(u0);
+(u0,i1,u2,i3,u1,u3,i2) = fsolve(u0);
 \end_layout
 
 \begin_layout Plain Layout
@@ -14073,36 +14286,17 @@ end{lstlisting}
 \end_layout
 
 \begin_layout Standard
-correctamente ordenado entre las ecuaciones 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+u0 = sin(12)+
-\end_layout
-
-\end_inset
-
- y 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb+der(iL) = (1/(L))*uL+
-\end_layout
-
-\end_inset
-
-.
+Esta función externa resuelve el sistema de ecuaciones formado por las ecuacione
+s del bucle mediante métodos de integración numérica.
 \end_layout
 
 \begin_layout Chapter
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Prueba-de-eficiencia"
+
+\end_inset
+
 Prueba de eficiencia
 \end_layout
 
@@ -14141,12 +14335,6 @@ Para realizar las puebas de eficiencia elegimos un modelo que representa
 \end_layout
 
 \begin_layout Standard
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Transmisión-de-masa/energía"
-
-\end_inset
-
 La ecuación que representa este fenómeno es la siguiente:
 \end_layout
 
@@ -14480,7 +14668,7 @@ centering
 \backslash
 includegraphics[width=0.8
 \backslash
-textwidth]{graphics/OneDHeatTransfer.pdf}
+textwidth]{graphics/OneDHeatTransfer.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -14808,7 +14996,7 @@ centering
 \backslash
 includegraphics[width=0.8
 \backslash
-textwidth]{graphics/OneDHeatTransfer_loop.pdf}
+textwidth]{graphics/OneDHeatTransfer_loop.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -14838,9 +15026,9 @@ end{figure}
 \end_layout
 
 \begin_layout Standard
-La línea semi-punteada representa los tiempos de ejecución resultantes de
- aplicar solo el algoritmo de Tarjan.
- La línea punteada representa los tiempos de ejecución de la estrategía
+La línea punteada representa los tiempos de ejecución resultantes de aplicar
+ solo el algoritmo de Tarjan.
+ La línea semi-punteada representa los tiempos de ejecución de la estrategía
  de causalización completa, es decir ejecutando el algoritmo simple antes
  de aplicar Tarjan.
  La línea continua grafica los tiempos de la estrategía simple.
@@ -16467,14 +16655,6 @@ ModelicaCC
 \end_layout
 
 \begin_layout Standard
-El componente de causalización desarrollado en esta tesina se realizó utilizando
- librerías abiertas como la biblioteca Boost Graph utilizada para la implementac
-ión del algoritmo de Tarjan, así como también para la representacion de
- los grafos y la biblioteca GiNaC para manipulación simbólica.
- 
-\end_layout
-
-\begin_layout Standard
 Estudiamos e implementamos tres estrategias distintas para resolver el problema
  de causalización analizando la complejidad computacional de cada una de
  ellas.
@@ -16495,6 +16675,13 @@ reference "sub:Optimización"
  tamaño del grafo eliminando (y causalizando) los vértices que no pertenecen
  a algún bucle, para luego aplicar el algoritmo de Tarjan calculando el
  emparejamiento sobre un grafo más pequeño.
+\end_layout
+
+\begin_layout Standard
+La implementación de las estrategías de causalización se realizó utilizando
+ librerías abiertas como la biblioteca Boost Graph utilizada para la implementac
+ión del algoritmo de Tarjan, así como también para la representacion de
+ los grafos y la biblioteca GiNaC para manipulación simbólica.
  
 \end_layout
 
@@ -16506,16 +16693,16 @@ reference "chap:Ejemplos"
 
 \end_inset
 
-presentamos dos ejemplos del campo eléctrico demostrando que el algoritmo
+ presentamos dos ejemplos del campo eléctrico demostrando que el algoritmo
  produce un resultado correcto tanto ante la presencia o ausencia de lazos
  algebraicos.
 \end_layout
 
 \begin_layout Standard
-Luego la sección 
+Luego en el capítulo 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Transmisión-de-masa/energía"
+reference "chap:Prueba-de-eficiencia"
 
 \end_inset
 
