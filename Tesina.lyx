@@ -3954,11 +3954,17 @@ En general no es posible transformar la matriz asociada a la forma triangular
 nte.
  A estos sub-sistemas de ecuaciones mutuamente dependientes se los denomina
  lazos algebraicos.
- En otras palabras los algoritmos de particionado encuentra lazos algebraicos
- de dimensiones mínimas.
+ Finalmente podemos concluir que los algoritmos de particionado encuentra
+ lazos algebraicos de dimensiones mínimas.
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Algoritmos-de-grafos"
+
+\end_inset
+
 Algoritmos de grafos para obtener la transformación BLT
 \end_layout
 
@@ -4096,8 +4102,8 @@ Algoritmo de Tarjan para encontrar los componentes fuertemente conexos de
 \end_layout
 
 \begin_layout Standard
-El algoritmo recibe como entrada un grafo dirigido y produce una partición
- de los vértices del grafo en componentes fuertemente conexos.
+El algoritmo de Tarjan recibe como entrada un grafo dirigido y produce una
+ partición de los vértices del grafo en componentes fuertemente conexos.
  Cada vértice del grafo aparece en un solo componente fuertemente conexo.
  Un vértice que no pertenece a ningún ciclo constituye por si solo un componente
  fuertemente conexo.
@@ -4360,7 +4366,22 @@ algorithm Tarjan is
 
 \begin_layout Plain Layout
 
-        v.lowlink  := min(v.lowlink, w.lowlink) 
+        v.lowlink  := min(v.lowlink, w.lowlink)
+\end_layout
+
+\begin_layout Plain Layout
+
+      else if (w.onStack) then
+\end_layout
+
+\begin_layout Plain Layout
+
+        // Successor w is in stack S and hence in the current SCC
+\end_layout
+
+\begin_layout Plain Layout
+
+        v.lowlink  := min(v.lowlink, w.index)
 \end_layout
 
 \begin_layout Plain Layout
@@ -4415,7 +4436,7 @@ algorithm Tarjan is
 
 \begin_layout Plain Layout
 
-      until (w = v)
+      while (w != v)
 \end_layout
 
 \begin_layout Plain Layout
@@ -4476,78 +4497,12 @@ ref{fig:pre_Tarjan}
 
 \end_inset
 
- junto con su matriz de adyacencia asociada.
- La matriz de adyacencia posee una fila por cada ecuación y una columna
+ junto con su matriz de coeficientes asociada.
+ La matriz de coeficientes posee una fila por cada ecuación y una columna
  por cada incógnita.
  Una entrada (i,j) de la matriz toma el valor 1 si la variable j ocurre
  en la ecuación i.
  En caso contrario la entrada de la matriz es 0.
- La figura 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-ref{fig:grafo_pre_Tarjan}
-\end_layout
-
-\end_inset
-
- muestra el grafo bipartito asociado al sistema de ecuaciones.
- La forma BLT final del sistema de ecuaciones, la cual es el resultado esperado
- de la transformación BLT, aparece en la figura 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-ref{fig:post_Tarjan}
-\end_layout
-
-\end_inset
-
- incluyendo un pequeño componente fuertemente conexo, un bloque compuesto
- por las ecuaciones f
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-3
-\end_layout
-
-\end_inset
-
-y f
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-5 
-\end_layout
-
-\end_inset
-
-y las variables z
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-3
-\end_layout
-
-\end_inset
-
-y z
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-5 
-\end_layout
-
-\end_inset
-
-, que también se denomina bucle algebraico.
 \end_layout
 
 \begin_layout Standard
@@ -4572,22 +4527,6 @@ centering
 
   
 \backslash
-begin{subfigure}[b]{0.3
-\backslash
-textwidth}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-centering
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
 begin{align*}
 \end_layout
 
@@ -4652,42 +4591,42 @@ bordermatrix{
 
 \begin_layout Plain Layout
 
-    & z_1 & z_2 & z_3 & z_4 & z_5 
+       & z_1 & z_2 & z_3 & z_4 & z_5 
 \backslash
 cr
 \end_layout
 
 \begin_layout Plain Layout
 
-    & 0   & 0   & 1   & 1   & 0 
+   f_1 & 0   & 0   & 1   & 1   & 0 
 \backslash
 cr
 \end_layout
 
 \begin_layout Plain Layout
 
-    & 0   & 1   & 0   & 0   & 0 
+   f_2 & 0   & 1   & 0   & 0   & 0 
 \backslash
 cr
 \end_layout
 
 \begin_layout Plain Layout
 
-    & 0   & 1   & 1   & 0   & 1 
+   f_3 & 0   & 1   & 1   & 0   & 1 
 \backslash
 cr
 \end_layout
 
 \begin_layout Plain Layout
 
-    & 1   & 1   & 0   & 0   & 0 
+   f_4 & 1   & 1   & 0   & 0   & 0 
 \backslash
 cr
 \end_layout
 
 \begin_layout Plain Layout
 
-    & 1   & 0   & 1   & 0   & 1 
+   f_5 & 1   & 0   & 1   & 0   & 1 
 \backslash
 cr
 \end_layout
@@ -4701,232 +4640,9 @@ cr
 
   
 \backslash
-subcaption{Sistema de ecuaciones junto con la matriz de adjacencia asociada.
+caption{Sistema de ecuaciones junto con la matriz de adjacencia asociada.
 \backslash
 label{fig:pre_Tarjan}}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-end{subfigure}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-hfill
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-begin{subfigure}[b]{0.3
-\backslash
-textwidth}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-centering
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-begin{align*}
-\end_layout
-
-\begin_layout Plain Layout
-
-    f_2(z_2) &= 0 
-\backslash
-
-\backslash
-
-\end_layout
-
-\begin_layout Plain Layout
-
-    f_4(z_1,z_2) &= 0 
-\backslash
-
-\backslash
-
-\end_layout
-
-\begin_layout Plain Layout
-
-    f_3(z_2,z_3,z_5) &= 0 
-\backslash
-
-\backslash
- 
-\end_layout
-
-\begin_layout Plain Layout
-
-    f_5(z_1,z_3,z_5) &= 0 
-\backslash
-
-\backslash
-
-\end_layout
-
-\begin_layout Plain Layout
-
-    f_1(z_3,z_4) &= 0 
-\backslash
-
-\backslash
-
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-end{align*}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-bordermatrix{
-\end_layout
-
-\begin_layout Plain Layout
-
-    & z_2 & z_1 & z_3 & z_5 & z_4 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-    & 1   & 0   & 0   & 0   & 0 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-    & 1   & 1   & 0   & 0   & 0 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-    & 1   & 0   & 1   & 1   & 0 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-    & 0   & 1   & 1   & 1   & 0 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-    & 0   & 0   & 1   & 0   & 1 
-\backslash
-cr
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-label{fig:sistema_final}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-subcaption{Sistema de ecuaciones en la forma BLT luego de haber sido ordenado
- topológicamente por el algorítmo de Tarjan.
-\backslash
-label{fig:post_Tarjan}}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-end{subfigure}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-hfill
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-begin{subfigure}[b]{0.3
-\backslash
-textwidth}
-\end_layout
-
-\begin_layout Plain Layout
-
-   
-\backslash
-includegraphics[width=1
-\backslash
-textwidth]{graphics/grafo_bipartito.png}
-\end_layout
-
-\begin_layout Plain Layout
-
-   
-\backslash
-subcaption{Grafo bipartito correspondiente a la forma inicial del sistema
- de eucaciones.}
-\end_layout
-
-\begin_layout Plain Layout
-
-   
-\backslash
-label{fig:grafo_pre_Tarjan}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-end{subfigure}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-caption{
-\backslash
-label{fig:aplicacion_Tarjan}}
 \end_layout
 
 \begin_layout Plain Layout
@@ -4942,13 +4658,153 @@ end{figure}
 \end_layout
 
 \begin_layout Standard
-Dado que el algoritmo de Tarjan aplica sobre un grafo dirigido es necesario
- asociar con el grafo bipartito, obtenido a partir del sistema de ecuaciones,
- el cual es no dirigido, un grafo dirigido.
+Tal como explicamos en la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Algoritmos-de-grafos"
+
+\end_inset
+
+, para poder obtener la transformación BLT de una matriz, necesitamos construir
+ un grafo dirigido a partir de la misma y aplicar el algoritmo de Tarjan
+ sobre ese grafo.
+ En el caso de la matriz de coeficientes asociada a un sistema de ecuaciones
+ diferenciales el grafo que se obtiene es un grafo bipartito no dirigido.
+ Por lo tanto es necesario generar a partir de este un grafo dirigido sobre
+ el cual poder aplicar el algoritmo de Tarjan.
+ En la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:grafo_pre_Tarjan}
+\end_layout
+
+\end_inset
+
+ se puede ver el grafo bipartito asociado a la matriz de coeficientes del
+ ejemplo.
 \end_layout
 
 \begin_layout Standard
-El grafo dirigido lo construimos de la siguiente manera:
+Notar que en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:grafo_pre_Tarjan}
+\end_layout
+
+\end_inset
+
+ hemos destacada un conjunto de vértices y algunas de sus aristas adjacentes.
+ Estos vértices forman un componente fuertemente conexo.
+ Dicho componente se corresponde con un lazo algebraico del sistema de ecuacione
+s compuesto por las ecuaciones 
+\begin_inset Formula $f_{3}$
+\end_inset
+
+ y 
+\begin_inset Formula $f_{5}$
+\end_inset
+
+.
+ Más adelante, en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:system_post_Tarjan}
+\end_layout
+
+\end_inset
+
+ se puede ver como, después de aplicar el algoritmo de Tarjan, el lazo algebraic
+o formado por las ecuaciones 
+\begin_inset Formula $f_{3}$
+\end_inset
+
+ y 
+\begin_inset Formula $f_{5}$
+\end_inset
+
+ queda correctamente ordenado después de las ecuaciones 
+\begin_inset Formula $f_{2}$
+\end_inset
+
+ y 
+\begin_inset Formula $f_{4}$
+\end_inset
+
+ de la cuales depende.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\backslash
+includegraphics[width=0.3
+\backslash
+textwidth]{graphics/revision/bipartito_original.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\backslash
+caption{Grafo bipartito correspondiente a la forma inicial del sistema de
+ eucaciones.}
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\backslash
+label{fig:grafo_pre_Tarjan}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A partir del grafo bipartito se puede construir el grafo dirigido siguiendo
+ los pasos que describimos a continuación.
 \end_layout
 
 \begin_layout Enumerate
@@ -4974,13 +4830,46 @@ matching
 \end_layout
 
 \begin_layout Enumerate
-Los vértices correspondientes a incógnitas se colapsan contra su pareja
- correspondiente en el conjunto de vértices asociados a ecuaciones.
+Para cada 
+\begin_inset Formula $v{}_{e}$
+\end_inset
+
+ perteneciente al conjunto de vértices del grafo original asociados a ecuaciones
+ creamos un vértice 
+\begin_inset Formula $v_{e}^{d}$
+\end_inset
+
+ en el nuevo grafo dirigido.
 \end_layout
 
 \begin_layout Enumerate
-Las aristas que no pertenecen al emparejamiento se reemplazan por aristas
- dirigidas entrantes en los vértices correspondientes a incógnitas.
+Para cada par de aristas del grafo original (
+\begin_inset Formula $v{}_{e1}$
+\end_inset
+
+, 
+\begin_inset Formula $v{}_{i}$
+\end_inset
+
+) y (
+\begin_inset Formula $v{}_{e2}$
+\end_inset
+
+, 
+\begin_inset Formula $v{}_{i}$
+\end_inset
+
+), dentro y fuera del emparejamiento respectivamente, trazamos una arista
+ en el grafo dirigido.
+ Esta arista tendra como vértice de origen a 
+\begin_inset Formula $v{}_{e2}^{d}$
+\end_inset
+
+ y como vértice destino a 
+\begin_inset Formula $v{}_{e1}^{d}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -5078,7 +4967,7 @@ textwidth}
 \backslash
 includegraphics[width=0.8
 \backslash
-textwidth]{graphics/matching_grafo.png}
+textwidth]{graphics/revision/bipartito_matching.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -5119,7 +5008,7 @@ centering
 \backslash
 includegraphics[width=1
 \backslash
-textwidth]{graphics/final_graph.png}
+textwidth]{graphics/revision/dirigido.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -5142,7 +5031,7 @@ end{subfigure}
 
   
 \backslash
-begin{subfigure}[b]{0.3
+begin{subfigure}[b]{0.4
 \backslash
 textwidth}
 \end_layout
@@ -5160,7 +5049,7 @@ centering
 \backslash
 includegraphics[width=1
 \backslash
-textwidth]{graphics/strong_components.png}
+textwidth]{graphics/revision/dirigido_componentes.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -5201,9 +5090,322 @@ end{figure}
 \end_layout
 
 \begin_layout Standard
-Como veremos en los siguientes capítulos este enfoque presenta una complejidad
- computacional cuadrática con respecto a la cantidad de nodos a causalizar.
+A partir del orden de los componentes fuertemente conexos que arroja el
+ algoritmo de Tarjan podemos reordenar las columnas y filas de la matriz
+ de coeficientes del sistema de ecuaciones.
+ Es decir la fila correspondiente a la ecuación 
+\begin_inset Formula $f{}_{2}$
+\end_inset
+
+ y la columna correspondiente a la variable 
+\begin_inset Formula $z{}_{2}$
+\end_inset
+
+ se ubican en la primer posición, luego la fila correspondiente a 
+\begin_inset Formula $f{}_{4}$
+\end_inset
+
+ y la columna correspondiente a 
+\begin_inset Formula $z{}_{1}$
+\end_inset
+
+ ocupan la segunda posición y así sucesivamente.
+ La figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:matrix_post_Tarjan}
+\end_layout
+
+\end_inset
+
+ muestra la matriz de coeficientes resultante, la cual ha sido transformada
+ a la forma triangular inferior de a bloques.
+ El lazo algebraico destacado en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:grafo_pre_Tarjan}
+\end_layout
+
+\end_inset
+
+ constituye un bloque de tamaño 2 en la diagonal de la matriz de coeficientes.
+ El sistema de ecuaciones ordenado a partir del orden de los componentes
+ fuertemente conexos determinado por el algoritmo de Tarjan, se puede ver
+ en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:system_post_Tarjan}
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+hspace*{
+\backslash
+fill} 
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+bordermatrix{
+\end_layout
+
+\begin_layout Plain Layout
+
+       & z_2 & z_1 & z_3 & z_5 & z_4 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+   f_2 & 
+\backslash
+mathbf{1}   & 0   & 0   & 0   & 0 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+   f_4 & 1   & 
+\backslash
+mathbf{1}   & 0   & 0   & 0 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+   f_3 & 1   & 0   & 
+\backslash
+mathbf{1}   & 
+\backslash
+mathbf{1}   & 0 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+   f_5 & 0   & 1   & 
+\backslash
+mathbf{1}   & 
+\backslash
+mathbf{1}   & 0 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+   f_1 & 0   & 0   & 1   & 0   & 
+\backslash
+mathbf{1} 
+\backslash
+cr
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+subcaption{Matriz de coeficientes reordenada en forma triangular inferior
+ de a bloques
+\backslash
+label{fig:matrix_post_Tarjan}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+hfill
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{align*}
+\end_layout
+
+\begin_layout Plain Layout
+
+    f_2(z_2) &= 0 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    f_4(z_1,z_2) &= 0 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+mathbf{f_3(z_2,z_3,z_5)} &= 
+\backslash
+mathbf{0} 
+\backslash
+
+\backslash
  
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+mathbf{f_5(z_1,z_3,z_5)} &= 
+\backslash
+mathbf{0} 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    f_1(z_3,z_4) &= 0 
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{align*}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+subcaption{Sistema de ecuaciones reordenado según las dependencias entre
+ las ecuaciones.
+\backslash
+label{fig:system_post_Tarjan}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+hspace*{
+\backslash
+fill}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{
+\backslash
+label{fig:post_Tarjan}}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Chapter
@@ -5360,10 +5562,10 @@ ref{fig:bouncing_ball}
 \end_inset
 
  se pueden ver gráficamente el modelo.
- El mismo consta de una pelota conectada a un amortiguador el cual a su
- vez se conecta al suelo.
- El componente amortiguador, el cual obviamente en la realidad no existe,
- es necesario para representar la capacidad de rebotar de la pelota.
+ El mismo consta de una pelota conectada a un conjunto resorte-amortiguador
+ el cual a su vez se conecta al suelo.
+ El componente resorte-amortiguador, el cual obviamente en la realidad no
+ existe, es necesario para representar la capacidad de rebotar de la pelota.
 \end_layout
 
 \begin_layout Standard
@@ -5746,7 +5948,7 @@ verb+Spring+
 
 \end_inset
 
-, es el amortiguador.
+, es el conjunto resorte-amortiguador.
  Este modelo declara dos conectores mediante variables de tipo 
 \begin_inset ERT
 status open
@@ -5761,8 +5963,8 @@ verb+Flange+
 \end_inset
 
 .
- El primer conector será utilizado para conectar el amortiguador a la pelota
- mientras que el segundo el amortiguador al piso.
+ El primer conector será utilizado para conectar el componente a la pelota
+ mientras que el segundo representa la conexión del componente al piso.
  También declara dos variables de tipo 
 \begin_inset ERT
 status open
@@ -5804,7 +6006,7 @@ verb+b+
 
 \end_inset
 
- correspondiente a la masa del amortiguador y 
+ correspondiente al coeficiente de amortiguación del amortiguador y 
 \begin_inset ERT
 status open
 
@@ -5817,7 +6019,7 @@ verb+k+
 
 \end_inset
 
- correspondiente a la rigidez.
+ correspondiente al coeficiente de elasticidad del resorte.
  Las dos primeras ecuaciones del modelo 
 \begin_inset ERT
 status open
