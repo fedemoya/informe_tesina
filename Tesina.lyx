@@ -4466,6 +4466,284 @@ end{lstlisting}
 
 \end_layout
 
+\begin_layout Standard
+Vamos a finalizar la sección aplicando el algoritmo sobre el grafo de la
+ figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:tarjan_step_0}
+\end_layout
+
+\end_inset
+
+.
+ Entre las figuras 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:tarjan_step_1}
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:tarjan_step_4}
+\end_layout
+
+\end_inset
+
+ se puede ver en detalle como es el recorrido en profundidad que realiza
+ el algoritmo.
+ En cada una de las figuras se aprecia el camino que condujo a la identificación
+ de un componente fuertemente conexo, los valores que toman las variables
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+index+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+lowlink+
+\end_layout
+
+\end_inset
+
+ para cada nodo y el estado de la pila en el momento previa a la identificación
+ del componente.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/tarjan_step_0.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_0}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/tarjan_step_1.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_1}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/tarjan_step_2.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_2}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/tarjan_step_3.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_3}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.3
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/tarjan_step_4.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_4}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{
+\backslash
+label{fig:tarjan_step_by_step}}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
