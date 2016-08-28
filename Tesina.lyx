@@ -4508,11 +4508,10 @@ ref{fig:tarjan_step_4}
 
 \end_inset
 
- se puede ver en detalle como es el recorrido en profundidad que realiza
- el algoritmo.
- En cada una de las figuras se aprecia el camino que condujo a la identificación
- de un componente fuertemente conexo, los valores que toman las variables
- 
+ se puede ver la evolución del algoritmo.
+ En cada una de las figuras se destaco con linea de trazo continuo el camino
+ que condujo a la identificación de un componente fuertemente conexo.
+ Junto a cada nodo se incluyo el valor de las variables 
 \begin_inset ERT
 status open
 
@@ -4538,8 +4537,9 @@ verb+lowlink+
 
 \end_inset
 
- para cada nodo y el estado de la pila en el momento previa a la identificación
- del componente.
+.
+ También se incluyo junto a cada figura el estado de la pila en el momento
+ previo a la identificación del componente.
 \end_layout
 
 \begin_layout Standard
@@ -5210,6 +5210,21 @@ ref{fig:strong_components}
  el grafo luego de la aplicación del algoritmo de Tarjan.
  En la figura también se aprecia el orden en el que se identificaron los
  componentes.
+ El detalle del proceso de identificación de cada uno de los componentes
+ fuertemente conexos se puede ver en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:tarjan_step_by_step}
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -5825,8 +5840,11 @@ El proceso de análisis sintáctico, semántico y aplanado es responsabilidad
 Para ayudar a comprender las transformaciones que realizan sobre un modelo
  Modelica los diferentes componentes vamos a utilizar un ejemplo.
  El ejemplo es el modelo orientado a objetos de un sistema mecánico.
- El sistema es una pelota que rebota.
- En la figura 
+ El sistema es una pelota que rebota contra el suelo.
+\end_layout
+
+\begin_layout Standard
+En la figura 
 \begin_inset ERT
 status open
 
@@ -5840,10 +5858,14 @@ ref{fig:bouncing_ball}
 \end_inset
 
  se pueden ver gráficamente el modelo.
- El mismo consta de una pelota conectada a un conjunto resorte-amortiguador
- el cual a su vez se conecta al suelo.
- El componente resorte-amortiguador, el cual obviamente en la realidad no
- existe, es necesario para representar la capacidad de rebotar de la pelota.
+ Nuestro modelo contempla la situación de la pelota en contacto con el suelo
+ y en el aire.
+ Cuando está en el aire el modelo de la misma es el de una masa puntual
+ sobre la cual sólo actúa la fuerza de la gravedad y al estar en contacto
+ con el piso, el modelo consiste en una masa puntual vinculada con el piso
+ a través de un resorte y un amortiguador dispuestos en paralelo.
+ Ni el resorte ni el amortiguador existen en la realidad pero son necesarios
+ para representar la capacidad de rebotar de la pelota.
 \end_layout
 
 \begin_layout Standard
@@ -11774,6 +11796,10 @@ key "bauer2002introduction"
 \end_inset
 
 .
+ En los casos en los que el despeje mediante manipulación simbólica no es
+ posible, como es el caso de ciertos lazos algebricos, la tarea se delega
+ en el componente de simulación el cual aplicara técnicas de integración
+ numérica para la resolución del sistema en cuestion.
  La ecuación, reordenada de manera que del lado izquierdo quede solo la
  incógnita, se agrega a la lista 
 \begin_inset ERT
