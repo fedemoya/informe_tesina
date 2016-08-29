@@ -3805,13 +3805,13 @@ Permutando las ecuaciones y las variables es posible transformar el sistema
  inferior de a bloques (o BLT por sus siglas en inglés).
  Una vez llevado a esta forma BLT el sistema puede ser resuelto secuencialmente.
  Vamos a explicar la idea utilizando un ejemplo simple el cual consiste
- de 3 ecuaciones no lineales
+ de 3 ecuaciones no lineales.
 \begin_inset Formula 
-\begin{gather*}
-h_{1}(z_{1},z_{3})=0\\
-h_{2}(z_{2})=0\\
-h_{3}(z_{1},z_{2})=0
-\end{gather*}
+\begin{gather}
+h_{1}(z_{1},z_{3})=0\nonumber \\
+h_{2}(z_{2})=0\nonumber \\
+h_{3}(z_{1},z_{2})=0\label{eq:ej_transformacion_blt_sis}
+\end{gather}
 
 \end_inset
 
@@ -3820,7 +3820,7 @@ h_{3}(z_{1},z_{2})=0
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{gather*}
+\begin{gather}
 S_{1}=\begin{array}{c}
 \begin{array}{ccc}
 z_{1} & z_{2} & z_{3}\end{array}\\
@@ -3829,8 +3829,8 @@ z_{1} & z_{2} & z_{3}\end{array}\\
 0 & 1 & 0\\
 1 & 1 & 0
 \end{array}\right]
-\end{array}
-\end{gather*}
+\end{array}\label{eq:ej_transformacion_blt_matriz}
+\end{gather}
 
 \end_inset
 
@@ -3854,11 +3854,11 @@ describe la estructura del sistema de ecuaciones.
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{gather*}
-h_{2}(z_{2})=0\\
-h_{3}(z_{1},z_{2})=0\\
-h_{1}(z_{1},z_{3})=0
-\end{gather*}
+\begin{gather}
+h_{2}(z_{2})=0\nonumber \\
+h_{3}(z_{1},z_{2})=0\label{eq:ej_transformacion_blt_sis_2}\\
+h_{1}(z_{1},z_{3})=0\nonumber 
+\end{gather}
 
 \end_inset
 
@@ -3867,7 +3867,7 @@ h_{1}(z_{1},z_{3})=0
 
 \begin_layout Standard
 \begin_inset Formula 
-\begin{gather*}
+\begin{gather}
 S_{2}=\begin{array}{c}
 \begin{array}{ccc}
 z_{2} & z_{1} & z_{3}\end{array}\\
@@ -3876,8 +3876,8 @@ z_{2} & z_{1} & z_{3}\end{array}\\
 1 & 1 & 0\\
 0 & 1 & 1
 \end{array}\right]
-\end{array}
-\end{gather*}
+\end{array}\label{eq:ej_tranformacion_blt_matriz_2}
+\end{gather}
 
 \end_inset
 
@@ -10981,6 +10981,298 @@ Si el modelo no posee lazos algebraicos este algoritmo va a ser capaz de
 \end_layout
 
 \begin_layout Standard
+En la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:alg_simple_step_by_step}
+\end_layout
+
+\end_inset
+
+ podemos ver la aplicación del algoritmo sobre un grafo de ejemplo
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+En caso de imprimir este trabajo en blanco y negro notar que las aristas
+ dibujadas con linea punteada se corresponden con aristas de color rojo
+ y las aristas dibujadas con linea semi-punteada se corresponden con aristas
+ de color azul.
+\end_layout
+
+\end_inset
+
+.
+ El grafo lo generamos a partir del sistema de ecuaciones 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ej_transformacion_blt_sis"
+
+\end_inset
+
+ de la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Transformación-BLT--"
+
+\end_inset
+
+.
+ En la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_2}
+\end_layout
+
+\end_inset
+
+ se ve el estado del grafo luego de la aplicación de la regla número 1 del
+ algoritmo, es decir luego de iterar sobre la lista de vértices asociados
+ a ecuaciones acausales.
+ Luego de esta primer iteración la ecuación 
+\begin_inset Formula $h{}_{2}$
+\end_inset
+
+ pasa a la lista de ecuaciones causales (o causalizadas) y recibe el índice
+ número 1.
+ La aplicación de la regla número 2 del algoritmo da como resultado la causaliza
+ción de la ecuación 
+\begin_inset Formula $h{}_{1}$
+\end_inset
+
+ con índice 3.
+ Esto se puede ver en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_3}
+\end_layout
+
+\end_inset
+
+.
+ Finalmente en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_4}
+\end_layout
+
+\end_inset
+
+ vemos el resultado de la última iteración del algoritmo, la cual consta
+ de aplicar nuevamente la regla 1.
+ En esta última figura se puede apreciar el nuevo ordenamiento que se le
+ ha dado al sistema de ecuaciones, quedando la ecuación 
+\begin_inset Formula $h{}_{2}$
+\end_inset
+
+ en la primer posición, seguida de 
+\begin_inset Formula $h{}_{3}$
+\end_inset
+
+ y 
+\begin_inset Formula $h{}_{1}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_1.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_1}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_2.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_2}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_3.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_3}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_4.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_4}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{
+\backslash
+label{fig:alg_simple_step_by_step}}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Tal como esta planteado el algoritmo en el libro 
 \begin_inset CommandInset citation
 LatexCommand citep
@@ -11081,19 +11373,6 @@ V+(V-2)+((V-2)-2)+\ldots=\sum_{i=0}^{\frac{V}{2}}(V-2i)=\frac{V^{2}}{4}-\frac{V}
 \begin_layout Standard
 de donde vemos que finalmente esta versión simplificada (si fuera implementada
  como está descripta) sigue teniendo complejidad cuadrática.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Revisar esta fórmula
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsection
@@ -11787,6 +12066,19 @@ verb+EquationSolver::solve+
 
 \end_inset
 
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+En los casos en los que el despeje mediante manipulación simbólica no es
+ posible, como es el caso de ciertos lazos algebricos, la tarea se delega
+ en el componente de simulación el cual aplicara técnicas de integración
+ numérica para la resolución del sistema en cuestion.
+\end_layout
+
+\end_inset
+
  la cual fue implementada utilizando la biblioteca de manipulación simbólica
  GiNaC 
 \begin_inset CommandInset citation
@@ -11796,10 +12088,6 @@ key "bauer2002introduction"
 \end_inset
 
 .
- En los casos en los que el despeje mediante manipulación simbólica no es
- posible, como es el caso de ciertos lazos algebricos, la tarea se delega
- en el componente de simulación el cual aplicara técnicas de integración
- numérica para la resolución del sistema en cuestion.
  La ecuación, reordenada de manera que del lado izquierdo quede solo la
  incógnita, se agrega a la lista 
 \begin_inset ERT
@@ -12063,6 +12351,552 @@ begin{lstlisting}
 
 \backslash
 end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Aplicación del algoritmo simple optimizado sobre un grafo de ejemplo
+\end_layout
+
+\begin_layout Standard
+Para clarificar el algoritmo implementado en la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+ vamos a utililizar el mismo grafo de ejemplo que utilizamos en la sección
+ anterior (figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:alg_simple_step_by_step}
+\end_layout
+
+\end_inset
+
+).
+ La figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_op_1}
+\end_layout
+
+\end_inset
+
+ muestra el estado incial del grafo junto con el estado de las listas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+ luego de haber sido inicializadas.
+ Durante la incialización se encontraron dos vértices de grado 1.
+ El primero es un vértice asociado a una ecuación por eso fue insertado
+ en la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
+ El segundo vértice esta asociado a una incógnita y por lo tanto fue insertado
+ en la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
+ En la figura también incluimos el estado de las listas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsBegining+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsEnd+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+La primer iteración del bucle 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+while+
+\end_layout
+
+\end_inset
+
+ (presente en la función 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+simpleCausalizationStrategy+
+\end_layout
+
+\end_inset
+
+) la dividimos en dos etapas.
+ La primer etapa es la que consume y procesa el contenido de la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
+ El resultado de esta etapa se puede ver en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_op_2}
+\end_layout
+
+\end_inset
+
+, el vértice 
+\begin_inset Formula $h{}_{2}$
+\end_inset
+
+ junto con su única arista adjacente han sido eliminados del grafo.
+ El vértice 
+\begin_inset Formula $z{}_{2}$
+\end_inset
+
+ también fue eliminado pero previamente se identifico, entre los vértices
+ adyacentes a este, los de grado 1.
+ Este es el caso del vértice 
+\begin_inset Formula $h{}_{3}$
+\end_inset
+
+ el cual ha sido agregado a la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
+ Finalmente vemos que la ecuación 
+\begin_inset Formula $z{}_{2}$
+\end_inset
+
+ a sido agregada a la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsBegining+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+El resultado de la segunda etapa de la primer iteración del bucle 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+while+
+\end_layout
+
+\end_inset
+
+ lo vemos en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_op_3}
+\end_layout
+
+\end_inset
+
+, en la misma se puede ver que se han eliminado los vértices 
+\begin_inset Formula $z{}_{3}$
+\end_inset
+
+ y 
+\begin_inset Formula $h{}_{1}$
+\end_inset
+
+ junto con sus aristas adyacentes.
+ La ecuación 
+\begin_inset Formula $h{}_{1}$
+\end_inset
+
+ ha sido agregada a la lista 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Finalmente en la figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:ej_alg_simple_op_4}
+\end_layout
+
+\end_inset
+
+ se puede ver que las listas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+eqDegree1Verts+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+unknownDegree1Verts+
+\end_layout
+
+\end_inset
+
+ han quedado vacias y por lo tanto el algoritmo concluye la ejecución.
+ Concatenando las listas 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsBegining+
+\end_layout
+
+\end_inset
+
+ y 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+verb+_causalEqsEnd+
+\end_layout
+
+\end_inset
+
+ obtenemos el mismo orden que habíamos logrado con la versión original del
+ algoritmo simple.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{figure}[H]
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_op_1.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_op_1}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_op_2.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_op_2}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.8
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_op_3.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_op_3}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+begin{subfigure}[b]{0.4
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+includegraphics[width=0.4
+\backslash
+textwidth]{graphics/revision/ej_alg_simple_op_4.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_op_4}}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+end{subfigure}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{
+\backslash
+label{fig:ej_alg_simple_op_step_by_step}}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{figure}
 \end_layout
 
 \end_inset
