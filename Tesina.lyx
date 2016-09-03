@@ -1418,6 +1418,24 @@ Variable de estado
 \emph on
 sin singularidades estructurales
 \emph default
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Un modelo presenta singularidades estructurales si el orden del sistema
+ es mayor que los grados de libertad del mismo 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CK06"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
 .
 \end_layout
 
@@ -1428,11 +1446,6 @@ Variables algebraicas:
 \series default
  una variable que aparece en las ecuaciones pero que su derivada no aparece
  en el modelo.
- Usualmente se las incluye en el conjunto de variables denotadas por 
-\begin_inset Formula $y(t)$
-\end_inset
-
- aunque se esté interesado en observar la variable.
 \end_layout
 
 \begin_layout Subsection
@@ -2577,7 +2590,20 @@ Por último hacemos una observación importante en relación a los modelos
 \begin_layout Verse
 
 \emph on
-El número de variables debe ser igual al número de ecuaciones.
+El número de variables debe ser igual al número de ecuaciones
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+
+\emph on
+A los fines de la causalización se considera que todas las ecuaciones son
+ diferentes, incluso si la misma ecuación aparece dos veces.
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2769,7 +2795,7 @@ status open
 
 
 \backslash
-verb+lambda+
+verb+delta+
 \end_layout
 
 \end_inset
@@ -3942,8 +3968,54 @@ En general no es posible transformar la matriz asociada a la forma triangular
 \end_inset
 
 .
- Estos algoritmos garantizan que las dimensiones de los bloques que aparecen
- en la diagonal de la matriz son del menor tamaño posible.
+ Un ejemplo de matriz triangular inferior de a bloques se puede ver en la
+ figura 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:post_Tarjan}
+\end_layout
+
+\end_inset
+
+ de la sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Aplicacion-Tarjan-Marco-Teorico"
+
+\end_inset
+
+.
+ Esta no es una matriz triangular inferior estricta ya que la celda (
+\begin_inset Formula $f{}_{3}$
+\end_inset
+
+, 
+\begin_inset Formula $z{}_{5}$
+\end_inset
+
+), la cual posee un valor distinto de cero, se encuentra por encima de la
+ diagonal.
+ No obstante, dicha celda pertece a una submatriz o bloque de 
+\begin_inset Formula $2\times2$
+\end_inset
+
+.
+ Entonces considerando al resto de los elementos de la diagonal como bloques
+ de 
+\begin_inset Formula $1\times1$
+\end_inset
+
+ podemos decir que la matriz es triangular inferior de a bloques.
+\end_layout
+
+\begin_layout Standard
+Los algoritmos que permiten transformar una matriz en la forma BLT garantizan
+ que las dimensiones de los bloques son del menor tamaño posible.
  Es decir no se pueden obtener bloques más pequeños mediante la permutación
  de variables y ecuaciones.
  Los bloques de tamaño 
@@ -16008,7 +16080,7 @@ centering
 \backslash
 includegraphics[width=0.8
 \backslash
-textwidth]{graphics/OneDHeatTransfer.png}
+textwidth]{graphics/revision/OneDHeatTransfer.png}
 \end_layout
 
 \begin_layout Plain Layout
@@ -16336,7 +16408,7 @@ centering
 \backslash
 includegraphics[width=0.8
 \backslash
-textwidth]{graphics/OneDHeatTransfer_loop.png}
+textwidth]{graphics/revision/OneDHeatTransfer_loop.png}
 \end_layout
 
 \begin_layout Plain Layout
