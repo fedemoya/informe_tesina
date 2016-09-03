@@ -1295,8 +1295,8 @@ Categorías de variables y constantes
 
 \begin_layout Standard
 Antes de comenzar a describir los distintos tipos de ecuaciones resulta
- conveniente definir los distintos tipos de variables y constantes que se
- pueden encontrar en las ecuaciones.
+ conveniente definir los diferentes tipos de variables y constantes que
+ se pueden encontrar en las ecuaciones.
 \end_layout
 
 \begin_layout Standard
@@ -1398,6 +1398,39 @@ Variable de estado
 \begin_inset Formula $\dot{x}(t)$
 \end_inset
 
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Cabe aclarar que el análisis es puramente sintáctico.
+ Es decir el algoritmo de causalización no realiza ningún analisis de tipo
+ semantico.
+ Por ejemplo, en el hipotético caso de un sistema en el cual aparece la
+ ecuación 
+\begin_inset Formula $\dot{x}(t)=\dot{x}(t)$
+\end_inset
+
+, la variable 
+\begin_inset Formula $x$
+\end_inset
+
+ va a ser considerada de estado por el algoritmo de causalización.
+ No obstante, existe un componente del compilador ModelicaCC, denominado
+ antialias, el cual se encarga de eliminar ecuaciones de este tipo.
+ En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Visión-general-del"
+
+\end_inset
+
+ vamos a ver en más detalle los diferentes componentes que componen el compilado
+r ModelicaCC.
+\end_layout
+
+\end_inset
+
 .
  Si queremos estudiar alguna variable de estado 
 \begin_inset Formula $x_{i}(t)$
@@ -1431,6 +1464,7 @@ key "CK06"
 
 \end_inset
 
+.
  
 \end_layout
 
