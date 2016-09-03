@@ -7970,19 +7970,6 @@ reference "sub:Aplicación-Tarjan-Boost"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-FB: es logarítmica?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 Por último en la sección 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -8417,20 +8404,6 @@ La estructura VertexProperties define el tipo de los objetos que adjuntamos
  a los vértices del grafo.
  Estos objetos contienen las ecuaciones o incógnitas que los vértices del
  grafo representan.
- Las aristas en este caso son no dirigidas y no poseen propiedades 
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-verb|boost::undirectedS|
-\end_layout
-
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Standard
@@ -8829,6 +8802,16 @@ status open
 \backslash
 verb+in expression+
 \end_layout
+
+\end_inset
+
+.
+ En este caso el rango de iteración se deduce a partir del uso del índice
+ en uno o más arreglos.
+ Para más detalles consultar 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Fritzson98"
 
 \end_inset
 
@@ -10198,7 +10181,7 @@ verb+apply_Tarjan+
 \end_inset
 
 .
- Para los casos de grafos esparcidos (o poco densos) 
+ Para los casos de grafos ralos (o poco densos) 
 \begin_inset Formula $\dfrac{E}{V}$
 \end_inset
 
@@ -10232,6 +10215,18 @@ key "elmqvist2005"
  constante en nuestros cálculos.
  A dicho valor constante haremos referencia mediante la letra 
 \begin_inset Formula $K$
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Cabe destacar que E es lineal con respecto a V.
+ Esto es un corolario del hecho de que la cantidad promedio de aristas adyacente
+s en cada vértice es un valor constante.
+\end_layout
+
 \end_inset
 
 .
@@ -10344,7 +10339,7 @@ verb+strong_components+
 \end_inset
 
  son 
-\begin_inset Formula $O(V\times E\times4)$
+\begin_inset Formula $O(V\times E)$
 \end_inset
 
  y 
@@ -10590,15 +10585,15 @@ verb+for+
 \end_inset
 
  se puede representar por la siguiente expresión 
-\begin_inset Formula $O(V\times\dfrac{E}{V})$
+\begin_inset Formula $O(V\times K)$
 \end_inset
 
 .
- Ya que 
-\begin_inset Formula $\dfrac{E}{V}$
+ Dado que 
+\begin_inset Formula $K$
 \end_inset
 
- se puede asumir constante el segundo for de la función 
+ se considera constante el segundo for de la función 
 \begin_inset ERT
 status open
 
