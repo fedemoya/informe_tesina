@@ -586,7 +586,7 @@ Modelica es un lenguaje orientado a objetos, para el modelado de sistemas
 status open
 
 \begin_layout Plain Layout
-Licencia Modelica V2
+Licencia Modelica V2.
 \end_layout
 
 \end_inset
@@ -604,17 +604,17 @@ key "Fritzson98"
 \begin_layout Standard
 El modelado de sistemas físicos por medio de lenguajes orientados a objetos
  conduce a descripciones constituidas por ecuaciones diferenciales algebraicas,
- o de manera abreviada descripciones DAE
+ o de manera abreviada (utilizando las siglas de la denominación en ingles
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-Differential algebraic equation
+Differential algebraic equation.
 \end_layout
 
 \end_inset
 
- 
+) descripciones DAE 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "CK06,elmqvist2005,Fritzson98"
@@ -629,7 +629,7 @@ key "CK06,elmqvist2005,Fritzson98"
 status open
 
 \begin_layout Plain Layout
-Ordinary differential equation
+Ordinary differential equation.
 \end_layout
 
 \end_inset
@@ -960,8 +960,8 @@ La simulación de un modelo simplificado de una red de computadoras para
 \end_layout
 
 \begin_layout Standard
-¿Dada la utilidad de la simulación a la hora de estudiar el comportamiento
- de los sistemas, cómo hacemos para construir modelos de esos sistemas?
+Dada la utilidad de la simulación a la hora de estudiar el comportamiento
+ de los sistemas ¿Cómo hacemos para construir modelos de esos sistemas?
  Existen lenguajes de modelado que facilitan la construcción de modelos
  de sistemas.
  Uno de esos lenguajes es Modelica.
@@ -1002,7 +1002,7 @@ De esta manera, el lenguaje permite asociar cada componente de un sistema
 ionales, rotacionales y multi-cuerpos), térmicos, state graphs, y diagramas
  de bloques.
  Otras librerías (disponibles en la web) contienen componentes de sistemas
- hidráulicos, bond graphs, redes de petri, etc.
+ hidráulicos, bond graphs, redes de Petri, etc.
 \end_layout
 
 \begin_layout Standard
@@ -2346,7 +2346,7 @@ verb+Real+
 
 \end_inset
 
- esto es valores que pertenecen al eje real 
+ esto es valores que pertenecen al conjunto real 
 \begin_inset ERT
 status open
 
@@ -2354,7 +2354,7 @@ status open
 
 $
 \backslash
-mathbf{R}$
+mathbb{R}$
 \end_layout
 
 \end_inset
@@ -11043,7 +11043,7 @@ para cada ecuación acausal, si la ecuación posee solo una arista negra,
  coloreamos esa arista de rojo, seguimos esa arista hacia la variable que
  se encuentra en el otro extremo, y coloreamos el resto de las arista que
  salen de dicha variable con azul.
- Enumeramos la ecuación utilizando el menor número que se encuentre libre
+ Enumeramos la ecuación utilizando el menor número que se encuentre disponible
  comenzando desde 1.
 \end_layout
 
@@ -11051,7 +11051,8 @@ para cada ecuación acausal, si la ecuación posee solo una arista negra,
 para cada incógnita, si posee solo una arista negra la coloreamos de rojo,
  seguimos dicha arista hasta la ecuación correspondiente y coloreamos el
  resto de las aristas de dicha ecuación en azul.
- Enumeramos la ecuación utilizando el número más alto comenzando con 
+ Enumeramos la ecuación utilizando el máximo número disponible comenzando
+ con 
 \emph on
 n
 \emph default
@@ -14864,7 +14865,7 @@ Dado que en el circuito hay cinco elementos, y cada uno define dos variables,
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-u_{0} & = & f\left(t\right)\\
+u_{0} & = & \sin\left(t\right)\\
 u_{1} & = & R_{1}i_{1}\\
 u_{2} & = & R_{2}i_{2}\\
 u_{L} & = & L\frac{du_{C}}{dt}\\
@@ -14979,7 +14980,7 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-      u0 = sin(12);
+      u0 = sin(time);
 \end_layout
 
 \begin_layout Plain Layout
@@ -15143,7 +15144,7 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-      u0 = sin(12);
+      u0 = sin(time);
 \end_layout
 
 \begin_layout Plain Layout
@@ -15284,7 +15285,7 @@ El sistema de ecuaciones que modela el comportamiento del circuito es el
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray}
-u_{0} & = & f\left(t\right)\\
+u_{0} & = & \sin\left(t\right)\\
 u_{1} & = & R_{1}i_{1}\\
 u_{2} & = & R_{2}i_{2}\\
 u_{3} & = & R_{3}i_{3}\\
@@ -15456,7 +15457,7 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-      u0 = sin(12);
+      u0 = sin(time);
 \end_layout
 
 \begin_layout Plain Layout
@@ -15619,7 +15620,7 @@ begin{lstlisting}[language=Modelica]
 
 \begin_layout Plain Layout
 
-    u0 = sin(12);
+    u0 = sin(time);
 \end_layout
 
 \begin_layout Plain Layout
@@ -15749,9 +15750,14 @@ reference "sub:Optimización"
 
 \end_inset
 
- se presentó una optimización del proceso de causalización la cual consistió
- en incluir un algoritmo que combinado con el de Tarjan realiza la causalización
- de manera óptima.
+ se presentó un algoritmo simple el cual permite optimizar el proceso de
+ causalización.
+ En esta sección vamos a comparar, utilizando un ejemplo, los tiempos de
+ ejecución del proceso de causalización completo con los tiempos del proceso
+ de causalización sin la optimización (es decir utilizando solo el algoritmo
+ de Tarjan).
+ El objetivo es evidenciar empíricamente la ganancia que se obtuvo al incluir
+ el algoritmo simple al proceso de causalización.
 \end_layout
 
 \begin_layout Standard
@@ -18023,7 +18029,7 @@ reference "chap:Ejemplos"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Chapter
