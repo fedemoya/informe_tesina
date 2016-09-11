@@ -557,7 +557,7 @@ El lenguaje de modelado orientado a objetos Modelica es el estándar de-facto
 En este trabajo se presenta la implementación de un algoritmo de causalización,
  que convierte modelos DAEs en ODEs para modelos Modelica.
  Se estudian diferentes enfoques analizando la complejidad algorítimica
- de cada una y luego se validan experimentalmente su performance computacional.
+ de cada uno y luego se valida experimentalmente su performance computacional.
 \end_layout
 
 \begin_layout Standard
@@ -16505,6 +16505,209 @@ reference "sub:Optimización"
 \begin_layout Chapter
 \begin_inset CommandInset label
 LatexCommand label
+name "chap:Conclusiones"
+
+\end_inset
+
+Conclusiones
+\end_layout
+
+\begin_layout Section
+Conclusiones generales
+\end_layout
+
+\begin_layout Standard
+En este trabajo se presentó la implementación en C++ de la etapa de causalizació
+n de ecuaciones de un compilador Modelica.
+ El trabajo estuvo enmarcado dentro del proyecto de investigación “Modelado,
+ Simulación y Control en Tiempo Real con Aplicaciones en Electrónica de
+ Potencia” de la Universidad Nacional de Rosario.
+ Uno de los objectivos de dicho proyecto es el desarrollo de un compilador
+ Modelica, denominado ModelicaCC (Modelica C Compiler), a partir del cual
+ poder investigar distintos algoritmos en relación a modelos de gran escala.
+ Puntualmente, la implementación aquí presentada de la etapa de causalización
+ constituye el puntapié inicial para la implementación de un algoritmo de
+ causalización vectorial, es decir, un algoritmo que realice la causalización
+ de ecuaciones sin la necesidad de expandir los arreglos ni las estructuras
+ repetitivas (como por ejmplo las For-Equation) presentes en el modelo.
+ Dicha implementación se puede ver en el siguiente artículo 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Comment
+status open
+
+\begin_layout Plain Layout
+En la primer parte del trabajo se introdujo el lenguaje Modelica, así como
+ también se introdujeron las nociones de ecuacion diferencial ordinaria
+ y ecuación diferencial algebraica.
+ Se planteó la necesidad de incluir en el proceso de compilación de un modelo
+ Modelica, un componente capaz de transformar los modelos representados
+ por ecuaciones diferenciales algebraicas en modelos equivalentes representados
+ por ecuaciones diferenciales ordinarias.
+ Esta necesidad surge a partir de el hecho de que la mayoría de los integradores
+ númericos, necesarios para la simulación de un modelo Modelica, esperan
+ modelos respresentados mediante eucaciones diferenciales ordinarias.
+ También presentamos el algoritmo de Tarjan como el más adecuado para resolver
+ la tarea de causalizaión de ecuaciones, es decir la transformación de ecuacione
+s diferenciales algebraicas en ecuaciones diferenciales ordinarias.
+ Por último introdujimos el compilador 
+\shape italic
+ModelicaCC
+\shape default
+, su arquitectura general y los diferentes componentes que implementan cada
+ una de las etapas de compilación.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Estudiamos e implementamos tres estrategias distintas para resolver el problema
+ de causalización analizando la complejidad computacional de cada una de
+ ellas.
+ La aplicación del algoritmo de Tarjan conlleva el cálculo de un enparejamiento
+ sobre el grafo lo cual tiene un costo cuadrático con respecto a los vértices.
+ Basándonos en una versión simplificada del algoritmo de Tarjan introdujimos
+ una nueva formulación del algorítmo (Sección 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Optimización"
+
+\end_inset
+
+) que permite llevar a cabo la causalización en tiempo logarítmico cuando
+ el modelo no presenta lazos algebraicos.
+ Este algoritmo resultó una optimización en todos los casos, ya que para
+ los modelos que sí presentan bucles algebraicos, el algoritmo reduce el
+ tamaño del grafo eliminando (y causalizando) los vértices que no pertenecen
+ a algún bucle, para luego aplicar el algoritmo de Tarjan calculando el
+ emparejamiento sobre un grafo más pequeño.
+\end_layout
+
+\begin_layout Standard
+La implementación de las estrategías de causalización se realizó utilizando
+ librerías abiertas como la biblioteca Boost Graph utilizada para la implementac
+ión del algoritmo de Tarjan, así como también para la representacion de
+ los grafos y la biblioteca GiNaC para manipulación simbólica.
+ 
+\end_layout
+
+\begin_layout Standard
+En el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Ejemplos"
+
+\end_inset
+
+ presentamos dos ejemplos del campo eléctrico demostrando que el algoritmo
+ produce un resultado correcto tanto ante la presencia o ausencia de lazos
+ algebraicos.
+\end_layout
+
+\begin_layout Standard
+Luego en el capítulo 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Prueba-de-eficiencia"
+
+\end_inset
+
+ se presentó un ejemplo que permite ver más claramente de qué manera la
+ inclusión del algoritmo simple resulta en una optimización del proceso
+ de causalización.
+ 
+\end_layout
+
+\begin_layout Standard
+Por último, en el apéndice se incluyó el detalle de los tests unitarios
+ escritos para validar los diferentes componentes desarrollados durante
+ esta tesina.
+\end_layout
+
+\begin_layout Section
+Trabajo a futuro
+\end_layout
+
+\begin_layout Standard
+Algunos puntos quedan como trabajo a futuro de esta tesina:
+\end_layout
+
+\begin_layout Itemize
+Singularidades estructurales: La transformación de ecuaciones diferenciales
+ algebráicas en ecuaciones diferenciales ordinarias no siempre puede ser
+ llevada a cabo utilizando los algoritmos presentados en este trabajo.
+ Ciertos modelos presentan lo que se conoce como 
+\begin_inset Quotes eld
+\end_inset
+
+singularidad estructural
+\begin_inset Quotes erd
+\end_inset
+
+ lo que llevará al algoritmo de Tarjan (o sus variantes) a fallar debido
+ a que algunos nodos quedan desconectados.
+ En este caso debe ser aplicado previamente el algoritmo de Pantelides 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Pan88"
+
+\end_inset
+
+ para transformar al sistema en uno que sí se pueda causalizar.
+\end_layout
+
+\begin_layout Itemize
+Otro punto a tratar es la resolución de lazos algebraicos.
+ Los algoritmos aquí presentados se encargan de detectar e identificar las
+ variables y ecuaciones que deben ser resueltas en conjunto pero este lazo
+ puede ser de gran tamaño.
+ Una opción para reducir el tamaño del lazo es aplicar la técnica conocida
+ como Tearing 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "CK06"
+
+\end_inset
+
+ la cual considera conocida una variable del lazo y trata de despejar las
+ otras a partir de ésta.
+ En la presente implementación esta técnica no es utilizado por lo cual
+ los lazo algebraicos quedan del tamaño con el cual son identificados.
+\end_layout
+
+\begin_layout Itemize
+Causalización de ecuaciones for sin expansión: En esta versión del causalizador
+ de ecuaciones las estructuras repetitivas como las ecuaciones for se expanden.
+ Esta solución no es eficiente para modelo de gran escala.
+ En 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "lsmodelica"
+
+\end_inset
+
+ se plantea una versión vectorial del algoritmo de Tarjan la cual permite
+ realizar la causalización de ecuaciones sin la necesidad de expandir las
+ estructuras repetitivas.
+ La implementación de dicho algoritmo vectorial queda pendiente para futuras
+ versiones del causalizador.
+\end_layout
+
+\begin_layout Chapter
+\start_of_appendix
+\begin_inset CommandInset label
+LatexCommand label
 name "sec:Tests-unitarios"
 
 \end_inset
@@ -18038,207 +18241,6 @@ reference "chap:Ejemplos"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Chapter
-\begin_inset CommandInset label
-LatexCommand label
-name "chap:Conclusiones"
-
-\end_inset
-
-Conclusiones
-\end_layout
-
-\begin_layout Section
-Conclusiones generales
-\end_layout
-
-\begin_layout Standard
-En este trabajo se presentó la implementación en C++ de la etapa de causalizació
-n de ecuaciones de un compilador Modelica.
- El trabajo estuvo enmarcado dentro del proyecto de investigación “Modelado,
- Simulación y Control en Tiempo Real con Aplicaciones en Electrónica de
- Potencia” de la Universidad Nacional de Rosario.
- Uno de los objectivos de dicho proyecto es el desarrollo de un compilador
- Modelica, denominado ModelicaCC (Modelica C Compiler), a partir del cual
- poder investigar distintos algoritmos en relación a modelos de gran escala.
- Puntualmente, la implementación aquí presentada de la etapa de causalización
- constituye el puntapié inicial para la implementación de un algoritmo de
- causalización vectorial, es decir, un algoritmo que realice la causalización
- de ecuaciones sin la necesidad de expandir los arreglos ni las estructuras
- repetitivas (como por ejmplo las For-Equation) presentes en el modelo.
- Dicha implementación se puede ver en el siguiente artículo 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "lsmodelica"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Comment
-status open
-
-\begin_layout Plain Layout
-En la primer parte del trabajo se introdujo el lenguaje Modelica, así como
- también se introdujeron las nociones de ecuacion diferencial ordinaria
- y ecuación diferencial algebraica.
- Se planteó la necesidad de incluir en el proceso de compilación de un modelo
- Modelica, un componente capaz de transformar los modelos representados
- por ecuaciones diferenciales algebraicas en modelos equivalentes representados
- por ecuaciones diferenciales ordinarias.
- Esta necesidad surge a partir de el hecho de que la mayoría de los integradores
- númericos, necesarios para la simulación de un modelo Modelica, esperan
- modelos respresentados mediante eucaciones diferenciales ordinarias.
- También presentamos el algoritmo de Tarjan como el más adecuado para resolver
- la tarea de causalizaión de ecuaciones, es decir la transformación de ecuacione
-s diferenciales algebraicas en ecuaciones diferenciales ordinarias.
- Por último introdujimos el compilador 
-\shape italic
-ModelicaCC
-\shape default
-, su arquitectura general y los diferentes componentes que implementan cada
- una de las etapas de compilación.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Estudiamos e implementamos tres estrategias distintas para resolver el problema
- de causalización analizando la complejidad computacional de cada una de
- ellas.
- La aplicación del algoritmo de Tarjan conlleva el cálculo de un enparejamiento
- sobre el grafo lo cual tiene un costo cuadrático con respecto a los vértices.
- Basándonos en una versión simplificada del algoritmo de Tarjan introdujimos
- una nueva formulación del algorítmo (Sección 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Optimización"
-
-\end_inset
-
-) que permite llevar a cabo la causalización en tiempo logarítmico cuando
- el modelo no presenta lazos algebraicos.
- Este algoritmo resultó una optimización en todos los casos, ya que para
- los modelos que sí presentan bucles algebraicos, el algoritmo reduce el
- tamaño del grafo eliminando (y causalizando) los vértices que no pertenecen
- a algún bucle, para luego aplicar el algoritmo de Tarjan calculando el
- emparejamiento sobre un grafo más pequeño.
-\end_layout
-
-\begin_layout Standard
-La implementación de las estrategías de causalización se realizó utilizando
- librerías abiertas como la biblioteca Boost Graph utilizada para la implementac
-ión del algoritmo de Tarjan, así como también para la representacion de
- los grafos y la biblioteca GiNaC para manipulación simbólica.
- 
-\end_layout
-
-\begin_layout Standard
-En el capítulo 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "chap:Ejemplos"
-
-\end_inset
-
- presentamos dos ejemplos del campo eléctrico demostrando que el algoritmo
- produce un resultado correcto tanto ante la presencia o ausencia de lazos
- algebraicos.
-\end_layout
-
-\begin_layout Standard
-Luego en el capítulo 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "chap:Prueba-de-eficiencia"
-
-\end_inset
-
- se presentó un ejemplo que permite ver más claramente de qué manera la
- inclusión del algoritmo simple resulta en una optimización del proceso
- de causalización.
- 
-\end_layout
-
-\begin_layout Standard
-Por último, se incluyó el detalle de los tests unitarios escritos para validar
- los diferentes componentes desarrollados durante esta tesina.
-\end_layout
-
-\begin_layout Section
-Trabajo a futuro
-\end_layout
-
-\begin_layout Standard
-Algunos puntos quedan como trabajo a futuro de esta tesina:
-\end_layout
-
-\begin_layout Itemize
-Singularidades estructurales: La transformación de ecuaciones diferenciales
- algebráicas en ecuaciones diferenciales ordinarias no siempre puede ser
- llevada a cabo utilizando los algoritmos presentados en este trabajo.
- Ciertos modelos presentan lo que se conoce como 
-\begin_inset Quotes eld
-\end_inset
-
-singularidad estructural
-\begin_inset Quotes erd
-\end_inset
-
- lo que llevará al algoritmo de Tarjan (o sus variantes) a fallar debido
- a que algunos nodos quedan desconectados.
- En este caso debe ser aplicado previamente el algoritmo de Pantelides 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "Pan88"
-
-\end_inset
-
- para transformar al sistema en uno que sí se pueda causalizar.
-\end_layout
-
-\begin_layout Itemize
-Otro punto a tratar es la resolución de lazos algebraicos.
- Los algoritmos aquí presentados se encargan de detectar e identificar las
- variables y ecuaciones que deben ser resueltas en conjunto pero este lazo
- puede ser de gran tamaño.
- Una opción para reducir el tamaño del lazo es aplicar la técnica conocida
- como Tearing 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "CK06"
-
-\end_inset
-
- la cual considera conocida una variable del lazo y trata de despejar las
- otras a partir de ésta.
- En la presente implementación esta técnica no es utilizado por lo cual
- los lazo algebraicos quedan del tamaño con el cual son identificados.
-\end_layout
-
-\begin_layout Itemize
-Causalización de ecuaciones for sin expansión: En esta versión del causalizador
- de ecuaciones las estructuras repetitivas como las ecuaciones for se expanden.
- Esta solución no es eficiente para modelo de gran escala.
- En 
-\begin_inset CommandInset citation
-LatexCommand citep
-key "lsmodelica"
-
-\end_inset
-
- se plantea una versión vectorial del algoritmo de Tarjan la cual permite
- realizar la causalización de ecuaciones sin la necesidad de expandir las
- estructuras repetitivas.
- La implementación de dicho algoritmo vectorial queda pendiente para futuras
- versiones del causalizador.
 \end_layout
 
 \begin_layout Standard
