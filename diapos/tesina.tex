@@ -1,0 +1,52 @@
+\documentclass{beamer}
+\usepackage[LGR,T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{textcomp}
+\usepackage{listings}
+\lstset{language=c++, xleftmargin=25pt}
+\input{listings-modelica.cfg}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epstopdf}
+
+\usetheme{Madrid}
+
+ \AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+ 
+\title[] %optional
+{Causalización de Modelos Modelica}
+ 
+\subtitle{Tesina de Grado}
+ 
+\author[] % (optional, for multiple authors)
+{Federico~Moya}
+ 
+\institute[] % (optional)	
+{
+  Licenciatura en Cs. de la Computación\\
+  Facultad de Cs. Exactas, Ingeniería y Agrimensura\\
+  Universidad Nacional de Rosario
+}
+ 
+\date[] % (optional)
+{Agosto 2016}
+ 
+% \logo{\includegraphics[height=1.5cm]{graphics/logo_unr.jpg}}
+ 
+\begin{document}
+ 
+\input{tex/intro.tex}
+
+\input{tex/modelica.tex}
+ 
+\end{document}

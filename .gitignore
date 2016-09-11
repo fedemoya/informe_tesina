@@ -1,4 +1,4 @@
-
+*.*~
 *.dia~
 
 *.pdf
@@ -10,3 +10,13 @@ Tesina.lyx~
 *.emergency
 
 .DS_Store
+
+*sublime*
+
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb

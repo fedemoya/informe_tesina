@@ -1,0 +1,40 @@
+\section{Modelica}
+
+\begin{frame}{Modelica}
+    \begin{block}<1->{}
+        Es un lenguaje de modelado (estándar abierto) que permite la especificación de modelos matemáticos de complejos sistemas naturales o artificiales.
+    \end{block}
+    Características principales:
+    \begin{itemize}
+        \item<2-> Modelica es un lenguaje orientado a objetos con un concepto general de clase que unifica las ideas de clases, tipos genéricos y subtipos en un solo lenguaje. Esto facilita la reutilización de componentes y la evolución de los modelos. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Modelica}
+    \begin{itemize}
+        \item<1-> Modelica está principalmente basado en ecuaciones en lugar de asignaciones. Esto permite un modelado acausal lo cual facilita la reutilización de las clases ya que las ecuaciones no especifican una dirección particular para el flujo de datos. De esta manera una clase Modelica se puede adaptar a contextos con diferentes flujos de datos.
+        \item<2-> Modelica permite describir y conectar componentes de modelos pertenecientes a diferentes dominios como eléctricos, mecánicos, termodinámica, hidráulica, biología, control, etc. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conceptos básicos}
+    \begin{itemize}
+        \item<1-> Un modelo Modelica se construye a partir de clases.
+        \item<2-> Los principales elementos que contiene una clase  son declaraciones de variables y ecuaciones.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conceptos básicos}
+    \begin{block}{Hello World}
+        $\dot{x}(t)=-a x(t)$
+    \end{block}
+    \pause
+    \begin{lstlisting}[language=Modelica]
+  class HelloWorld
+    Real x(start = 1);
+    parameter Real a = 1;
+  equation
+    der(x) = -a*x;
+  end HelloWorld;
+    \end{lstlisting}  
+\end{frame}
