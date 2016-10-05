@@ -25,16 +25,70 @@
 \end{frame}
 
 \begin{frame}[fragile]{Conceptos básicos}
-    \begin{block}{Hello World}
-        $\dot{x}(t)=-a x(t)$
-    \end{block}
-    \pause
-    \begin{lstlisting}[language=Modelica]
-  class HelloWorld
-    Real x(start = 1);
-    parameter Real a = 1;
+   \framesubtitle{Ejemplo: Péndulo Plano}
+   \fontsize{8pt}{7.2}\selectfont
+    \begin{columns}
+    % \begin{minipage}[t]{2cm}
+        \begin{column}{0.4\textwidth}
+                \begin{align*}
+                    m\dot{v_{x}}  & =-F\sin(\varphi)\nonumber \\
+                    m\dot{v_{y}}  & =-F\cos(\varphi)-mg\nonumber \\
+                    \dot{x}       & =v_{x}\nonumber \\
+                    \dot{y}       & =v_{y}\\
+                    \dot{\varphi} & =\omega\nonumber \\
+                    x             & =L\sin(\varphi)\nonumber \\
+                    y             & =-L\cos\left(\varphi\right)\nonumber
+                \end{align*}
+        \end{column}
+        % \end{minipage}
+        \begin{column}{0.6\textwidth}
+        % \begin{minipage}[t]{10cm}
+            \begin{lstlisting}[language=Modelica]
+class Pendulum "Planar Pendulum"
+  parameter Real m=1, g=9.81, L=O.5;
+  Real F, phi, omega;
+  output Real x(start=O.5);
+  output Real y(start=O);
+  output Real vx,vy;
   equation
-    der(x) = -a*x;
-  end HelloWorld;
-    \end{lstlisting}  
+    m*der(vx)=-F*sin(phi);
+    m*der(vy)=-F*cos(phi)-m*g;
+    der(x)=vx;
+    der(y)=vy;
+    der(phi)=omega;
+    x=L*sin(phi);
+    y=-L*cos(phi);
+end Pendulum;
+            \end{lstlisting}
+        % \end{minipage}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Modelado acausal}
+    La ecuación característica de una resistencia, $Ri=v$, puede utilizarse de diferentes maneras.
+    \pause
+    \begin{itemize}
+        \item<1-> Para calcular la corriente a partir del voltaje y de la resistencia: $i :=\frac{v}{R}$
+        \item<2-> Para calcular el voltaje a partir de la resistencia
+y de la corriente: $v :=R\times i$
+        \item<3-> Para calcular la resistencia a partir del voltaje y
+de la corriente: $R :=\frac{v}{i}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Compilación y Ejecución de Modelos Modelica}
+    \note{Análisis sintáctico del código fuente Modelica del cual se obtiene un árbol sintáctico abstracto. Se analiza gramaticalmente, se realiza la verificación de tipos, las clases se heredan y expanden, las ecuaciones connect se convierten en ecuaciones comunes,
+etc. El resultado de este proceso de análisis y traducción es un conjunto plano de ecuaciones, constantes, variables y funciones. No queda ningún rastro de la estructura de objetos.
+Luego un módulo de optimización compuesto por algoritmos de simplificación algebraica, métodos de
+reducción de índices, etc., elimina la mayoría de las ecuaciones dejando solo un conjunto mínimo que eventualmente va a ser resuelto numéricamente. Por ejemplo, si dos variables son sintácticamente equivalentes solo
+se conserva una.
+Causalización.
+Finalmente se genera código en algún lenguaje de programación convencional,
+usualmente C, y se lo enlaza con algún método de integración numérica.
+}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=1\textwidth]{graphics/compilacion_ejecucion_modelica.png}
+    \end{figure}
 \end{frame}

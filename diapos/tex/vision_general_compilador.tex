@@ -1,0 +1,13 @@
+\section{Visión General del Compilador ModelicaCC}
+
+\begin{frame}
+    La compilación de un modelo Modelica es el proceso mediante el cual se transforma un modelo de alto nivel, el cual puede contener clases y ecuaciones acausales, en un modelo plano, sin clases, y donde las ecuciones se encuentran ordenadas o causalizadas.
+    \pause
+    El compilador ModelicaCC se planteo como un conjunto de componentes independientes.
+    \pause
+    \begin{itemize} 
+        \item<1-> \textbf{flatter}: Es el componente encargado de el análisis sintáctico y semántico, y del aplanado de la estructura de objetos. 
+        \item<2-> \textbf{μModelica}: Es el componente responsable de reescribir el modelo utilizando un subconjunto del lenguaje Modelica denominado μModelica.
+        \item<3-> \textbf{antialias}: Es el componente encargado de eliminar ecuaciones triviales de la forma \verb+a=b+.
+        \item<4-> \textbf{cauzalize} Es el componente responsable de la causalización del conjunto de ecuaciones del modelo.
+\end{frame}

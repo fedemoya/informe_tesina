@@ -1,0 +1,122 @@
+\section{Causalización de un sistema DAE}
+
+\begin{frame}{Causalización}
+    ¿Como convertimos un modelo DAE acausal en un modelo ODE causalizado?
+    \pause
+    \begin{itemize}
+        \item<2-> Necesitamos reordenar horizontalmente el modelo de manera que del lado izquierdo de cada ecuación solo aparezca o bien la derivada de una variable de estado o bien una variable algebraica.
+        \item<3-> Necesitamos ordenar verticalmente las ecuaciones de manera que puedan ser resueltas secuencialmente.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Causalización}
+    \begin{itemize}
+        \item<1-> Definimos que para toda variable $x$ tal que $\dot{x}$ aparece en el modelo, $x$ es conocida y $\dot{x}$ es una incógnita.
+        \item<2-> Construimos un grafo bipartito no dirigido a partir del modelo DAE.
+        \item<3-> Calculamos un matching máximo sobre el grafo para definir qué variable vamos a despejar de qué ecuación.
+        \item<4-> A partir del grafo bipartito y del matching construimos un grafo dirigido.
+        \item<5-> Aplicamos el algoritmo de Tarjan sobre el grafo dirigido. De esta manera obtenemos un orden para las ecuaciones del sistema.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \begin{itemize}
+        \item<1-> Permite encontrar los componentes fuertemente conexos en un grafo dirigido.
+        \item<2-> Complejidad $O(\abs{V}+\abs{E})$
+        \item<3-> Posee la propiedad de que ningún componente fuertemente conexo va a ser identificado antes que alguno de sus sucesores. De esta manera el orden en el que son identificados los componentes fuertemente conexos constituye un orden topológico reverso del grafo dirigido acíclico formado por los mismos componentes fuertemente conexos.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \framesubtitle{Ejemplo}
+    \begin{figure}
+        \includegraphics[width=0.6\textwidth]{graphics/tarjan_step_0.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \framesubtitle{Ejemplo}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{graphics/tarjan_step_1.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \framesubtitle{Ejemplo}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{graphics/tarjan_step_2.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \framesubtitle{Ejemplo}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{graphics/tarjan_step_3.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algoritmo de Tarjan}
+    \framesubtitle{Ejemplo}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{graphics/tarjan_step_4.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Aplicación del Algoritmo de Tarjan sobre un modelo DAE}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+          \centering
+          \begin{align*}
+            f_1(z_3,z_4) &= 0 \\
+            f_2(z_2) &= 0 \\
+            f_3(z_2,z_3,z_5) &= 0 \\
+            f_4(z_1,z_2) &= 0 \\
+            f_5(z_1,z_3,z_5) &= 0 \\
+          \end{align*}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+        \begin{figure}
+           \centering
+           \includegraphics[width=0.8\textwidth]{graphics/bipartito_original.png}
+        \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Aplicación del Algoritmo de Tarjan sobre un modelo DAE}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+        \begin{figure}
+           \centering
+           \includegraphics[width=0.6\textwidth]{graphics/bipartito_matching.png}
+        \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+        \begin{figure}
+           \centering
+           \includegraphics[width=0.8\textwidth]{graphics/dirigido.png}
+        \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Aplicación del Algoritmo de Tarjan sobre un modelo DAE}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+               \centering
+               \includegraphics[width=0.8\textwidth]{graphics/dirigido_componentes.png}
+            \end{figure}
+        \end{column}  
+        \begin{column}{0.5\textwidth}
+            \begin{align*}
+            f_2(z_2) &= 0 \\
+            f_4(z_1,z_2) &= 0 \\
+            \mathbf{f_3(z_2,z_3,z_5)} &= \mathbf{0} \\ 
+            \mathbf{f_5(z_1,z_3,z_5)} &= \mathbf{0} \\
+            f_1(z_3,z_4) &= 0 \\
+            \end{align*}
+        \end{column}
+    \end{columns}
+\end{frame}

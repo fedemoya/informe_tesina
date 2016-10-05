@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\usepackage{pgfpages}
 \usepackage[LGR,T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
@@ -7,11 +8,15 @@
 \lstset{language=c++, xleftmargin=25pt}
 \input{listings-modelica.cfg}
 \usepackage{amsmath}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{epstopdf}
+
+\setbeameroption{show notes on second screen}
 
 \usetheme{Madrid}
 
@@ -47,6 +52,12 @@
  
 \input{tex/intro.tex}
 
+\input{tex/modelos_matematicos.tex}
+
 \input{tex/modelica.tex}
  
+\input{tex/causalizacion.tex}
+
+% \input{tex/vision_general_compilador.tex}
+
 \end{document}
