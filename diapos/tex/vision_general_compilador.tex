@@ -1,13 +1,22 @@
 \section{Visión General del Compilador ModelicaCC}
 
-\begin{frame}
-    La compilación de un modelo Modelica es el proceso mediante el cual se transforma un modelo de alto nivel, el cual puede contener clases y ecuaciones acausales, en un modelo plano, sin clases, y donde las ecuciones se encuentran ordenadas o causalizadas.
-    \pause
-    El compilador ModelicaCC se planteo como un conjunto de componentes independientes.
-    \pause
+\begin{frame}[fragile]{El Compilador ModelicaCC}
+    \note{
+        La compilación de un modelo Modelica es el proceso mediante el cual se transforma un modelo de alto nivel, el cual puede contener clases y ecuaciones acausales, en un modelo plano, sin clases, y donde las ecuciones se encuentran ordenadas o causalizadas.\\
+        El compilador ModelicaCC se planteo con una arquitectura de pipeline o de tubos y filtros. Es decir se compone de aplicaciones independientes cada una de las cuales recibe como entrada un modelo Modelica y produce como salida otro modelo Modelica, modificado de alguna manera pero equivalente al que se recibio como entrada.
+    }
     \begin{itemize} 
-        \item<1-> \textbf{flatter}: Es el componente encargado de el análisis sintáctico y semántico, y del aplanado de la estructura de objetos. 
-        \item<2-> \textbf{μModelica}: Es el componente responsable de reescribir el modelo utilizando un subconjunto del lenguaje Modelica denominado μModelica.
-        \item<3-> \textbf{antialias}: Es el componente encargado de eliminar ecuaciones triviales de la forma \verb+a=b+.
-        \item<4-> \textbf{cauzalize} Es el componente responsable de la causalización del conjunto de ecuaciones del modelo.
+        \item<1-> Desarrollado en C++. 
+        \item<2-> Implementa una arquitectura de pipeline o tubos y filtros.
+    \end{itemize}
+    \pause
+    \begin{center}
+        \includegraphics[width=\textwidth]{graphics/compilacion_modelica.png}
+    \end{center}
+    \begin{itemize} 
+        \item<4-> flatter: Es el componente encargado de el análisis sintáctico y semántico, y del aplanado de la estructura de objetos. 
+        \item<5-> mmo: Es el componente responsable de reescribir el modelo utilizando un subconjunto del lenguaje Modelica denominado μModelica.
+        \item<6-> antialias: Es el componente encargado de eliminar ecuaciones triviales de la forma \verb+a=b+.
+        \item<7-> cauzalize: Es el componente responsable de la causalización del conjunto de ecuaciones del modelo.
+    \end{itemize}
 \end{frame}

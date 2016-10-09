@@ -1,59 +1,50 @@
-\section{Introducción}
+\section{Contexto}
 
-\begin{frame}
-	\frametitle{Contexto}
+\begin{frame}{Contexto}
     \begin{itemize}
         \item<1-> Proyecto de investigación de la U.N.R: Modelado, Simulación y Control en Tiempo Real con Aplicaciones en Electrónica de Potencia.
         \item<2-> Desarrollar un compilador Modelica con los fines de investigar distintos algoritmos en relación a modelos de gran escala.
-        \item<3-> Causalización de ecuaciones diferenciales algebraicas.
+        \item<3-> Causalización de ecuaciones diferenciales algebraicas mediante la aplicación del algoritmo de Tarjan.
     \end{itemize}
 \end{frame}
 
 \section{Modelado y Simulación}
 
-\begin{frame}
-	\frametitle{Sistema}
+\begin{frame}{Sistema y Experimento}
 	\begin{itemize}
-		\begin{block}<1->{Definición}
-			Un sistema es un objeto o una colección de objetos cuyas propiedades queremos estudiar.
-		\end{block}
-	  	\item<2-> Las entradas son variables del entorno que influencian el comportamiento del sistema. Estas entradas pueden o no ser controlables por nosotros. 
-		\item<3-> Las salidas de un sistema son variables que son determinadas por el sistema y pueden influenciar el entorno que lo rodea.
+        \item<1-> Un sistema es un objeto o una colección de objetos cuyas propiedades queremos estudiar.
+	  	\item<2-> Para un sistema se pueden definir variables de entrada y variables de salida.
+        \note{
+            \begin{itemize}
+                \item Las entradas son variables del entorno que influencian el comportamiento del sistema. Estas entradas pueden o no ser controlables por nosotros. 
+                \item Las salidas de un sistema son variables que son determinadas por el sistema y pueden influenciar el entorno que lo rodea.
+            \end{itemize}
+        }
+        \item<3-> Un experimento es el proceso de extraer información de un sistema ejercitando sus entradas.
+        \note{
+            Desventajas del método experimental:
+                \begin{itemize}
+                    \item Para un gran número de sistemas muchas variables de entrada no son accesibles ni controlables.
+                    \item Algunas variables de salida importantes no resultan accesibles para poder medirlas; estas variables a veces se denominan estados internos del sistema.
+                    \item Problemas prácticos (el experimento puede ser muy caro, o peligroso, o bien el sistema necesario para el experimento puede que todavía no exista).
+                \end{itemize}
+        }
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Experimento}
-	\begin{block}<1->{Definición}
-		Un experimento es el proceso de extraer información de un sistema ejercitando sus entradas.
-	\end{block}
-	Desventajas del método experimental:
-	\begin{itemize}
-	  	\item<2-> Para un gran número de sistemas muchas variables de entrada no son accesibles ni controlables.
-		\item<3-> Algunas variables de salida importantes no resultan accesibles para poder medirlas; estas variables a veces se denominan estados internos del sistema.
-		\item<4-> Problemas prácticos (el experimento puede ser muy caro, o peligroso, o bien el sistema necesario para el experimento puede que todavía no exista).
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Modelo}
-	\begin{block}<1->{Definición}
-		Un modelo de un sistema es cualquier cosa sobre la cual se puede aplicar un “experimento” con el objeto de responder preguntas sobre el sistema.
-	\end{block}
-	\begin{block}<2->{Modelo matemático}
-		Es una descripción de un sistema en donde las relaciones entre las variables se expresan en forma matemática mediante ecuaciones. Las variables pueden ser cantidades medibles como tamaño, longitud, peso, temperatura, nivel de desempleo, flujo de información, etc. La mayoría de las leyes de físicas son modelos matemáticos en este sentido.
-	\end{block}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Simulación}
-	\begin{block}<1->{Definición}
-		Una simulación es un experimento realizado sobre un modelo.
-	\end{block}
-    Algunos ejemplos:
-	\begin{itemize}
-  		\item<1-> La simulación de un proceso industrial como la producción de acero o papel para aprender sobre el comportamiento bajo diferentes condiciones de operación con el objetivo de mejorar el proceso.
-        \item<2-> La simulación del comportamiento de un vehículo, por ejemplo un auto o un avión, para que el conductor o piloto pueda disponer de un entrenamiento realista.
-        \item<3-> La simulación de un modelo simplificado de una red de computadoras para aprender cómo se comporta bajo diferentes cargas con el objetivo de mejorar la eficiencia.
-  	\end{itemize}
+\begin{frame}{Modelado y Simulación}
+    \begin{itemize}
+        \item<1-> Un modelo de un sistema es cualquier cosa sobre la cual se puede aplicar un “experimento” con el objeto de responder preguntas sobre el sistema.
+    	\item<2-> Un modelo matemático es una descripción de un sistema en donde las relaciones entre las variables se expresan en forma matemática mediante ecuaciones.
+        \note{Las variables pueden ser cantidades medibles como tamaño, longitud, peso, temperatura, nivel de desempleo, flujo de información, etc. La mayoría de las leyes de físicas son modelos matemáticos en este sentido.}
+        \item<3-> Una simulación es un experimento realizado sobre un modelo.
+        \note{
+            Algunos ejemplos de simlación:
+            \begin{itemize}
+                \item<1-> La simulación de un proceso industrial como la producción de acero o papel para aprender sobre el comportamiento bajo diferentes condiciones de operación con el objetivo de mejorar el proceso.
+                \item<2-> La simulación del comportamiento de un vehículo, por ejemplo un auto o un avión, para que el conductor o piloto pueda disponer de un entrenamiento realista.
+                \item<3-> La simulación de un modelo simplificado de una red de computadoras para aprender cómo se comporta bajo diferentes cargas con el objetivo de mejorar la eficiencia.
+            \end{itemize}
+        }
+    \end{itemize}
 \end{frame}

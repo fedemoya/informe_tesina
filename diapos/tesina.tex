@@ -4,6 +4,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{textcomp}
+\usepackage{alltt}
+\renewcommand{\ttdefault}{txtt}
 \usepackage{listings}
 \lstset{language=c++, xleftmargin=25pt}
 \input{listings-modelica.cfg}
@@ -19,14 +21,6 @@
 \setbeameroption{show notes on second screen}
 
 \usetheme{Madrid}
-
- \AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
  
 \title[] %optional
 {Causalización de Modelos Modelica}
@@ -44,12 +38,24 @@
 }
  
 \date[] % (optional)
-{Agosto 2016}
+{Octubre 2016}
  
-% \logo{\includegraphics[height=1.5cm]{graphics/logo_unr.jpg}}
+\logo{\includegraphics[height=1.5cm]{graphics/logo_unr.jpg}}
  
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Indice}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \begin{document}
- 
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
 \input{tex/intro.tex}
 
 \input{tex/modelos_matematicos.tex}
@@ -58,6 +64,8 @@
  
 \input{tex/causalizacion.tex}
 
-% \input{tex/vision_general_compilador.tex}
+\input{tex/vision_general_compilador.tex}
+
+\input{tex/implementacion_causalizacion.tex}
 
 \end{document}

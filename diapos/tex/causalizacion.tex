@@ -1,7 +1,7 @@
-\section{Causalización de un sistema DAE}
+\section{Causalización de un modelo DAE}
 
 \begin{frame}{Causalización}
-    ¿Como convertimos un modelo DAE acausal en un modelo ODE causalizado?
+    ¿Como convertimos un modelo DAE acausal en un modelo ODE causal?
     \pause
     \begin{itemize}
         \item<2-> Necesitamos reordenar horizontalmente el modelo de manera que del lado izquierdo de cada ecuación solo aparezca o bien la derivada de una variable de estado o bien una variable algebraica.
@@ -11,11 +11,19 @@
 
 \begin{frame}{Causalización}
     \begin{itemize}
-        \item<1-> Definimos que para toda variable $x$ tal que $\dot{x}$ aparece en el modelo, $x$ es conocida y $\dot{x}$ es una incógnita.
-        \item<2-> Construimos un grafo bipartito no dirigido a partir del modelo DAE.
-        \item<3-> Calculamos un matching máximo sobre el grafo para definir qué variable vamos a despejar de qué ecuación.
-        \item<4-> A partir del grafo bipartito y del matching construimos un grafo dirigido.
-        \item<5-> Aplicamos el algoritmo de Tarjan sobre el grafo dirigido. De esta manera obtenemos un orden para las ecuaciones del sistema.
+        % \item<1-> Definimos que para toda variable $x$ tal que $\dot{x}$ aparece en el modelo, $x$ es conocida y $\dot{x}$ es una incógnita.
+        \item<1-> Construimos un grafo bipartito no dirigido a partir del modelo DAE, el cual posee un vértice para cada ecuación del modelo y un vértice por cada incógnita del modelo. Una arista del grafo representa la ocurrencia de una incógnita en una ecuación.
+        \item<2-> Calculamos un matching máximo sobre el grafo para definir qué variable vamos a despejar de qué ecuación.
+        \item<3-> A partir del grafo bipartito no dirigido y del matching construimos un grafo dirigido.
+        \note{
+            El grafo dirigido representa las dependencias entre las ecuaciones.
+            \begin{itemize}
+                \item<1-> Por cada arista del matching creamos un nodo en el grafo dirigido. De esta manera un nodo del grafo dirigido esta asociado a una ecuación y a una incógnita de esa ecuación la cual a sido seleccionada para ser despejada.
+                \item<2-> Dados dos nodos, a y b, del grafo dirigido, trazamos una arista de a hacia b si en el grafo original existe una arista, no perteneciente al matching, entre la ecuación asociada al nodo a y la incógnita asociada al nodo b.
+            \end{itemize}
+        }
+        \item<4-> Aplicamos el algoritmo de Tarjan sobre el grafo dirigido.
+        \item<5-> Despejamos de cada ecuación la variable seleccionada por el matching.
     \end{itemize}
 \end{frame}
 
@@ -23,7 +31,10 @@
     \begin{itemize}
         \item<1-> Permite encontrar los componentes fuertemente conexos en un grafo dirigido.
         \item<2-> Complejidad $O(\abs{V}+\abs{E})$
-        \item<3-> Posee la propiedad de que ningún componente fuertemente conexo va a ser identificado antes que alguno de sus sucesores. De esta manera el orden en el que son identificados los componentes fuertemente conexos constituye un orden topológico reverso del grafo dirigido acíclico formado por los mismos componentes fuertemente conexos.
+        \item<3-> Posee la propiedad de que el orden en el que son identificados los componentes fuertemente conexos constituye un orden topológico reverso del grafo dirigido acíclico formado por los mismos componentes fuertemente conexos.
+        \note{
+            Ningún componente fuertemente conexo va a ser identificado antes que alguno de sus sucesores.
+        }
     \end{itemize}
 \end{frame}
 
@@ -111,11 +122,10 @@
         \end{column}  
         \begin{column}{0.5\textwidth}
             \begin{align*}
-            f_2(z_2) &= 0 \\
-            f_4(z_1,z_2) &= 0 \\
-            \mathbf{f_3(z_2,z_3,z_5)} &= \mathbf{0} \\ 
-            \mathbf{f_5(z_1,z_3,z_5)} &= \mathbf{0} \\
-            f_1(z_3,z_4) &= 0 \\
+            z_2 &= f_2'() \\
+            z_1 &= f_4'(z_2) \\
+            (z_3, z_5) &= f_{35}'(z_2) \\
+            z_4 &= f_1'(z_4) \\
             \end{align*}
         \end{column}
     \end{columns}

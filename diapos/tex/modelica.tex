@@ -6,14 +6,12 @@
     \end{block}
     Características principales:
     \begin{itemize}
-        \item<2-> Modelica es un lenguaje orientado a objetos con un concepto general de clase que unifica las ideas de clases, tipos genéricos y subtipos en un solo lenguaje. Esto facilita la reutilización de componentes y la evolución de los modelos. 
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Modelica}
-    \begin{itemize}
-        \item<1-> Modelica está principalmente basado en ecuaciones en lugar de asignaciones. Esto permite un modelado acausal lo cual facilita la reutilización de las clases ya que las ecuaciones no especifican una dirección particular para el flujo de datos. De esta manera una clase Modelica se puede adaptar a contextos con diferentes flujos de datos.
-        \item<2-> Modelica permite describir y conectar componentes de modelos pertenecientes a diferentes dominios como eléctricos, mecánicos, termodinámica, hidráulica, biología, control, etc. 
+        \item<2-> Orientado a objetos.
+        \item<3-> Basado en ecuaciones.
+        \note{
+            Esto permite un modelado acausal lo cual facilita la reutilización de las clases ya que las ecuaciones no especifican una dirección particular para el flujo de datos. De esta manera una clase Modelica se puede adaptar a contextos con diferentes flujos de datos.
+        }
+        \item<4-> Permite describir y conectar componentes de modelos pertenecietes a diferentes dominios.
     \end{itemize}
 \end{frame}
 
@@ -25,42 +23,48 @@
 \end{frame}
 
 \begin{frame}[fragile]{Conceptos básicos}
-   \framesubtitle{Ejemplo: Péndulo Plano}
+   \framesubtitle{Ejemplo: Circuito RLC}
    \fontsize{8pt}{7.2}\selectfont
     \begin{columns}
-    % \begin{minipage}[t]{2cm}
         \begin{column}{0.4\textwidth}
-                \begin{align*}
-                    m\dot{v_{x}}  & =-F\sin(\varphi)\nonumber \\
-                    m\dot{v_{y}}  & =-F\cos(\varphi)-mg\nonumber \\
-                    \dot{x}       & =v_{x}\nonumber \\
-                    \dot{y}       & =v_{y}\\
-                    \dot{\varphi} & =\omega\nonumber \\
-                    x             & =L\sin(\varphi)\nonumber \\
-                    y             & =-L\cos\left(\varphi\right)\nonumber
-                \end{align*}
+            \begin{eqnarray*}
+            u_{0} & = & \sin\left(t\right)\\
+            u_{1} & = & R_{1}i_{1}\\
+            u_{2} & = & R_{2}i_{2}\\
+            u_{L} & = & L\frac{di_{L}}{dt}\\
+            i_{C} & = & C\frac{du_{C}}{dt}\\
+            u_{0} & = & u_{1}+u_{2}\\
+            u_{L} & = & u_{1}+u_{2}\\
+            u_{C} & = & u_{2}\\
+            i_{0} & = & i_{1}+i_{L}\\
+            i_{1} & = & i_{2}+i_{C}
+            \end{eqnarray*}
         \end{column}
-        % \end{minipage}
         \begin{column}{0.6\textwidth}
-        % \begin{minipage}[t]{10cm}
             \begin{lstlisting}[language=Modelica]
-class Pendulum "Planar Pendulum"
-  parameter Real m=1, g=9.81, L=O.5;
-  Real F, phi, omega;
-  output Real x(start=O.5);
-  output Real y(start=O);
-  output Real vx,vy;
-  equation
-    m*der(vx)=-F*sin(phi);
-    m*der(vy)=-F*cos(phi)-m*g;
-    der(x)=vx;
-    der(y)=vy;
-    der(phi)=omega;
-    x=L*sin(phi);
-    y=-L*cos(phi);
-end Pendulum;
+model RLC
+    Real u1; Real u2;
+    Real uL; Real iC;
+    Real i1; Real i2;
+    Real u0; Real i0;
+    Real iL; Real uC;
+    parameter Real R1;
+    parameter Real R2;
+    parameter Real L;
+    parameter Real C;
+    equation
+        u0 = sin(time);
+        u1 = R1 * i1;
+        u2 = R2 * i2;
+        uL = L * der(iL);
+        iC = C *der(uC);
+        u0 = u1 + uC;
+        uL = u1 + u2;
+        uC = u2;
+        i0 = i1 + iL;
+        i1 = i2 + iC;
+end RLC;
             \end{lstlisting}
-        % \end{minipage}
         \end{column}
     \end{columns}
 \end{frame}
@@ -69,26 +73,10 @@ end Pendulum;
     La ecuación característica de una resistencia, $Ri=v$, puede utilizarse de diferentes maneras.
     \pause
     \begin{itemize}
-        \item<1-> Para calcular la corriente a partir del voltaje y de la resistencia: $i :=\frac{v}{R}$
-        \item<2-> Para calcular el voltaje a partir de la resistencia
-y de la corriente: $v :=R\times i$
-        \item<3-> Para calcular la resistencia a partir del voltaje y
+        \item<2-> Para calcular la corriente a partir del voltaje y de la resistencia: $i :=\frac{v}{R}$
+        \item<3-> Para calcular el voltaje a partir de la resistencia
+y de la corriente: $v :=Ri$
+        \item<4-> Para calcular la resistencia a partir del voltaje y
 de la corriente: $R :=\frac{v}{i}$
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Compilación y Ejecución de Modelos Modelica}
-    \note{Análisis sintáctico del código fuente Modelica del cual se obtiene un árbol sintáctico abstracto. Se analiza gramaticalmente, se realiza la verificación de tipos, las clases se heredan y expanden, las ecuaciones connect se convierten en ecuaciones comunes,
-etc. El resultado de este proceso de análisis y traducción es un conjunto plano de ecuaciones, constantes, variables y funciones. No queda ningún rastro de la estructura de objetos.
-Luego un módulo de optimización compuesto por algoritmos de simplificación algebraica, métodos de
-reducción de índices, etc., elimina la mayoría de las ecuaciones dejando solo un conjunto mínimo que eventualmente va a ser resuelto numéricamente. Por ejemplo, si dos variables son sintácticamente equivalentes solo
-se conserva una.
-Causalización.
-Finalmente se genera código en algún lenguaje de programación convencional,
-usualmente C, y se lo enlaza con algún método de integración numérica.
-}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=1\textwidth]{graphics/compilacion_ejecucion_modelica.png}
-    \end{figure}
 \end{frame}
