@@ -1,23 +1,9 @@
 \section{Modelos Matemáticos para Sistemas Continuos}
 
-\begin{frame}{Categorías de variables y constantes}
-    \begin{itemize}
-        \item<1-> \textbf{Constante:} una cantidad en el modelo que no varía nunca, por ejemplo la gravedad en la tierra $g=9.8$.
-        \item<2-> \textbf{Variable:} una cantidad en el modelo que varia respecto del tiempo.
-        \note{
-            \begin{itemize}
-                \item<1-> \textbf{Variable de salida:} una variable cuyo comportamiento queremos observar. Usualmente denotada como $y(t)$. El rol de variable de salida no está establecido por el sistema que se modela sino que es determinado por lo que el modelador quiere estudiar.
-                \item<2-> \textbf{Variable de entrada:} una variable que afecta el comportamiento del modelo sin ser afectada por otras variables del modelo y cuyas variaciones respecto del tiempo pueden ser controladas. Usualmente se las denota $u(t)$.
-            \end{itemize}
-        }
-        \item<3-> \textbf{Variable de estado}: una variable para la cual aparece su derivada respecto del tiempo, usualmente denotada por $\dot{x}(t)$
-        \item<4-> \textbf{Variables algebraicas:} una variable que aparece en las ecuaciones pero que su derivada no aparece en el modelo.
-    \end{itemize}
-\end{frame}
-
 \begin{frame}{Ecuacion diferencial ordinaria en forma de espacio de estados explícita}
-    \note{ Las ecuaciones diferenciales ordinarias aparecen en la mayoría de los modelos matemáticos de sistemas continuos dado que la dependencia respecto del tiempo en esos modelos generalmente se refleja por medio de derivadas respecto del tiempo de variables de estado correspondientes a dichos modelos.\\
-    Un modelo ODE de espacio de estados explícito resulta más eficiente de resolver y analizar que otros modelos más complicados.\\
+    \note{
+    Existe una formulación estándar de las ecuaciones de ciertos modelos matemáticos de sistemas dinámicos denominada modelos de espacio de estados explícitos, en donde las derivadas de las variables de estado aparecen explícitamente del lado izquierdo de las ecuaciones.
+    Estos modelos usualmente resultan más eficiente de resolver y analizar que otros modelos más complicados.\\
     El modelo expresado de esta manera implica que a partir de las variables de estado y de las variables de entrada podemos calcular las derivadas y las variables algebraicas. }
     \framesubtitle{Forma General}
     \begin{align*}

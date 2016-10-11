@@ -15,10 +15,13 @@
 
 \begin{frame}[fragile]{Definición del grafo}
    \fontsize{9pt}{7.2}\selectfont
+    \note{
+        La elección de listS como contenedor para las aristas y vértices del grafo se justifica ya que con este tipo de estructura de datos la complejidad temporal de las operaciones que modifican el grafo es mejor. Por ejemplo la operación remove\_vertex(), la cual se utiliza en la optimización del proceso de causalización, es constante para el contenedor listS pero O(V+E) para el contenedor boost::vecS.
+    }
     \begin{lstlisting}
 struct VertexProperties {
-    MMO_EquationList eqs;
-    AST_ExpressionList unknowns;
+    Modelica::AST::Equation  eq;
+    Modelica::AST::Expression unknown;
 };
 
 typedef boost::adjacency_list<boost::listS,
@@ -52,9 +55,16 @@ typedef CausalizationGraph::edge_descriptor Edge;
     \end{itemize}
 \end{frame}
 
-\section{Aplicación del Algoritmo de Tarjan}
+\section{Causalización}
 
 \begin{frame}[fragile]{Aplicación del Algoritmo de Tarjan}
+    \note{
+        El grafo dirigido representa las dependencias entre las ecuaciones.
+        \begin{itemize}
+            \item<3-> Por cada arista del matching creamos un nodo en el grafo dirigido. De esta manera un nodo del grafo dirigido esta asociado a una ecuación y a una incógnita de esa ecuación la cual a sido seleccionada para ser despejada.
+            \item<3-> Dados dos nodos, a y b, del grafo dirigido, trazamos una arista de a hacia b si en el grafo original existe una arista, no perteneciente al matching, entre la ecuación asociada al nodo a y la incógnita asociada al nodo b.
+        \end{itemize}
+    }
     \begin{itemize}
         \item<1-> Utilizamos la función \verb+checked_edmonds_maximum_cardinality_matching+ provista por la BGL para el cálculo de matching.
         \item<2-> Construimos el grafo dirigido.
@@ -66,10 +76,11 @@ typedef CausalizationGraph::edge_descriptor Edge;
     \note{
         Matching: $O(V\times E)$ -> $E\geqslant\dfrac{V}{2}$\\
         $O(\dfrac{E}{V})$ expresa la complejidad temporal de las operaciones que recorren la lista de adyacencia de un vértice. Para grafos ralos $\dfrac{E}{V}$ es mucho más chico que $V$ y puede ser considerado constante.\\
+        Mapas: vertex2component, matching. Complejidad logaritmica.
     }
     \begin{itemize}
     \item \verb+checked_edmonds_maximum_cardinality_matching+: $O(V^{2})$.
-    \item La construcción del grafo dirigido: $O(V)$.
+    \item La construcción del grafo dirigido: $O(V\log(V))$.
     \item \verb+strong_components+: $O(V+E)$.
     \end{itemize}
 \end{frame}
@@ -83,23 +94,65 @@ typedef CausalizationGraph::edge_descriptor Edge;
     \end{itemize}
 \end{frame}
 
-\begin{frame}
-    \only<1>{
+\begin{frame}[fragile]{Un algritmo simple para obtener la causalización de un modelo DAE sin bucles}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{align*}
+            h_{1}(z_{1},z_{3}) &=0 \\
+            h_{2}(z_{2}) &=0 \\
+            h_{3}(z_{1},z_{2}) &=0
+        \end{align*}
+    \end{column}
+    \begin{column}{0.5\textwidth}
         \includegraphics[width=0.8\textwidth]{graphics/ej_alg_simple_op_1.png}
-    }
-    \only<2>{
-        \includegraphics[width=0.8\textwidth]{graphics/ej_alg_simple_op_2.png}
-    }
-    \only<3>{
-        \includegraphics[width=0.8\textwidth]{graphics/ej_alg_simple_op_3.png}
-    }
-    \only<4>{
-        \centering
-        \includegraphics[width=0.3\textwidth,height=0.7\textheight]{graphics/ej_alg_simple_op_4.png}
-    }
+    \end{column}
+\end{columns}
 \end{frame}
 
-\section{Ejemplo}
+\begin{frame}[fragile]{Un algritmo simple para obtener la causalización de un modelo DAE sin bucles}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[width=0.8\textwidth]{graphics/ej_alg_simple_op_2.png}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[width=0.8\textwidth]{graphics/ej_alg_simple_op_3.png}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Un algritmo simple para obtener la causalización de un modelo DAE sin bucles}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+    \begin{center} 
+        \includegraphics[width=0.5\textwidth,height=0.5\textheight]{graphics/ej_alg_simple_op_4.png}
+    \end{center}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{align*}
+            z_{2} &= h_{2}'() \\
+            z_{1} &= h_{3}'(z_{2}) \\
+            z_{3} &= h_{1}'(z_{1}) 
+        \end{align*}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Complejidad del algoritmo simple}
+\begin{center}
+    $O(V\log V)$
+\end{center}
+\end{frame}
+
+\begin{frame}{Algoritmo final de causalización}
+\begin{itemize}
+    \item<1-> Construimos el grafo bipartito a partir del modelo DAE.
+    \item<2-> Aplicamos el algoritmo simple.
+    \item<3-> Aplicamos el algoritmo de Tarjan sobre el grafo resultante de aplicar el algoritmo simple.
+    \item<4-> Finalmente el despeje de las incógnitas los hacemos utilizando la biblioteca de manipulación simbólica GiNaC.
+\end{itemize}
+\end{frame}
+
+\section{Ejemplos}
 
 \begin{frame}[fragile]{Circuito RLC}
    \fontsize{8pt}{7.2}\selectfont
@@ -151,6 +204,74 @@ model RLC
         iC = (-i2)+i1;
         uL = u1+u2;
         der(uC) = iC*(1/(C));
+        der(iL) = (1/(L))*uL;
+        i0 = i1+iL;
+end RLC;
+        \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Circuito RLC con bucle algebraico}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[width=0.8\textwidth]{graphics/rlc_loop.png}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[width=0.8\textwidth]{graphics/rlc_loop_graph.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Circuito RLC con bucle algebraico}
+   \fontsize{7pt}{7.2}\selectfont
+   \note{
+        En este caso elbucle pudo ser resuelto (todos los lados derechos de las ecuaciones dependen solo de la variable u0) porque las ecuaciones que lo conformaban eran lineales.
+   }
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+        \begin{lstlisting}[language=Modelica]
+model RLC
+    Real u1; Real u2; Real u3;
+    Real uL; Real u0; Real i0;
+    Real i1; Real i2; Real i3;
+    Real iL;
+    parameter Real R1;
+    parameter Real R2;
+    parameter Real L;
+    equation
+        u0 = sin(time);
+        u1 = R1 * i1;
+        u2 = R2 * i2;
+        u3 = R3 * i3; 
+        uL = L * der(iL); 
+        u0 = u1 + u3; 
+        uL = u1 + u2;
+        u3 = u2;
+        i0 = i1 + iL;
+        i1 = i2 + i3;
+  end RLC;
+        \end{lstlisting}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+        \begin{lstlisting}[language=Modelica]
+model RLC
+    Real u1; Real u2; Real u3;
+    Real uL; Real u0; Real i0;
+    Real i1; Real i2; Real i3;
+    Real iL;
+    parameter Real R1;
+    parameter Real R2;
+    parameter Real L;
+    equation
+        u0 = sin(time);
+        i1 = (1/(R1*R2+R1*R3+R2*R3))*(u0*R3+u0*R2);
+        u2 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2*R3;
+        i3 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2;
+        u1 = (1/(R1*R2+R1*R3+R2*R3))*(u0*R1*R2+u0*R1*R3);
+        u3 = u0*(1/(R1*R2+R1*R3+R2*R3))*R2*R3;
+        i2 = u0*(1/(R1*R2+R1*R3+R2*R3))*R3;
+        uL = u1+u2;
         der(iL) = (1/(L))*uL;
         i0 = i1+iL;
 end RLC;
@@ -252,3 +373,8 @@ end RLC;
     \end{itemize}
 \end{frame}
 
+\begin{frame}{}
+\begin{center}
+    ¿Preguntas?
+\end{center}
+\end{frame}
